@@ -14,9 +14,10 @@ private:
 
 public:
   ~Game();
+  void Run();
+  SDL_Renderer* GetRenderer();
+  State& GetState();
   static Game& GetInstance();  
-  // void run();
-
 };
 
 #endif

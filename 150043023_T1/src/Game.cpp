@@ -76,6 +76,18 @@ Game::~Game(){
   SDL_Quit();
 }
 
+void Game::Run() {
+  // TODO
+}
+
+State& Game::GetState() {
+  return *state;
+}
+
+SDL_Renderer* Game::GetRenderer() {
+  return renderer;
+}
+
 Game &Game::GetInstance()
 {
   if (instance == nullptr)
