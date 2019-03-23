@@ -77,7 +77,12 @@ Game::~Game(){
 }
 
 void Game::Run() {
-  // TODO
+  while () {
+    state.Update();
+    state.Render();
+    SDL_RenderPresent();
+    SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
+  }
 }
 
 State& Game::GetState() {
