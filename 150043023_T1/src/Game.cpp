@@ -77,7 +77,7 @@ Game::~Game(){
 }
 
 void Game::Run() {
-  while () {
+  while (not state.quitRequested) {
     state.Update();
     state.Render();
     SDL_RenderPresent();
