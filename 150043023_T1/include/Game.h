@@ -15,14 +15,14 @@ private:
   SDL_Renderer* renderer;
   State* state;
 
-  Game(std:string title, int width, int height);
+  Game(std::string title, int width, int height);
 
 public:
   ~Game();
   void Run();
   SDL_Renderer* GetRenderer();
   State& GetState();
-  static Game& GetInstance();  
+  static Game& GetInstance(std::string title = "", int width = 1024, int height = 600);
 };
 
 #endif

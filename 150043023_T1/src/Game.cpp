@@ -75,10 +75,10 @@ Game::~Game(){
 }
 
 void Game::Run() {
-  while (not state.quitRequested) {
+  while (not state.QuitRequested()) {
     state.Update();
     state.Render();
-    SDL_RenderPresent();
+    SDL_RenderPresent(renderer);
     SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
   }
 }
@@ -91,10 +91,9 @@ SDL_Renderer* Game::GetRenderer() {
   return renderer;
 }
 
-Game &Game::GetInstance()
-{
+Game &Game::GetInstance(std::string title = "", int width = 1024, int height = 600) {
   if (instance == nullptr)
-    instance = new Game();
+    instance = new Game(title, width, height);
 
   return *instance;
 }
