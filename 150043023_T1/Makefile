@@ -13,6 +13,7 @@ INC_PATH = include
 SRC_PATH = src
 BIN_PATH = bin
 DEP_PATH = dep
+RES_PATH = resources
 # SDL_PATHS =
 
 CPP_FILES = $(wildcard $(SRC_PATH)/*.cpp)

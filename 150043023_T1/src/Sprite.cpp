@@ -18,7 +18,7 @@ void Sprite::Open(std::string file) {
     SDL_DestroyTexture(texture);
   }
 
-  SDL_Texture* texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), file.c_str());
+  SDL_Texture *texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (RES_PATH + file).c_str());
 
   if (texture == nullptr) {
     printf("%s\n", SDL_GetError());

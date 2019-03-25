@@ -2,7 +2,8 @@
 
 State::State() {
   quitRequested = false;
-  // TODO: Instancia o Sprite
+  bg = Sprite("img/ocean.jpg");
+  music = Music("audio/stageState.ogg");
 }
 
 void State::LoadAssets() {

@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+#define RES_PATH "resources/"
 
 #include <iostream>
 #include "SDL2/SDL.h"
