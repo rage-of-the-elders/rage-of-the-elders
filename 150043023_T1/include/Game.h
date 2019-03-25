@@ -1,8 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
+
 #include <iostream>
-// #include "State.h"
-#include "SDL.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_mixer.h"
+#include "State.h"
 
 class Game {
 private:

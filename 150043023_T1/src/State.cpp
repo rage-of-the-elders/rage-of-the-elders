@@ -2,6 +2,7 @@
 
 State::State() {
   quitRequested = false;
+  // TODO: Instancia o Sprite
 }
 
 void State::LoadAssets() {
