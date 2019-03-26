@@ -4,16 +4,16 @@
 
 Music::Music() {
   music = nullptr;
-};
+}
 
 Music::Music(std::string file) {
   this->Open(file);
-};
+}
 
 Music::~Music() {
   Stop();
   Mix_FreeMusic(music);
-};
+}
 
 void Music::Play(int times) {
   int mixPlayMusic = Mix_PlayMusic(music, times);
@@ -21,7 +21,7 @@ void Music::Play(int times) {
     printf("Play music: %s\n", Mix_GetError());
     exit(-1);
   }
-};
+}
 
 void Music::Stop(int msToStop) {
   int mixFadeOutMusic = Mix_FadeOutMusic(msToStop);
@@ -29,7 +29,7 @@ void Music::Stop(int msToStop) {
     printf("Stop music: %s\n", Mix_GetError());
     exit(-1);
   }
-};
+}
 
 void Music::Open(std::string file) {
   this->music = Mix_LoadMUS((RES_PATH + file).c_str());
@@ -37,8 +37,8 @@ void Music::Open(std::string file) {
     printf("Open music: %s\n", Mix_GetError());
     exit(-1);
   }
-};
+}
 
 bool Music::IsOpen() {
   return music != nullptr;
-};
+}
