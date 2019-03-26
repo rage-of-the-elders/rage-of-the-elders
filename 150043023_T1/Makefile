@@ -95,6 +95,9 @@ endif
 
 print-% : ; @echo $* = $($*)
 
+todo:
+	grep --color --exclude='Makefile' --exclude-dir='resources' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
+
 help:
 ifeq ($(OS), Windows_NT)
 	@echo.
