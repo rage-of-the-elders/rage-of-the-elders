@@ -2,8 +2,6 @@
 #define SPRITE_H
 
 #include <iostream>
-#include "SDL2/SDL.h"
-#include "Game.h"
 #include "SDL2/SDL_image.h"
 
 class Sprite {

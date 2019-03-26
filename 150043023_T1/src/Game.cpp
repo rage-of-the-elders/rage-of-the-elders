@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Game.h"
 
 Game *Game::instance = nullptr;
@@ -43,7 +42,7 @@ Game::Game(std::string title, int width, int height) {
   }
 
   // Window creation
-  window = SDL_Window *SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED,
+  window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
                                SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr) {
     printf("%s\n", SDL_GetError());
@@ -52,7 +51,7 @@ Game::Game(std::string title, int width, int height) {
                                
   // Renderer creation
   int SUPPORTED_RENDERER = -1;
-  renderer = SDL_Renderer * SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);
+  renderer = SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);
 
   if (renderer == nullptr) {
     printf("%s\n", SDL_GetError());
@@ -64,7 +63,7 @@ Game::Game(std::string title, int width, int height) {
 
 Game::~Game(){
   if (state != nullptr)
-	  delete stored_state;
+	  delete state;
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
@@ -75,9 +74,9 @@ Game::~Game(){
 }
 
 void Game::Run() {
-  while (not state.QuitRequested()) {
-    state.Update();
-    state.Render();
+  while (not state->QuitRequested()) {
+    state->Update(-1); // TODO: set a valid number
+    state->Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
   }
@@ -91,7 +90,7 @@ SDL_Renderer* Game::GetRenderer() {
   return renderer;
 }
 
-Game &Game::GetInstance(std::string title = "", int width = 1024, int height = 600) {
+Game &Game::GetInstance(const std::string title, int width, int height) {
   if (instance == nullptr)
     instance = new Game(title, width, height);
 

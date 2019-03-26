@@ -1,7 +1,8 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
-#include "Game.h"
+#include <iostream>
+#include "SDL2/SDL_mixer.h"
 
 class Music {
 private:

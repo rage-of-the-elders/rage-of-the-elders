@@ -22,7 +22,7 @@ public:
   void Run();
   SDL_Renderer* GetRenderer();
   State& GetState();
-  static Game& GetInstance(std::string title = "", int width = 1024, int height = 600);
+  static Game& GetInstance(const std::string title = std::string(""), int width = 1024, int height = 600);
 };
 
 #endif
