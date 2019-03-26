@@ -2,7 +2,8 @@
 #include "Game.h"
 
 State::State() : bg("img/ocean.jpg"), music("audio/stageState.ogg") {
-  quitRequested = false;
+  this->quitRequested = false;
+  this->music.Play(-1);
 }
 
 void State::LoadAssets() {
@@ -16,7 +17,7 @@ void State::Update(float dt) {
 }
 
 void State::Render() {
-  bg.Render(0, 0);
+  this->bg.Render(0, 0);
 }
 
 bool State::QuitRequested() {
