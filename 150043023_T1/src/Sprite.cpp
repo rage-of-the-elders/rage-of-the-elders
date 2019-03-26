@@ -7,11 +7,12 @@ Sprite::Sprite() {
 
 Sprite::Sprite(std::string file) {
   texture = nullptr;
-  Sprite::Open(file);
+  this->Open(file);
 }
 
 Sprite::~Sprite() {
-  SDL_DestroyTexture(texture);
+  if (texture != nullptr)
+    SDL_DestroyTexture(texture);
 }
 
 void Sprite::Open(std::string file) {
@@ -19,16 +20,16 @@ void Sprite::Open(std::string file) {
     SDL_DestroyTexture(texture);
   }
 
-  SDL_Texture *texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (RES_PATH + file).c_str());
+  SDL_Texture* texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (RES_PATH + file).c_str());
 
   if (texture == nullptr) {
-    printf("%s\n", SDL_GetError());
+    printf("IMG Load Texture: %s\n", SDL_GetError());
     exit(-1);
   }
 
   int queryTexture = SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
 
-  // FIXME: What are theses 2 first params? (x, y)
+  // FIXME: What are theses 2 first params? (x, y ?)
   SetClip(0, 0, width, height);
 }
 
@@ -42,6 +43,14 @@ void Sprite::Render(int x, int y) {
                  texture,
                  &clipRect,
                  &dstRect);
+}
+
+int Sprite::GetWidth() {
+  return width;
+}
+
+int Sprite::GetHeight() {
+  return height;
 }
 
 bool Sprite::IsOpen() {
