@@ -3,15 +3,17 @@
 Game *Game::instance = nullptr;
 
 Game::Game(std::string title, int width, int height) {
-  if (instance != nullptr)
+  if (instance != nullptr) {
+    printf("There's already an instance of Game running!");
     exit(-1); // TODO: HANDLE THIS ERROR
+  }
 
   instance = this;
 
   // SDL initialization
   int sdl_initialization_error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
   if (sdl_initialization_error) {
-    printf("%s\n", SDL_GetError()); // FIXME: Move this to a helper
+    printf("SDL Init Error: %s\n", SDL_GetError()); // FIXME: Move this to a helper
     exit(-1);
   }
 
@@ -20,7 +22,7 @@ Game::Game(std::string title, int width, int height) {
   int sdl_image = IMG_Init(IMG_FLAGS);
 
   if (sdl_image != IMG_FLAGS) {
-    printf("%s\n", SDL_GetError());
+    printf("IMG Init Error: %s\n", SDL_GetError());
     exit(-1);
   }
 
@@ -29,7 +31,7 @@ Game::Game(std::string title, int width, int height) {
   int sdl_mix = Mix_Init(MIX_FLAGS);
 
   if(sdl_mix != MIX_FLAGS) {
-    printf("%s\n", SDL_GetError());
+    printf("MIX Init Error: %s\n", SDL_GetError());
     exit(-1);
   }
 
@@ -45,7 +47,7 @@ Game::Game(std::string title, int width, int height) {
   window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
                                SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr) {
-    printf("%s\n", SDL_GetError());
+    printf("SDL Create Window: %s\n", SDL_GetError());
     exit(-1);
   }
                                
@@ -54,7 +56,7 @@ Game::Game(std::string title, int width, int height) {
   renderer = SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);
 
   if (renderer == nullptr) {
-    printf("%s\n", SDL_GetError());
+    printf("SDL Create Renderer: %s\n", SDL_GetError());
     exit(-1);
   }
 

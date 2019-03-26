@@ -25,7 +25,7 @@ void Music::Play(int times) {
 
 void Music::Stop(int msToStop) {
   int mixFadeOutMusic = Mix_FadeOutMusic(msToStop);
-  if (!mixFadeOutMusic) {
+  if (not mixFadeOutMusic) {
     printf("Stop music: %s\n", Mix_GetError());
     exit(-1);
   }
