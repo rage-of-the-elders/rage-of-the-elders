@@ -16,7 +16,7 @@ void State::Update(float dt) {
 }
 
 void State::Render() {
-  bg.Render(30, 30);
+  bg.Render(0, 0);
 }
 
 bool State::QuitRequested() {

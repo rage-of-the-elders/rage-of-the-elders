@@ -13,7 +13,7 @@ Game::Game(std::string title, int width, int height) {
   // SDL initialization
   int sdl_initialization_error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
   if (sdl_initialization_error) {
-    printf("SDL Init Error: %s\n", SDL_GetError()); // FIXME: Move this to a helper
+    printf("SDL Init Error: %s\n", SDL_GetError()); // TODO: Move this to a helper
     exit(-1);
   }
 
@@ -60,7 +60,7 @@ Game::Game(std::string title, int width, int height) {
     exit(-1);
   }
 
-  state = new State(); // TODO: Check this
+  state = new State();
 }
 
 Game::~Game(){
