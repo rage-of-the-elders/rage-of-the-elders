@@ -39,13 +39,20 @@ Game::Game(std::string title, int width, int height) {
   int mix_open = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT,
                                MIX_DEFAULT_CHANNELS, DEFAULT_CHUNKSIZE);
   if (mix_open) {
-    printf("%s\n", SDL_GetError());
+    printf("Mix Open Audio: %s\n", SDL_GetError());
+    exit(-1);
+  }
+
+  int CHANNELS = 32;
+  int mix_channels = Mix_AllocateChannels(CHANNELS);
+  if (mix_channels != CHANNELS) {
+    printf("Mix Allocate Channels: %s\n", SDL_GetError());
     exit(-1);
   }
 
   // Window creation
   window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-                               SDL_WINDOWPOS_CENTERED, width, height, 0);
+                            SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr) {
     printf("SDL Create Window: %s\n", SDL_GetError());
     exit(-1);
