@@ -1,11 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 #define RES_PATH "resources/"
+#define INCLUDE_SDL
+#define INCLUDE_SDL_IMAGE
+#define INCLUDE_SDL_MIXER
 
 #include <iostream>
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL_mixer.h"
+#include "SDL_include.h"
 #include "State.h"
 
 class Game {

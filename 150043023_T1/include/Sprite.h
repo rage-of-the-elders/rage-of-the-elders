@@ -1,8 +1,9 @@
 #ifndef SPRITE_H
 #define SPRITE_H
+#define INCLUDE_SDL_IMAGE
 
 #include <iostream>
-#include "SDL2/SDL_image.h"
+#include "SDL_include.h"
 
 class Sprite {
 private:
