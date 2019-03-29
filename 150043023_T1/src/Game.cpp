@@ -99,9 +99,9 @@ SDL_Renderer* Game::GetRenderer() {
   return renderer;
 }
 
-Game &Game::GetInstance(const std::string title, int width, int height) {
+Game &Game::GetInstance() {
   if (instance == nullptr)
-    instance = new Game(title, width, height);
+    instance = new Game("Matheus Richard - 150043023", 1024, 600);
 
   return *instance;
 }
