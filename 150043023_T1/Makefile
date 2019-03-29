@@ -17,7 +17,7 @@
 # SRC_PATH = src
 # BIN_PATH = bin
 # DEP_PATH = dep
-# RES_PATH = resources
+# ASSETS_PATH = assets
 # # SDL_PATHS =
 
 # CPP_FILES = $(wildcard $(SRC_PATH)/*.cpp)
@@ -98,7 +98,7 @@
 # print-% : ; @echo $* = $($*)
 
 # todo:
-# 	grep --color --exclude='Makefile' --exclude-dir='resources' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
+# 	grep --color --exclude='Makefile' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
 
 # help:
 # ifeq ($(OS), Windows_NT)

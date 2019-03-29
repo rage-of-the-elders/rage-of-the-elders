@@ -35,7 +35,7 @@ void Music::Stop(int msToStop) {
 }
 
 void Music::Open(std::string file) {
-  this->music = Mix_LoadMUS((RES_PATH + file).c_str());
+  this->music = Mix_LoadMUS((ASSETS_PATH + file).c_str());
   if (this->music == nullptr) {
     printf("Open music: %s\n", Mix_GetError());
     exit(-1);

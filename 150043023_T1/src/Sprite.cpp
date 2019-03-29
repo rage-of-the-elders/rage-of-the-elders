@@ -20,7 +20,7 @@ void Sprite::Open(std::string file) {
     SDL_DestroyTexture(this->texture);
   }
 
-  this->texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (RES_PATH + file).c_str());
+  this->texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (ASSETS_PATH + file).c_str());
 
   if (this->texture == nullptr) {
     printf("IMG Load Texture: %s\n", SDL_GetError());
