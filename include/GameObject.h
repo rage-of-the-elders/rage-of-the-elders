@@ -25,18 +25,6 @@ public:
   void AddComponent(Component *cpt);
   void RemoveComponent(Component *cpt);
   Component *GetComponent(std::string type);
-
-  // Sprite() : Component(GameObject &associated);
-  // Sprite(std::string file);
-  // ~Sprite();
-  // void Open(std::string file);
-  // void SetClip(int x, int y, int w, int h);
-  // void Render();
-  // int GetWidth();
-  // int GetHeight();
-  // bool IsOpen();
-  // void Update(float dt);
-  // bool Is(std::string type);
 };
 
 #endif
