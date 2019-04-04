@@ -42,8 +42,14 @@ void Sound::Open(std::string file) {
   }
 }
 
-bool IsOpen();
+bool Sound::IsOpen() {
+  return this->chunk != nullptr;
+}
+
 void Update(float dt);
 void Render();
-bool Is(std::string type);
+
+bool Is(std::string type) {
+  return type == "Sound";
+};
 

@@ -66,6 +66,5 @@ bool Sprite::IsOpen() {
 void Update(float dt) {}
 
 bool Is(std::string type) {
-  // FIXME: check this
   return type == "Sprite";
 }
