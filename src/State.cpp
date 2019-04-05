@@ -51,7 +51,6 @@ void State::Input() {
 			if( event.key.keysym.sym == SDLK_ESCAPE ) {
 				quitRequested = true;
 			} else {
-				// FIXME: Centralize sprite
 				Vec2 objPos = Vec2(mouseX, mouseY).Rotate(200, rand() % 360);
 				this->AddObject((int)objPos.x, (int)objPos.y);
 			}
@@ -77,8 +76,6 @@ void State::Render() {
 
 void State::AddObject(int mouseX, int mouseY) {
 	GameObject *gameObj = new GameObject();
-	gameObj->box.x = mouseX;
-	gameObj->box.y = mouseY;
 
 	Sprite *sprite = new Sprite(*gameObj, "img/penguinface.png");
 	Sound *sound = new Sound(*gameObj, "audio/boom.wav");
@@ -89,6 +86,8 @@ void State::AddObject(int mouseX, int mouseY) {
 	gameObj->AddComponent(face);
 
 	this->objectArray.emplace_back(gameObj);
+	gameObj->box = Rect(mouseX - sprite->GetWidth() / 2, mouseY - sprite->GetHeight() / 2,
+									    sprite->GetWidth(), sprite->GetHeight());
 }
 
 bool State::QuitRequested() {
