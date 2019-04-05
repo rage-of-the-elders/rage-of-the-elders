@@ -7,7 +7,7 @@
 #include "Component.h"
 #include "GameObject.h"
 
-class Sprite : Component {
+class Sprite : public Component {
 private:
   SDL_Texture* texture;
   int width;

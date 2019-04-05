@@ -6,7 +6,7 @@
 #include "Component.h"
 #include "GameObject.h"
 
-class Sound : Component {
+class Sound : public Component {
 private:
   Mix_Chunk *chunk;
   int channel;

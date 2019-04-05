@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "GameObject.h"
 
-class Face : Component {
+class Face : public Component {
 private:
   int hitpoints;
 
