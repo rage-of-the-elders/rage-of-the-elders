@@ -15,8 +15,8 @@ private:
   SDL_Rect clipRect;
 
 public:
-  Sprite() : Component(associated) {};
-  Sprite(std::string file) : Component(associated) {};
+  Sprite(GameObject &associated) : Component(associated) {};
+  Sprite(GameObject &associated, std::string file) : Component(associated){};
   ~Sprite();
   void Open(std::string file);
   void SetClip(int x, int y, int w, int h);
