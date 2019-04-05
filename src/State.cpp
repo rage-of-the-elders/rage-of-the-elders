@@ -50,11 +50,8 @@ void State::Input() {
 			if( event.key.keysym.sym == SDLK_ESCAPE ) {
 				quitRequested = true;
 			} else {
-				// FIXME
-				// cstdlib, ctime
-				// Vec2 objPos = Vec2(200, 0).GetRotated(-PI + PI*(rand() % 1001)/500.0) + Vec2(mouseX, mouseY);
-				// AddObject((int)objPos.x, (int)objPos.y);
-				this->AddObject(mouseX, mouseY);
+				Vec2 objPos = Vec2(mouseX, mouseY).Rotate(rand() % 360);
+				this->AddObject((int)objPos.x, (int)objPos.y);
 			}
 		}
 	}

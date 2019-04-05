@@ -8,6 +8,15 @@ public:
 
   Vec2();
   Vec2(float x, float y);
+  float Cos(float angle);
+  float Sin(float angle);
+  Vec2 Rotate(float angle);
+
+  Vec2 operator+(const Vec2 &other) const;
+  Vec2 operator+(const float other) const;
+  Vec2 operator-(const Vec2 &other) const;
+  Vec2 operator-(const float other) const;
+  Vec2 operator*(const float other) const;
 };
 
 #endif
