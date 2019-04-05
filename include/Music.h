@@ -1,9 +1,10 @@
 #ifndef MUSIC_H
 #define MUSIC_H
-#define INCLUDE_SDL_MIXER
 
-#include <iostream>
+#define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+
+#include <string>
 
 class Music {
 private:

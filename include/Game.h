@@ -2,10 +2,7 @@
 #define GAME_H
 #define ASSETS_PATH "assets/"
 #define INCLUDE_SDL
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
 
-#include <iostream>
 #include "SDL_include.h"
 #include "State.h"
 

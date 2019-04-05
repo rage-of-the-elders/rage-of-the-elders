@@ -5,7 +5,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
   texture = nullptr;
 }
 
-Sprite::Sprite(GameObject &associated, std::string file) : Component(associated) {
+Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated) {
   texture = nullptr;
   this->Open(file);
 }
@@ -63,8 +63,9 @@ bool Sprite::IsOpen() {
   return texture != nullptr;
 }
 
-void Update(float dt) {}
+void Sprite::Update(float dt) {
+}
 
-bool Is(std::string type) {
+bool Sprite::Is(std::string type) {
   return type == "Sprite";
 }

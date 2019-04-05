@@ -1,10 +1,11 @@
 #ifndef SOUND_H
 #define SOUND_H
-#define INCLUDE_SDL_MIXER
 
+#define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+
 #include "Component.h"
-#include "GameObject.h"
+#include <string>
 
 class Sound : public Component {
 private:

@@ -1,9 +1,7 @@
 #define INCLUDE_SDL_MIXER
+#define ASSETS_PATH "assets/"
 
 #include "Music.h"
-// #include "SDL2/SDL_mixer.h"
-#include "SDL_include.h"
-#include "Game.h"
 
 Music::Music() {
   music = nullptr;

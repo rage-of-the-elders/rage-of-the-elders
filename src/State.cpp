@@ -1,13 +1,16 @@
 #include "State.h"
-#include "Game.h"
-#include "Face.h"
 #include "Vec2.h"
-#include "Sound.h"
 
-State::State() : bg("img/ocean.jpg"), music("audio/stageState.ogg") {
+State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
-  this->music.Play(-1);
-  // FIXME
+  this->music.Play();
+
+	GameObject *bg = new GameObject();
+	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
+	bg->AddComponent(bgSprite);
+	objectArray.emplace_back(bg);
+
+	srand(time(NULL));
 }
 
 State::~State() {
@@ -34,7 +37,8 @@ void State::Input() {
 				GameObject* go = (GameObject*) objectArray[i].get();
 
         // FIXME
-        if(go->box.Contains( {(float)mouseX, (float)mouseY} ) ) {
+        // if(go->box.Contains( {(float)mouseX, (float)mouseY} ) ) {
+        if(true) {
 					Face* face = (Face*)go->GetComponent("Face");
 					if (face != nullptr) {
 						face->Damage(std::rand() % 10 + 10);
@@ -49,10 +53,10 @@ void State::Input() {
 				quitRequested = true;
 			} else {
 				// FIXME
-				//  srand(time(NULL))
 				// cstdlib, ctime
-				Vec2 objPos = Vec2(200, 0).GetRotated(-PI + PI*(rand() % 1001)/500.0) + Vec2(mouseX, mouseY);
-				AddObject((int)objPos.x, (int)objPos.y);
+				// Vec2 objPos = Vec2(200, 0).GetRotated(-PI + PI*(rand() % 1001)/500.0) + Vec2(mouseX, mouseY);
+				// AddObject((int)objPos.x, (int)objPos.y);
+				this->AddObject(mouseX, mouseY);
 			}
 		}
 	}

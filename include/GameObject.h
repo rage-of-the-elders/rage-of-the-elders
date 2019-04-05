@@ -1,12 +1,11 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
-// #define INCLUDE_SDL_IMAGE
 
-// #include <iostream>
-// #include "SDL_include.h"
-#include "Component.h"
-#include "Rect.h"
+#include <string>
 #include <vector>
+#include "Rect.h"
+
+class Component;
 
 class GameObject {
 private:

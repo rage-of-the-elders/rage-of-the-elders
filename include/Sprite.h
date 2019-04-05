@@ -1,11 +1,11 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-#define INCLUDE_SDL_IMAGE
 
-#include <iostream>
+#define INCLUDE_SDL_IMAGE
 #include "SDL_include.h"
+
 #include "Component.h"
-#include "GameObject.h"
+#include <string>
 
 class Sprite : public Component {
 private:
@@ -15,8 +15,8 @@ private:
   SDL_Rect clipRect;
 
 public:
-  Sprite(GameObject &associated) : Component(associated) {};
-  Sprite(GameObject &associated, std::string file) : Component(associated){};
+  Sprite(GameObject &associated);
+  Sprite(GameObject &associated, std::string file);
   ~Sprite();
   void Open(std::string file);
   void SetClip(int x, int y, int w, int h);

@@ -1,7 +1,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <iostream>
+#include "GameObject.h"
+#include <string>
 
 class Component {
 protected:

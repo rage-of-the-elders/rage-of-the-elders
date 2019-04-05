@@ -1,11 +1,11 @@
 #include "Sound.h"
+#include "Game.h"
 
-Sound::Sound(GameObject &associated) {
-  this->associated = associated;
+Sound::Sound(GameObject &associated) : Component (associated) {
   this->chunk = nullptr;
 }
 
-Sound::Sound(GameObject &associated, std::string file) : Sound(associated) {
+Sound::Sound(GameObject &associated, std::string file) : Sound (associated) {
   this->Open(file);
 }
 
@@ -34,7 +34,7 @@ void Sound::Stop() {
 }
 
 void Sound::Open(std::string file) {
-  this->chunk = Mix_LoadWAV(file.c_str());
+  this->chunk = Mix_LoadWAV((ASSETS_PATH + file).c_str());
 
   if (not chunk) {
     printf("Mix Load WAV: %s\n", Mix_GetError());
@@ -46,10 +46,13 @@ bool Sound::IsOpen() {
   return this->chunk != nullptr;
 }
 
-void Update(float dt);
-void Render();
+void Sound::Update(float dt) {
 
-bool Is(std::string type) {
-  return type == "Sound";
-};
+}
+void Sound::Render() {
+}
+
+bool Sound::Is(std::string type) {
+  return (type == "Sound");
+}
 

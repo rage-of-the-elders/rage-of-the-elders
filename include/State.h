@@ -1,13 +1,17 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "GameObject.h"
 #include "Sprite.h"
+#include "Sound.h"
+#include "Face.h"
 #include "Music.h"
+
+#include <vector>
 #include <memory>
 
 class State {
 private:
-  Sprite bg;
   Music music;
   bool quitRequested;
   std::vector<std::unique_ptr<GameObject>> objectArray;
@@ -22,7 +26,6 @@ public:
   void LoadAssets();
   void Update(float dt);
   void Render();
-  void Input();
 };
 
 #endif

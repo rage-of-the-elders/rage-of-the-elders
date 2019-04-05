@@ -17,8 +17,14 @@ void Face::Damage(int damage) {
       sound->Play();
   }
 }
-void Face::Update(float dt) {}
-void Face::Render() {}
+
+void Face::Update(float dt) {
+
+}
+
+void Face::Render() {
+  
+}
 
 bool Face::Is(std::string type) {
   return type == "Face";

@@ -1,22 +1,23 @@
 #include "GameObject.h"
+#include "Component.h"
 
 GameObject::GameObject() {
   this->isDead = false;
 }
 
 GameObject::~GameObject() {
-  for (Component *component : components)
+  for (auto &component : components)
     delete component;
   components.clear();
 }
 
 void GameObject::Update(float dt) {
-  for (Component *component : components)
+  for (auto &component : components)
     component->Update(dt);
 }
 
 void GameObject::Render() {
-  for (Component *component : components)
+  for (auto &component : components)
     component->Render();
 }
 
