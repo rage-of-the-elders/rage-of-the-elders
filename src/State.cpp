@@ -36,9 +36,7 @@ void State::Input() {
 			for (int i = objectArray.size() - 1; i >= 0; i--) {
 				GameObject* go = (GameObject*) objectArray[i].get();
 
-        // FIXME
-        // if(go->box.Contains( {(float)mouseX, (float)mouseY} ) ) {
-        if(true) {
+        if (go->box.Contains( (float)mouseX, (float)mouseY ) ) {
 					Face* face = (Face*)go->GetComponent("Face");
 					if (face != nullptr) {
 						face->Damage(std::rand() % 10 + 10);
