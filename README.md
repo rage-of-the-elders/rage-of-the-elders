@@ -11,4 +11,5 @@ make run
 ```
 
 # Releases
-* [Exercise 01](https://github.com/MatheusRich/IDJ/releases/tag/v0.1)
+### [Exercise 01](https://github.com/MatheusRich/IDJ/releases/tag/v0.1)
+### [Exercise 02](https://github.com/MatheusRich/IDJ/releases/tag/v0.2)
