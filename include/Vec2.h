@@ -1,5 +1,5 @@
 
-class Rect {
+class Vec2 {
 public:
   float x, y;
 }
