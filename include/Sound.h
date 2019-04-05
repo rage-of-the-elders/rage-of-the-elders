@@ -23,6 +23,7 @@ public:
 
   void Update(float dt);
   void Render();
+  bool IsPlaying();
   bool Is(std::string type);
 };
 

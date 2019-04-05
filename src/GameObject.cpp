@@ -26,7 +26,7 @@ bool GameObject::IsDead() {
 }
 
 void GameObject::RequestDelete() {
-  isDead = true;
+  this->isDead = true;
 }
 
 void GameObject::AddComponent(Component * cpt) {
