@@ -4,6 +4,7 @@
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
   this->music.Play();
+	this->objectArray = std::vector<std::unique_ptr<GameObject>>();
 
 	GameObject *bg = new GameObject();
 	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
@@ -50,7 +51,8 @@ void State::Input() {
 			if( event.key.keysym.sym == SDLK_ESCAPE ) {
 				quitRequested = true;
 			} else {
-				Vec2 objPos = Vec2(mouseX, mouseY).Rotate(rand() % 360);
+				// FIXME: Centralize sprite
+				Vec2 objPos = Vec2(mouseX, mouseY).Rotate(200, rand() % 360);
 				this->AddObject((int)objPos.x, (int)objPos.y);
 			}
 		}

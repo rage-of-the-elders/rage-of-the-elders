@@ -19,8 +19,8 @@ float Vec2::Sin(float angle) {
 	return sin(angle * (PI/180.0));
 }
 
-Vec2 Vec2::Rotate(float angle){
-	return Vec2(x + 200 * cos(angle), y + 200 * sin(angle));
+Vec2 Vec2::Rotate(float distance, float angle){
+	return Vec2(x + distance * cos(angle), y + distance * sin(angle));
 }
 
 // Vec2 Vec2::Rotate(float angle) {
