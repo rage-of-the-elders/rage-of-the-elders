@@ -21,7 +21,6 @@ Sound::~Sound() {
 
 void Sound::Play(int times) {
   int loops = times - (times > 0 ? 1 : 0);
-
   
   this->channel = Mix_PlayChannel(channel, this->chunk, loops);
 

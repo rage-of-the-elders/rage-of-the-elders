@@ -4,7 +4,7 @@
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
   this->music.Play();
-	this->objectArray = std::vector<std::unique_ptr<GameObject>>();
+	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 
 	GameObject *bg = new GameObject();
 	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
