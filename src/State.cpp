@@ -17,8 +17,8 @@ State::State() : music("audio/stageState.ogg") {
 State::~State() {
   this->objectArray.clear();
 }
+
 void State::LoadAssets() {
-  // TODO
 }
 
 void State::Input() {

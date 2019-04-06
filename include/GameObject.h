@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
 #include "Rect.h"
 
 class Component;
@@ -10,7 +12,7 @@ class Component;
 class GameObject {
 private:
   bool isDead;
-  std::vector<Component *> components;
+  std::vector<std::shared_ptr<Component>> components;
 
 public:
   Rect box;
