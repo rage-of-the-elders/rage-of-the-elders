@@ -97,8 +97,9 @@
 
 # print-% : ; @echo $* = $($*)
 
-# todo:
-# 	grep --color --exclude='Makefile' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
+notes: todo
+todo:
+	grep --color --exclude='Makefile' --exclude='LICENSE' --exclude-dir='.git' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
 
 # help:
 # ifeq ($(OS), Windows_NT)

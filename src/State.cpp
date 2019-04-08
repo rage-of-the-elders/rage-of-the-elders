@@ -15,6 +15,7 @@ State::State() : music("audio/stageState.ogg") {
 	bg->AddComponent(bgSprite);
 	this->objectArray.emplace_back(bg);
 
+	// FIXME: check if this should be a State member
 	TileSet	*tileSet = new TileSet(64, 64, "img/tileset.png") ;
 	Component *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
