@@ -44,11 +44,11 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 }
 
 void Sprite::Render() {
-  Render(associated.box.x, associated.box.y, clipRect.w, clipRect.h);
+  Render(associated.box.x, associated.box.y);
 }
 
-void Sprite::Render(int x, int y, int w, int h) {
-  SDL_Rect dstRect = SDL_Rect{ x, y, w, h };
+void Sprite::Render(int x, int y) {
+  SDL_Rect dstRect = SDL_Rect{x, y, clipRect.w, clipRect.h};
   SDL_RenderCopy(Game::GetInstance().GetRenderer(),
                  this->texture,
                  &clipRect,
