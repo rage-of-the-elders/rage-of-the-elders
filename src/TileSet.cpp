@@ -13,7 +13,7 @@ TileSet::TileSet(int tileWidth, int tileHeight, std::string file) {
 
 void TileSet::RenderTile(unsigned index, float x, float y) {
   // FIXME: Check this
-  if (index >= 0 and index <= (Ntiles - 1)) {
+  if (index >= 0 and index < (this->rows * this->columns)) {
     this->tileSet->Render(x, y);
   }
 }
