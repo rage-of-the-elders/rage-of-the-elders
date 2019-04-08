@@ -1,5 +1,7 @@
 #include "State.h"
 #include "Vec2.h"
+#include "TileMap.h"
+#include "TileSet.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -7,9 +9,17 @@ State::State() : music("audio/stageState.ogg") {
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 
 	GameObject *bg = new GameObject();
+	GameObject *mapGameObj = new GameObject();
+
 	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
 	bg->AddComponent(bgSprite);
 	this->objectArray.emplace_back(bg);
+
+	TileSet	*tileSet = new TileSet(64, 64, "img/tileset.png") ;
+	Component *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
+	mapGameObj->AddComponent(tileMap);
+	mapGameObj->box = Rect();
+	this->objectArray.emplace_back(mapGameObj);
 
 	srand(time(NULL));
 }
