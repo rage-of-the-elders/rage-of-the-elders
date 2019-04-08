@@ -41,11 +41,14 @@ int &TileMap::At(int x, int y, int z) {
 }
 
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
-// TO DO
+  for (int j = 0; j < this->mapHeight; j++)
+    for (int i = 0; i < this->mapWidth; i++)
+      this->tileSet->RenderTile(At(i, j, layer), i * this->tileSet->GetTileWidth(), j * this->tileSet->GetTileHeight());
 }
 
 void TileMap::Render() {
-// TO DO
+  for (int i = this->mapDepth - 1; i >= 0; i--)
+    RenderLayer(i);
 }
 
 int TileMap::GetTileWidth() {
