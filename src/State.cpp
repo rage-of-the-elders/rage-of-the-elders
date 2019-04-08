@@ -9,7 +9,7 @@ State::State() : music("audio/stageState.ogg") {
 	GameObject *bg = new GameObject();
 	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
 	bg->AddComponent(bgSprite);
-	objectArray.emplace_back(bg);
+	this->objectArray.emplace_back(bg);
 
 	srand(time(NULL));
 }
