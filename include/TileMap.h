@@ -24,6 +24,8 @@ public:
   int GetTileWidth();
   int GetTileHeight();
   int GetTileDepth();
+  bool Is(std::string type);
+  void Update(float dt);
 };
 
 #endif
