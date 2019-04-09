@@ -1,19 +1,21 @@
 #include "TileSet.h"
 #include <math.h>
 
-TileSet::TileSet(GameObject& associated, int tileWidth, int tileHeight, std::string file) {
+TileSet::TileSet(GameObject& associated, int tileWidth, int tileHeight, std::string file) : tileSet(associated, file) {
   this->tileWidth = tileWidth;
   this->tileHeight = tileHeight;
-
-  this->tileSet = new Sprite(associated, file);
-  this->rows = this->tileSet->GetHeight() / this->GetTileHeight();
-  this->columns = this->tileSet->GetWidth() / this->GetTileWidth();
+  this->rows = this->tileSet.GetHeight() / this->GetTileHeight();
+  this->columns = this->tileSet.GetWidth() / this->GetTileWidth();
 }
 
 void TileSet::RenderTile(unsigned index, float x, float y) {
-  if (index >= 0 and index < (this->rows * this->columns)) {
+  if (index < (this->rows * this->columns)) {
     // FIXME: Check this
-    this->tileSet->Render(int(x), int(y));
+    tileSet.SetClip(this->tileWidth * (index % this->columns),
+                    this->tileHeight * (index / this->columns),
+                    this->tileWidth,
+                    this->tileHeight);
+    this->tileSet.Render(int(x), int(y));
   }
 }
 int TileSet::GetTileWidth() {

@@ -6,7 +6,7 @@
 
 class TileSet {
 private:
-  Sprite *tileSet;
+  Sprite tileSet;
   int rows;
   int columns;
   int tileWidth;
