@@ -16,6 +16,7 @@ private:
 
 public:
   TileMap(GameObject &associated, std::string file, TileSet *tileSet);
+  ~TileMap();
   void Load(std::string file);
   void SetTileSet(TileSet *tileSet);
   int& At (int x, int y, int z = 0);

@@ -9,6 +9,11 @@ TileMap::TileMap(GameObject &associated, std::string file, TileSet *tileSet) : C
   this->Load(file);
 }
 
+TileMap::~TileMap() {
+  delete tileSet;
+  this->tileMatrix.clear();
+}
+
 void TileMap::Load(std::string file) {
   std::ifstream tileMapFile("assets/map/tileMap.txt", std::ios::in);
 
