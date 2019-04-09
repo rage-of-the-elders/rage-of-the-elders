@@ -97,10 +97,6 @@
 
 # print-% : ; @echo $* = $($*)
 
-notes: todo
-todo:
-	grep --color --exclude='Makefile' --exclude='LICENSE' --exclude-dir='.git' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
-
 # help:
 # ifeq ($(OS), Windows_NT)
 # 	@echo.
@@ -202,8 +198,11 @@ run:
 
 clean:
 	$(RMDIR) $(BIN_PATH) $(DEP_PATH)
-	$(RM) $(EXEC)
 
+notes: todo
+
+todo:
+	grep --color --exclude='Makefile' --exclude='LICENSE' --exclude-dir='.git' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
 .PRECIOUS: $(DEP_PATH)/%.D
 
 .PHONY: debug clean release
