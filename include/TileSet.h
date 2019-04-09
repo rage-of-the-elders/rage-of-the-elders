@@ -13,7 +13,7 @@ private:
   int tileHeight;
 
 public:
-  TileSet(int tileWidth, int tileHeight, std::string file);
+  TileSet(GameObject &associated, int tileWidth, int tileHeight, std::string file);
   // ~TileSet();
 
   void RenderTile(unsigned index, float x, float y);

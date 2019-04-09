@@ -1,13 +1,11 @@
 #include "TileSet.h"
 #include <math.h>
 
-TileSet::TileSet(int tileWidth, int tileHeight, std::string file) {
+TileSet::TileSet(GameObject& associated, int tileWidth, int tileHeight, std::string file) {
   this->tileWidth = tileWidth;
   this->tileHeight = tileHeight;
 
-  // FIXME: check this
-  GameObject *go = new GameObject();
-  this->tileSet = new Sprite(*go, file);
+  this->tileSet = new Sprite(associated, file);
   this->rows = this->tileSet->GetHeight() / this->GetTileHeight();
   this->columns = this->tileSet->GetWidth() / this->GetTileWidth();
 }

@@ -5,23 +5,21 @@
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
-  this->music.Play();
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 
 	GameObject *bg = new GameObject();
-	GameObject *mapGameObj = new GameObject();
-
 	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
 	bg->AddComponent(bgSprite);
 	this->objectArray.emplace_back(bg);
 
-	// FIXME: check if this should be a State member
-	TileSet	*tileSet = new TileSet(64, 64, "img/tileset.png") ;
+	GameObject *mapGameObj = new GameObject();
+	TileSet	*tileSet = new TileSet(*mapGameObj, 64, 64, "img/tileset.png") ;
 	Component *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
 	this->objectArray.emplace_back(mapGameObj);
 
+  this->music.Play();
 	srand(time(NULL));
 }
 
