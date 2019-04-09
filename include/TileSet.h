@@ -1,9 +1,6 @@
 #ifndef TILESET_H
 #define TILESET_H
 
-// #define INCLUDE_SDL_IMAGE
-// #include "SDL_include.h"
-
 #include "Sprite.h"
 #include <string>
 
