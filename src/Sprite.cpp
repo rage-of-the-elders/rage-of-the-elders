@@ -3,7 +3,9 @@
 #include "Resources.h"
 
 Sprite::Sprite(GameObject &associated) : Component(associated) {
-  texture = nullptr;
+  this->texture = nullptr;
+  this->width = 0;
+  this->height = 0;
 }
 
 Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated) {
