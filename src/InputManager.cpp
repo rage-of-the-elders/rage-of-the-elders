@@ -14,6 +14,9 @@ InputManager::InputManager() {
   this->mouseY = 0;
 }
 
+InputManager::~InputManager() {
+}
+
 InputManager &InputManager::GetInstance() {
   static InputManager inputManager;
   return inputManager;
@@ -21,16 +24,19 @@ InputManager &InputManager::GetInstance() {
 
 void InputManager::Update() {
   SDL_Event event;
-	int mouseX, mouseY;
+
   this->updateCounter++;
   this->quitRequested = false;
 
-  SDL_GetMouseState(&mouseX, &mouseY);
+  SDL_GetMouseState(&this->mouseX, &this->mouseY);
 
-	while (SDL_PollEvent(&event)) {
+  while (SDL_PollEvent(&event)) {
     int keyId, buttonId;
 
     if (not event.key.repeat) {
+      if (event.key.keysym.sym == SDLK_ESCAPE)
+        this->quitRequested = true;
+
       switch (event.type) {
         case SDL_MOUSEBUTTONDOWN:
           buttonId = event.button.button;
@@ -43,12 +49,12 @@ void InputManager::Update() {
           this->mouseUpdate[buttonId] = this->updateCounter;
           break;
         case SDL_KEYDOWN:
-          keyId = event.button.button;
+          keyId = event.key.keysym.sym;
           this->keyState[keyId] = true;
           this->keyUpdate[keyId] = this->updateCounter;
           break;
         case SDL_KEYUP:
-          keyId = event.button.button;
+          keyId = event.key.keysym.sym;
           this->keyState[keyId] = false;
           this->keyUpdate[keyId] = this->updateCounter;
           break;
@@ -59,28 +65,6 @@ void InputManager::Update() {
           break;
       }
     }
-		
-      // Traveling the array backwards to always click on the object from above
-			// for (int i = objectArray.size() - 1; i >= 0; i--) {
-			// 	GameObject* go = (GameObject*) objectArray[i].get();
-
-      //   if (go->box.Contains( (float)mouseX, (float)mouseY ) ) {
-			// 		Face* face = (Face*)go->GetComponent("Face");
-			// 		if (face != nullptr) {
-			// 			face->Damage(std::rand() % 10 + 10);
-      //       break; // Exits the loop to hit only one face
-      //     }
-			// 	}
-			// }
-
-		// if (event.type == SDL_KEYDOWN) {
-		// 	if( event.key.keysym.sym == SDLK_ESCAPE ) {
-		// 		quitRequested = true;
-		// 	} else {
-		// 		Vec2 objPos = Vec2(mouseX, mouseY).Rotate(200, rand() % 360);
-		// 		this->AddObject((int)objPos.x, (int)objPos.y);
-		// 	}
-		// }
 	}
 }
 

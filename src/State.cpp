@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "TileMap.h"
 #include "TileSet.h"
+#include "InputManager.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -31,45 +32,14 @@ void State::LoadAssets() {
 	this->objectArray.emplace_back(mapGameObj);
 }
 
-void State::Input() {
-	SDL_Event event;
-	int mouseX, mouseY;
-
-	SDL_GetMouseState(&mouseX, &mouseY);
-
-	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-			this->quitRequested = true;
-		}
-		
-		if (event.type == SDL_MOUSEBUTTONDOWN) {
-			// Traveling the array backwards to always click on the object from above
-			for (int i = objectArray.size() - 1; i >= 0; i--) {
-				GameObject* go = (GameObject*) objectArray[i].get();
-
-        if (go->box.Contains( (float)mouseX, (float)mouseY ) ) {
-					Face* face = (Face*)go->GetComponent("Face");
-					if (face != nullptr) {
-						face->Damage(std::rand() % 10 + 10);
-            break; // Exits the loop to hit only one face
-          }
-				}
-			}
-		}
-
-		if (event.type == SDL_KEYDOWN) {
-			if( event.key.keysym.sym == SDLK_ESCAPE ) {
-				quitRequested = true;
-			} else {
-				Vec2 objPos = Vec2(mouseX, mouseY).Rotate(200, rand() % 360);
-				this->AddObject((int)objPos.x, (int)objPos.y);
-			}
-		}
-	}
-}
-
 void State::Update(float dt) {
-  this->Input();
+  this->quitRequested = InputManager::GetInstance().QuitRequested();
+
+	if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+		Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(), InputManager::GetInstance().GetMouseY())
+										.Rotate(200, rand() % 360);
+		this->AddObject((int)objPos.x, (int)objPos.y);
+	}
 
   for (auto &gameObj : this->objectArray)
     gameObj->Update(dt);

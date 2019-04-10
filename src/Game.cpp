@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "Resources.h"
+#include "InputManager.h"
 
 Game *Game::instance = nullptr;
 
@@ -89,6 +90,7 @@ Game::~Game(){
 
 void Game::Run() {
   while (not state->QuitRequested()) {
+    InputManager::GetInstance().Update();
     state->Update(-1); // TODO: set a valid number
     state->Render();
     SDL_RenderPresent(renderer);

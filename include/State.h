@@ -16,7 +16,6 @@ private:
   bool quitRequested;
   std::vector<std::shared_ptr<GameObject>> objectArray;
 
-  void Input();
   void AddObject(int mouseX, int mouseY);
 
 public:
