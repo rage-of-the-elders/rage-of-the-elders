@@ -10,12 +10,11 @@ TileSet::TileSet(GameObject& associated, int tileWidth, int tileHeight, std::str
 
 void TileSet::RenderTile(unsigned index, float x, float y) {
   if (index < (this->rows * this->columns)) {
-    // FIXME: Check this
     tileSet.SetClip(this->tileWidth * (index % this->columns),
                     this->tileHeight * (index / this->columns),
                     this->tileWidth,
                     this->tileHeight);
-    this->tileSet.Render(int(x), int(y));
+    this->tileSet.Render(round(x), round(y));
   }
 }
 int TileSet::GetTileWidth() {
