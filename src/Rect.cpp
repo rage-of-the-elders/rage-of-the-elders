@@ -17,3 +17,7 @@ Rect::Rect(float x, float y, float w, float h) {
 bool Rect::Contains(float pX, float pY) {
   return ((pX > x) && (pX < (x + w)) && (pY > y) && (pY < (y + h)));
 }
+
+Vec2 Rect::GetCenter() {
+  return Vec2((x + w)/2.0, (y + h)/2.0);
+}
