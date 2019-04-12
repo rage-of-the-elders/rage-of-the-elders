@@ -8,13 +8,16 @@
 
 Game *Game::instance = nullptr;
 
-Game::Game(std::string title, int width, int height) {
+Game::Game(std::string title, int width, int height) {  
   if (instance != nullptr) {
     printf("There's already an instance of Game running!");
     exit(-1); // TODO: HANDLE THIS ERROR
   }
 
   instance = this;
+
+  this->frameStart = SDL_GetTicks();
+	this->dt = 0;
 
   // SDL initialization
   int sdl_initialization_error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
@@ -89,9 +92,10 @@ Game::~Game(){
 }
 
 void Game::Run() {
+  this->CalculateDeltaTime();
   while (not state->QuitRequested()) {
     InputManager::GetInstance().Update();
-    state->Update(-1); // TODO: set a valid number
+    state->Update(this->GetDeltaTime());
     state->Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
@@ -115,4 +119,13 @@ Game &Game::GetInstance() {
     instance = new Game("Matheus Richard - 150043023", 1024, 600);
 
   return *instance;
+}
+
+void Game::CalculateDeltaTime() {
+  this->dt = SDL_GetTicks() - this->frameStart;
+  this->frameStart += this->dt;
+}
+
+float Game::GetDeltaTime() {
+	return this->dt/1000.0;
 }
