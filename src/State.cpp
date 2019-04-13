@@ -12,7 +12,7 @@ State::State() : music("audio/stageState.ogg") {
 
 	LoadAssets();
 
-  // this->music.Play();
+  this->music.Play();
 	srand(time(NULL));
 }
 
@@ -38,7 +38,7 @@ void State::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
 
 	Camera::Update(dt);
-	bg->Update(dt);
+	this->bg->Update(dt);
 	this->mapGameObj->Update(dt);
 
 	if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
@@ -58,9 +58,8 @@ void State::Update(float dt) {
 }
 
 void State::Render() {
-	bg->Render();
-	Component *tileMap = mapGameObj->GetComponent("TileMap");
-	tileMap->Render();
+	this->bg->Render();
+	this->mapGameObj->GetComponent("TileMap")->Render();
 
 	for (auto &gameObj : this->objectArray)
 		gameObj->Render();
