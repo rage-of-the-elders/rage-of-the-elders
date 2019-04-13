@@ -13,6 +13,8 @@
 class State {
 private:
   Music music;
+  GameObject *bg;
+  GameObject *mapGameObj;
   bool quitRequested;
   std::vector<std::shared_ptr<GameObject>> objectArray;
 

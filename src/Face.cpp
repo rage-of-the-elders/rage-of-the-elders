@@ -1,6 +1,7 @@
 #include "Face.h"
 #include "Sound.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 Face::Face(GameObject &associated) : Component(associated) {
   this->hitpoints = 30;
@@ -20,12 +21,17 @@ void Face::Damage(int damage) {
 }
 
 void Face::Update(float dt) {
-    if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
-      if (this->associated.box.Contains( (float)InputManager::GetInstance().GetMouseX(),
-                                         (float)InputManager::GetInstance().GetMouseY() ) ) {
-          float damage = std::rand() % 10 + 10;
-          this->Damage(damage);
-      }
+  if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
+    int posX = InputManager::GetInstance().GetMouseX();
+    int posY = InputManager::GetInstance().GetMouseY();
+
+    if (this->associated.box.Contains((float)posX, (float)posY )) {
+        float damage = std::rand() % 10 + 10;
+        this->Damage(damage);
+    }
+  }
+  if (InputManager::GetInstance().MousePress(RIGHT_MOUSE_BUTTON)) {
+    Camera::Follow(&this->associated);
   }
 }
 

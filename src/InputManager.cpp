@@ -2,6 +2,7 @@
 #include "SDL_include.h"
 
 #include "InputManager.h"
+#include "Camera.h"
 
 #include <cstring>
 
@@ -24,11 +25,12 @@ InputManager &InputManager::GetInstance() {
 
 void InputManager::Update() {
   SDL_Event event;
-
   this->updateCounter++;
   this->quitRequested = false;
 
   SDL_GetMouseState(&this->mouseX, &this->mouseY);
+  this->mouseX += Camera::pos.x;
+  this->mouseY += Camera::pos.y;
 
   while (SDL_PollEvent(&event)) {
     int keyId, buttonId;

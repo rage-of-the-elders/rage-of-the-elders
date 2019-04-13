@@ -3,6 +3,8 @@
 #include "TileMap.h"
 #include "TileSet.h"
 #include "InputManager.h"
+#include "Camera.h"
+#include "CameraFollower.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -10,7 +12,7 @@ State::State() : music("audio/stageState.ogg") {
 
 	LoadAssets();
 
-  this->music.Play();
+  // this->music.Play();
 	srand(time(NULL));
 }
 
@@ -19,21 +21,25 @@ State::~State() {
 }
 
 void State::LoadAssets() {
-	GameObject *bg = new GameObject();
-	Component *bgSprite = new Sprite(*bg, "img/ocean.jpg");
-	bg->AddComponent(bgSprite);
-	this->objectArray.emplace_back(bg);
+	this->bg = new GameObject();
+	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
+	this->bg->box = Rect();
 
-	GameObject *mapGameObj = new GameObject();
+	this->mapGameObj = new GameObject();
 	TileSet *tileSet = new TileSet(*mapGameObj, 64, 64, "img/tileset.png");
-	Component *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
+	TileMap *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
-	this->objectArray.emplace_back(mapGameObj);
+
+	bg->AddComponent(new CameraFollower(*bg));
 }
 
 void State::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
+
+	Camera::Update(dt);
+	bg->Update(dt);
+	this->mapGameObj->Update(dt);
 
 	if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
 		Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(), InputManager::GetInstance().GetMouseY())
@@ -45,12 +51,18 @@ void State::Update(float dt) {
     gameObj->Update(dt);
 
   for (int i = objectArray.size() - 1; i >= 0; i--)
-    if (objectArray[i]->IsDead())
+    if (objectArray[i]->IsDead()) {
+			Camera::Unfollow();
       objectArray.erase(objectArray.begin() + i);
+		}
 }
 
 void State::Render() {
-  for (auto &gameObj : this->objectArray)
+	bg->Render();
+	Component *tileMap = mapGameObj->GetComponent("TileMap");
+	tileMap->Render();
+
+	for (auto &gameObj : this->objectArray)
 		gameObj->Render();
 }
 
@@ -66,8 +78,10 @@ void State::AddObject(int mouseX, int mouseY) {
 	gameObj->AddComponent(face);
 
 	this->objectArray.emplace_back(gameObj);
-	gameObj->box = Rect(mouseX - sprite->GetWidth() / 2, mouseY - sprite->GetHeight() / 2,
-									    sprite->GetWidth(), sprite->GetHeight());
+	gameObj->box = Rect((mouseX - sprite->GetWidth() / 2),
+											(mouseY - sprite->GetHeight() / 2),
+											sprite->GetWidth(),
+											sprite->GetHeight());
 }
 
 bool State::QuitRequested() {
