@@ -16,6 +16,7 @@ private:
 
 public:
   Rect box;
+  bool started;
 
   GameObject();
   ~GameObject();
@@ -26,6 +27,7 @@ public:
   void AddComponent(Component *cpt);
   void RemoveComponent(Component *cpt);
   Component *GetComponent(std::string type);
+  void Start();
 };
 
 #endif
