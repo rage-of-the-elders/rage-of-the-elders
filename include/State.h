@@ -17,6 +17,7 @@ private:
   GameObject *mapGameObj;
   bool quitRequested;
   std::vector<std::shared_ptr<GameObject>> objectArray;
+  bool started;
 
   void AddObject(int mouseX, int mouseY);
 
@@ -27,6 +28,9 @@ public:
   void LoadAssets();
   void Update(float dt);
   void Render();
+  void Start() ;
+  std::weak_ptr<GameObject> AddObject(GameObject* go);
+  std::weak_ptr<GameObject> GetObjectPtr(GameObject* go);
 };
 
 #endif

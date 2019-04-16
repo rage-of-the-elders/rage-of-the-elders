@@ -8,9 +8,9 @@
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
+  this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 
-	LoadAssets();
 
   this->music.Play();
 	srand(time(NULL));
@@ -85,4 +85,32 @@ void State::AddObject(int mouseX, int mouseY) {
 
 bool State::QuitRequested() {
   return quitRequested;
+}
+
+void State::Start() {
+	this->LoadAssets();
+
+	for (auto &obj : this->objectArray)
+		obj->Start();
+
+	this->started = true;
+}
+
+std::weak_ptr<GameObject> State::AddObject(GameObject *go) {
+	std::shared_ptr<GameObject> ptr = std::shared_ptr<GameObject>(go);
+	objectArray.push_back(ptr);
+
+	if (started)
+		ptr->Start();
+	return ptr;
+}
+
+std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
+	for (auto &obj : objectArray) {
+		if (obj.get() == go) {
+			std::weak_ptr<GameObject> weakPtr = obj;
+			return weakPtr;
+		}
+	}
+	return std::weak_ptr<GameObject>();
 }
