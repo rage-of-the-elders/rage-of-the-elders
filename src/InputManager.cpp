@@ -63,6 +63,18 @@ void InputManager::Update() {
         case SDL_QUIT:
           this->quitRequested = true;
           break;
+        case SDL_JOYAXISMOTION:
+          puts("JOY AXIS MOTION");
+          break;
+        case SDL_JOYBUTTONUP:
+          puts("SDL_JOYBUTTONUP");
+          break;
+        case SDL_JOYBUTTONDOWN:
+          puts("SDL_JOYBUTTONDOWN");
+          break;
+        case SDL_CONTROLLERBUTTONDOWN:
+          puts("SDL_CONTROLLERBUTTONDOWN");
+          break;
         default:
           break;
       }
@@ -104,4 +116,47 @@ int InputManager::GetMouseY() {
 
 bool InputManager::QuitRequested() {
   return this->quitRequested;
+}
+
+void InputManager::ConnectJoysticks(){
+	int maxJoysticks = SDL_NumJoysticks();
+	if(maxJoysticks > N_PLAYERS)
+    maxJoysticks = N_PLAYERS;
+	int n_controller = 0;
+
+	for(int i = 0; i < maxJoysticks; i++) {
+		if(this->controllers[i] != nullptr) {
+      SDL_GameControllerClose(this->controllers[i]);
+      this->controllers[i] = nullptr;
+    }
+	}
+
+	for(int i = 0; i < maxJoysticks; ++i) {
+		char guid[64];
+		SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(i), guid, sizeof (guid));
+
+		if(SDL_IsGameController(i)){
+			this->controllers[i] = SDL_GameControllerOpen(i);
+
+			SDL_Joystick *joystick = SDL_GameControllerGetJoystick(this->controllers[i]);
+      int instanceId = SDL_JoystickInstanceID(joystick);
+      printf("Controller %d (%d real) connected\n", i, instanceId);
+			this->controllersId[instanceId] = i;
+			n_controller++;
+		}else{
+			printf("WARNING: Joystick is not a game controller\n");
+			SDL_JoystickOpen(i);
+		}
+	}
+}
+
+bool InputManager::JoystickButtonPress(int button, int joystick){
+	return joystickState[joystick][button] && joystickUpdate[joystick][button] == this->updateCounter;
+} 
+
+bool InputManager::JoystickButtonRelease(int button, int joystick){
+  return !joystickState[joystick][button] && joystickUpdate[joystick][button] == this->updateCounter;
+}
+bool InputManager::IsJoystickButtonDown(int button, int joystick){
+	return joystickState[joystick][button];
 }

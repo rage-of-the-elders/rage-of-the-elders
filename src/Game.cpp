@@ -18,9 +18,10 @@ Game::Game(std::string title, int width, int height) {
 
   this->frameStart = SDL_GetTicks();
 	this->dt = 0;
+  srand(time(NULL));
 
   // SDL initialization
-  int sdl_initialization_error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
+  int sdl_initialization_error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
   if (sdl_initialization_error) {
     printf("SDL Init Error: %s\n", SDL_GetError()); // TODO: Move this to a helper
     exit(-1);
@@ -76,6 +77,21 @@ Game::Game(std::string title, int width, int height) {
     exit(-1);
   }
 
+  int ttf_init = TTF_Init();
+	if(ttf_init){
+		printf("%s\n", TTF_GetError());
+		exit(-1);
+	}
+
+  if(SDL_NumJoysticks() < 1) {
+		printf("Warning: No joysticks connected!\n");
+    printf("ERROR: %s!\nasdf: %d\n", SDL_GetError(), SDL_NumJoysticks());
+  }
+
+  SDL_GameControllerAddMappingsFromFile((std::string(ASSETS_PATH) + "joystick/game-controller-mapping.txt").c_str());
+
+  InputManager::GetInstance().ConnectJoysticks();
+	// InputManager::get_instance()->connect_joysticks();
   state = new State();
 }
 
@@ -83,6 +99,7 @@ Game::~Game(){
   if (state != nullptr)
 	  delete state;
 
+	TTF_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   Mix_Quit();

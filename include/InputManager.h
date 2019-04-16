@@ -10,6 +10,25 @@
 #define SPACE_KEY SDLK_SPACE
 #define ESCAPE_KEY SDLK_ESCAPE
 
+#define UP SDL_CONTROLLER_BUTTON_DPAD_UP
+#define RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#define DOWN SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#define LEFT SDL_CONTROLLER_BUTTON_DPAD_LEFT
+#define A SDL_CONTROLLER_BUTTON_A
+#define B SDL_CONTROLLER_BUTTON_B
+#define X SDL_CONTROLLER_BUTTON_X
+#define Y SDL_CONTROLLER_BUTTON_Y
+#define LB SDL_CONTROLLER_BUTTON_LEFTSHOULDER
+#define RB SDL_CONTROLLER_BUTTON_RIGHTSHOULDER
+#define LT 0x20
+#define RT 0x21 //Valor arbitrário, mas tá cert
+#define SELECT SDL_CONTROLLER_BUTTON_BACK
+#define START SDL_CONTROLLER_BUTTON_START
+#define L3 SDL_CONTROLLER_BUTTON_LEFTSTICK
+#define R3 SDL_CONTROLLER_BUTTON_RIGHTSTICK
+
+#define N_PLAYERS 2
+
 #define INCLUDE_SDL
 #include "SDL_include.h"
 
@@ -23,8 +42,12 @@ private:
   int mouseY;
   std::unordered_map<int, bool> keyState;
   std::unordered_map<int, int> keyUpdate;
+  std::unordered_map<int, int> controllersId;
+  std::unordered_map<int, bool> joystickState[10];
+  std::unordered_map<int, int> joystickUpdate[10];
   bool quitRequested;
   int updateCounter;
+  SDL_GameController *controllers[N_PLAYERS];
 
   InputManager();
   ~InputManager();
@@ -40,7 +63,11 @@ public:
   bool IsMouseDown(int button);
   int GetMouseX();
   int GetMouseY();
+  bool JoystickButtonPress(int button, int joystick);
+  bool JoystickButtonRelease(int button, int joystick);
+  bool IsJoystickButtonDown(int button, int joystick);
   bool QuitRequested();
+  void ConnectJoysticks();
 };
 
 #endif

@@ -12,8 +12,7 @@ State::State() : music("audio/stageState.ogg") {
 
 	LoadAssets();
 
-  this->music.Play();
-	srand(time(NULL));
+  // this->music.Play();
 }
 
 State::~State() {
