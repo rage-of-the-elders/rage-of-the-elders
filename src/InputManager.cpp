@@ -102,6 +102,10 @@ int InputManager::GetMouseY() {
   return this->mouseY;
 }
 
+Vec2 InputManager::GetMousePos() {
+  return Vec2(this->mouseX, this->mouseY);
+}
+
 bool InputManager::QuitRequested() {
   return this->quitRequested;
 }

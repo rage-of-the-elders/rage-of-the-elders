@@ -40,6 +40,7 @@ public:
   bool IsMouseDown(int button);
   int GetMouseX();
   int GetMouseY();
+  Vec2 GetMousePos();
   bool QuitRequested();
 };
 
