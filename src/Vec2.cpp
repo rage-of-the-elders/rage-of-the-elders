@@ -28,13 +28,24 @@ Vec2 Vec2::Rotate(float distance, float angle){
 // }
 
 Vec2 Vec2::GetSpeed(Vec2 pos) {
-	return Vec2((pos.x - this->x) / this->GetModule(),
-							(pos.y - this->y) / this->GetModule());
+	return Vec2(this->GetDeltaX(pos.x) / this->GetDistance(pos),
+							this->GetDeltaY(pos.y) / this->GetDistance(pos));
 }
 
+float Vec2::GetDeltaX(float targetX) {
+	return targetX - this->x;
+}
+
+float Vec2::GetDeltaY(float targetY) {
+	return targetY - this->y;
+}
 
 float Vec2::Module(float x, float y) {
-	return pow((pow(x , 2) + pow(y, 2)), 0.5);
+	return sqrt(pow(x , 2) + pow(y, 2));
+}
+
+float Vec2::GetDistance(Vec2 target) {
+	return this->Module(this->GetDeltaX(target.x), this->GetDeltaY(target.y));
 }
 
 float Vec2::GetModule() {

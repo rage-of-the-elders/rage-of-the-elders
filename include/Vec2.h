@@ -8,11 +8,14 @@ public:
 
   Vec2();
   Vec2(float x, float y);
-  float Cos(float angle);
-  float Sin(float angle);
-  Vec2 Rotate(float distance, float angle);
-  static float Module(float x, float y);
+  static float Cos(float angle);
+  static float Sin(float angle);
+  Vec2 Rotate(float distance = 0, float angle = 0);
+  float GetDeltaX(float targetX);  
+  float GetDeltaY(float targetY);
+  float GetDistance(Vec2 target);
   float GetModule();
+  static float Module(float x, float y);
   Vec2 GetSpeed(Vec2 pos);
 
   Vec2 operator+(const Vec2 &other) const;
