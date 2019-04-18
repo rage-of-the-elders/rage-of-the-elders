@@ -27,7 +27,7 @@ Vec2 Vec2::Rotate(float distance, float angle){
 // 	return Vec2(x * cos(angle) - y * sin(angle), y * cos(angle) + x * sin(angle));
 // }
 
-Vec2 Vec2::GetCos(Vec2 pos) {
+Vec2 Vec2::GetSpeed(Vec2 pos) {
 	return Vec2((pos.x - this->x) / this->GetModule(),
 							(pos.y - this->y) / this->GetModule());
 }

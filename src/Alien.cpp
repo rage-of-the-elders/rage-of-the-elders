@@ -47,7 +47,7 @@ void Alien::Update(float dt) {
 
     switch (this->taskQueue.front().type) {
     case Action::MOVE: {
-      this->speed = associatedBox.GetPos().GetCos(pos) * 100;
+      this->speed = associatedBox.GetPos().GetSpeed(pos) * 100;
       // printf("%f\n", dt);
 
       if ((associatedBox.x + speed.x * dt > pos.x && pos.x > associatedBox.x) || (associatedBox.x + speed.x * dt < pos.x && pos.x < associatedBox.x))
