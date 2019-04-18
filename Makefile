@@ -196,6 +196,8 @@ release: all
 run:
 	$(RUN)$(EXEC)
 
+go: all run
+
 clean:
 	$(RMDIR) $(BIN_PATH) $(DEP_PATH)
 
