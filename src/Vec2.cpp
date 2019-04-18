@@ -27,6 +27,20 @@ Vec2 Vec2::Rotate(float distance, float angle){
 // 	return Vec2(x * cos(angle) - y * sin(angle), y * cos(angle) + x * sin(angle));
 // }
 
+Vec2 Vec2::GetCos(Vec2 pos) {
+	return Vec2((pos.x - this->x) / this->GetModule(),
+							(pos.y - this->y) / this->GetModule());
+}
+
+
+float Vec2::Module(float x, float y) {
+	return pow((pow(x , 2) + pow(y, 2)), 0.5);
+}
+
+float Vec2::GetModule() {
+	return this->Module(this->x, this->y);
+}
+
 Vec2 Vec2::operator+(const Vec2& other) const {
 	return Vec2(x + other.x, y + other.y);
 }

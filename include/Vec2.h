@@ -11,6 +11,9 @@ public:
   float Cos(float angle);
   float Sin(float angle);
   Vec2 Rotate(float distance, float angle);
+  static float Module(float x, float y);
+  float GetModule();
+  Vec2 GetCos(Vec2 pos);
 
   Vec2 operator+(const Vec2 &other) const;
   Vec2 operator+(const float other) const;
