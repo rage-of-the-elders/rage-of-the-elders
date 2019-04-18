@@ -43,24 +43,24 @@ void Alien::Update(float dt) {
   }
 
   if (this->taskQueue.size() > 0) {
-    Vec2 pos = this->taskQueue.front().pos;
+    Vec2 targetPos = this->taskQueue.front().pos;
 
     switch (this->taskQueue.front().type) {
     case Action::MOVE: {
-      this->speed = associatedBox.GetPos().GetSpeed(pos) * 100;
+      this->speed = associatedBox.GetPos().GetSpeed(targetPos) * 300;
       // printf("%f\n", dt);
 
-      if ((associatedBox.x + speed.x * dt > pos.x && pos.x > associatedBox.x) || (associatedBox.x + speed.x * dt < pos.x && pos.x < associatedBox.x))
-        associatedBox.x = pos.x;
+      if ((associatedBox.x + speed.x * dt > targetPos.x && targetPos.x > associatedBox.x) || (associatedBox.x + speed.x * dt < targetPos.x && targetPos.x < associatedBox.x))
+        associatedBox.x = targetPos.x;
       else
         associatedBox.x += speed.x * dt;
-      if ((associatedBox.y + speed.y * dt > pos.y && pos.y > associatedBox.y) || (associatedBox.y + speed.y * dt < pos.y && pos.y < associatedBox.y))
-        associatedBox.y = pos.y;
+      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y) || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y))
+        associatedBox.y = targetPos.y;
       else
         associatedBox.y += speed.y * dt;
 
-      // printf("x: %f y:%f\n", speed.x, speed.y);
-      if (associatedBox.x == pos.x && associatedBox.y == pos.y)
+      // FIXME
+      if (abs(associatedBox.x - targetPos.x) < 1 && abs(associatedBox.y - targetPos.y) < 1)
         taskQueue.pop();
 
       this->associated.box = associatedBox;
