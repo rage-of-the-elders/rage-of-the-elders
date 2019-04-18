@@ -12,6 +12,7 @@
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
+#include "Vec2.h"
 
 #include <unordered_map>
 

@@ -5,14 +5,19 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "CameraFollower.h"
+#include "Alien.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 
+	GameObject *alienGO = new GameObject();
+	alienGO->AddComponent(new Alien(*alienGO, 8));
+	alienGO->box.SetPos(512 - alienGO->box.w / 2, 300 - alienGO->box.h / 2);
+	AddObject(alienGO);
 
-  this->music.Play();
+	this->music.Play();
 	srand(time(NULL));
 }
 
@@ -41,11 +46,11 @@ void State::Update(float dt) {
 	this->bg->Update(dt);
 	this->mapGameObj->Update(dt);
 
-	if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-		Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(), InputManager::GetInstance().GetMouseY())
-										.Rotate(200, rand() % 360);
-		this->AddObject((int)objPos.x, (int)objPos.y);
-	}
+	// if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+	// 	Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(), InputManager::GetInstance().GetMouseY())
+	// 									.Rotate(200, rand() % 360);
+	// 	this->AddObject((int)objPos.x, (int)objPos.y);
+	// }
 
   for (auto &gameObj : this->objectArray)
     gameObj->Update(dt);
@@ -65,23 +70,23 @@ void State::Render() {
 		gameObj->Render();
 }
 
-void State::AddObject(int mouseX, int mouseY) {
-	GameObject *gameObj = new GameObject();
+// void State::AddObject(int mouseX, int mouseY) {
+// 	GameObject *gameObj = new GameObject();
 
-	Sprite *sprite = new Sprite(*gameObj, "img/penguinface.png");
-	Sound *sound = new Sound(*gameObj, "audio/boom.wav");
-	Face *face = new Face(*gameObj);
+// 	Sprite *sprite = new Sprite(*gameObj, "img/penguinface.png");
+// 	Sound *sound = new Sound(*gameObj, "audio/boom.wav");
+// 	Face *face = new Face(*gameObj);
 
-	gameObj->AddComponent(sprite);
-	gameObj->AddComponent(sound);
-	gameObj->AddComponent(face);
+// 	gameObj->AddComponent(sprite);
+// 	gameObj->AddComponent(sound);
+// 	gameObj->AddComponent(face);
 
-	this->objectArray.emplace_back(gameObj);
-	gameObj->box = Rect((mouseX - sprite->GetWidth() / 2),
-											(mouseY - sprite->GetHeight() / 2),
-											sprite->GetWidth(),
-											sprite->GetHeight());
-}
+// 	this->objectArray.emplace_back(gameObj);
+// 	gameObj->box = Rect((mouseX - sprite->GetWidth() / 2),
+// 											(mouseY - sprite->GetHeight() / 2),
+// 											sprite->GetWidth(),
+// 											sprite->GetHeight());
+// }
 
 bool State::QuitRequested() {
   return quitRequested;
