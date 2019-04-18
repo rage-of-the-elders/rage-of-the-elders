@@ -10,7 +10,9 @@ public:
   Rect();
   Rect(float x, float y, float w, float h);
   bool Contains(float x, float y);
+  Vec2 GetPos();
   Vec2 GetCenter();
+  void SetPos(float x, float y);
 };
 
 #endif
