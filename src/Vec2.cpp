@@ -12,14 +12,18 @@ Vec2::Vec2(float x, float y) {
 }
 
 float Vec2::Cos(float angle) {
-	return cos(angle * (PI / 180.0));
+	return cos(angle * (180.0 / PI));
 }
 
 float Vec2::Sin(float angle) {
-	return sin(angle * (PI/180.0));
+	return sin(angle * (180.0 / PI));
 }
 
-Vec2 Vec2::Rotate(float distance, float angle){
+float Vec2::Acos(float angle) {
+	return (acos(angle) * (180.0 / PI));
+}
+
+Vec2 Vec2::Rotate(float distance, float angle) {
 	return Vec2(x + distance * cos(angle), y + distance * sin(angle));
 }
 
@@ -52,6 +56,11 @@ float Vec2::GetModule() {
 	return this->Module(this->x, this->y);
 }
 
+float Vec2::GetAngle(Vec2 target) {
+	float angle = ((*this) * target) / (this->GetModule() * target.GetModule());
+	return Acos(angle);
+}
+
 Vec2 Vec2::operator+(const Vec2& other) const {
 	return Vec2(x + other.x, y + other.y);
 }
@@ -70,4 +79,7 @@ Vec2 Vec2::operator-(const float other) const {
 
 Vec2 Vec2::operator*(const float other) const {
 	return Vec2(x * other, y * other);
+}
+float Vec2::operator*(const Vec2& other) const {
+	return (x * other.x) + (y * other.y);
 }
