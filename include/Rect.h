@@ -13,6 +13,7 @@ public:
   Vec2 GetPos();
   Vec2 GetCenter();
   void SetPos(float x, float y);
+  void SetPos(Vec2 pos);
 };
 
 #endif

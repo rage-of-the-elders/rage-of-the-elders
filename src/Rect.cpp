@@ -30,3 +30,8 @@ void Rect::SetPos(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
+
+void Rect::SetPos(Vec2 pos) {
+	x = pos.x;
+	y = pos.y;
+}
