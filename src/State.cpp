@@ -15,10 +15,9 @@ State::State() : music("audio/stageState.ogg") {
 	GameObject *alienGO = new GameObject();
 	alienGO->AddComponent(new Alien(*alienGO, 8));
 	alienGO->box.SetPos(512 - alienGO->box.w / 2, 300 - alienGO->box.h / 2);
-	AddObject(alienGO);
+	this->AddObject(alienGO);
 
-	this->music.Play();
-	srand(time(NULL));
+	// this->music.Play();
 }
 
 State::~State() {
