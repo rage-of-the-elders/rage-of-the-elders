@@ -1,7 +1,8 @@
 #include "Alien.h"
 #include "Sprite.h"
 #include "InputManager.h"
-// #include "Camera.h"
+#include "Minion.h"
+#include "Game.h"
 
 Alien::Action::Action(ActionType type, float x, float y) {
 	this->type = type;
@@ -13,6 +14,7 @@ Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
   this->speed = Vec2();
   this->taskQueue = std::queue<Action>();
   this->minionArray = std::vector<std::weak_ptr<GameObject>>();
+  this->nMinions = nMinions;
 
   this->associated.AddComponent(new Sprite(associated, "img/alien.png"));
 }
@@ -22,7 +24,11 @@ Alien::~Alien() {
 }
 
 void Alien::Start() {
-  // TODO
+  for (int i = 0; i < this->nMinions; i++) {
+    GameObject *go = new GameObject();
+    go->AddComponent(new Minion(*go, std::make_shared<GameObject>(this->associated), i * (360 / this->nMinions)));
+    minionArray.push_back(Game::GetInstance().GetState().AddObject(go));
+  }
 }
 
 void Alien::Update(float dt) {
@@ -35,7 +41,6 @@ void Alien::Update(float dt) {
 
   }
   if (InputManager::GetInstance().MousePress(RIGHT_MOUSE_BUTTON)) {
-    puts("bbbbbbbb");
     this->taskQueue.push(Action(Action::MOVE,
                                 (float)InputManager::GetInstance().GetMouseX() - associatedBox.w,
                                 (float)InputManager::GetInstance().GetMouseY() - associatedBox.h));
@@ -47,8 +52,7 @@ void Alien::Update(float dt) {
 
     switch (this->taskQueue.front().type) {
     case Action::MOVE: {
-      this->speed = associatedBox.GetPos().GetSpeed(targetPos) * 300;
-      // printf("%f\n", dt);
+      this->speed = associatedBox.GetPos().GetSpeed(targetPos) * 200;
 
       if ((associatedBox.x + speed.x * dt > targetPos.x && targetPos.x > associatedBox.x) || (associatedBox.x + speed.x * dt < targetPos.x && targetPos.x < associatedBox.x))
         associatedBox.x = targetPos.x;
@@ -66,10 +70,12 @@ void Alien::Update(float dt) {
       this->associated.box = associatedBox;
     } break;
 
-    case Action::SHOOT:
-      puts("SHOOT");
-      this->taskQueue.pop();
-      break;
+    case Action::SHOOT: {
+        Minion* minion = (Minion*) minionArray[rand() % minionArray.size()].lock()->GetComponent("Minion");
+        minion->Shoot(targetPos);
+        taskQueue.pop();
+      } break;
+
     default:
       break;
     }
