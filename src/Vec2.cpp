@@ -32,8 +32,13 @@ Vec2 Vec2::Rotate(float distance, float angle) {
 // }
 
 Vec2 Vec2::GetSpeed(Vec2 pos) {
-	return Vec2(this->GetDeltaX(pos.x) / this->GetDistance(pos),
-							this->GetDeltaY(pos.y) / this->GetDistance(pos));
+	float distance = this->GetDistance(pos);
+	if (distance != 0) {
+		return Vec2(this->GetDeltaX(pos.x) / distance,
+								this->GetDeltaY(pos.y) / distance);
+	} else {
+		return Vec2();
+	}
 }
 
 float Vec2::GetDeltaX(float targetX) {
