@@ -26,7 +26,11 @@ Alien::~Alien() {
 void Alien::Start() {
   for (int i = 0; i < this->nMinions; i++) {
     GameObject *go = new GameObject();
-    go->AddComponent(new Minion(*go, std::make_shared<GameObject>(this->associated), i * (360 / this->nMinions)));
+    // go->AddComponent(new Minion(*go, std::make_shared<GameObject>(this->associated), i * (360 / this->nMinions)));
+
+    // printf("nminions %d\n",i);
+    // printf("%f\n", i * (360.0 / this->nMinions));
+    go->AddComponent(new Minion(*go, this->associated, i * (360.0 / this->nMinions)));
     minionArray.push_back(Game::GetInstance().GetState().AddObject(go));
   }
 }
@@ -42,9 +46,8 @@ void Alien::Update(float dt) {
   }
   if (InputManager::GetInstance().MousePress(RIGHT_MOUSE_BUTTON)) {
     this->taskQueue.push(Action(Action::MOVE,
-                                (float)InputManager::GetInstance().GetMouseX() - associatedBox.w,
-                                (float)InputManager::GetInstance().GetMouseY() - associatedBox.h));
-    // taskQueue.push(Action(Action::MOVE, mousePos.x - box.w / 2, mousePos.y - box.h / 2));
+                                (float)InputManager::GetInstance().GetMouseX() - associatedBox.w / 2,
+                                (float)InputManager::GetInstance().GetMouseY() - associatedBox.h / 2));
   }
 
   if (this->taskQueue.size() > 0) {
@@ -54,17 +57,19 @@ void Alien::Update(float dt) {
     case Action::MOVE: {
       this->speed = associatedBox.GetPos().GetSpeed(targetPos) * 200;
 
-      if ((associatedBox.x + speed.x * dt > targetPos.x && targetPos.x > associatedBox.x) || (associatedBox.x + speed.x * dt < targetPos.x && targetPos.x < associatedBox.x))
+      if ((associatedBox.x + speed.x * dt > targetPos.x && targetPos.x > associatedBox.x)
+          || (associatedBox.x + speed.x * dt < targetPos.x && targetPos.x < associatedBox.x)) {
         associatedBox.x = targetPos.x;
-      else
+      } else {
         associatedBox.x += speed.x * dt;
-      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y) || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y))
+      }
+      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y) || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y)) {
         associatedBox.y = targetPos.y;
-      else
+      } else {
         associatedBox.y += speed.y * dt;
+      }
 
-      // FIXME
-      if (abs(associatedBox.x - targetPos.x) < 1 && abs(associatedBox.y - targetPos.y) < 1)
+      if ((associatedBox.x == targetPos.x) && (associatedBox.y == targetPos.y))
         taskQueue.pop();
 
       this->associated.box = associatedBox;
