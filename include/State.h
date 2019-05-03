@@ -18,8 +18,6 @@ private:
   std::vector<std::shared_ptr<GameObject>> objectArray;
   bool started;
 
-  // void AddObject(int mouseX, int mouseY);
-
 public:
   State();
   ~State();
