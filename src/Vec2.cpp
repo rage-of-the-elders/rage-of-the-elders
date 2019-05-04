@@ -1,5 +1,6 @@
 #include "Vec2.h"
 #include <cmath>
+#include <iostream>
 
 Vec2::Vec2() {
   this->x = 0.0;
@@ -12,19 +13,19 @@ Vec2::Vec2(float x, float y) {
 }
 
 float Vec2::Cos(float angle) {
-	return cos(angle * (180.0 / PI));
+	return cos(Math::Radians(angle));
 }
 
 float Vec2::Sin(float angle) {
-	return sin(angle * (180.0 / PI));
+	return sin(Math::Radians(angle));
 }
 
 float Vec2::Acos(float angle) {
-	return (acos(angle) * (180.0 / PI));
+	return (acos(Math::Radians(angle)));
 }
 
 Vec2 Vec2::Rotate(float distance, float angle) {
-	return Vec2(x + distance * cos(angle), y + distance * sin(angle));
+	return Vec2((x + distance) * Cos(angle), (y + distance) * Sin(angle));
 }
 
 // Vec2 Vec2::Rotate(float angle) {
