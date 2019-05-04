@@ -14,9 +14,10 @@ State::State() : music("audio/stageState.ogg") {
 
 	GameObject *alienGO = new GameObject();
 	alienGO->AddComponent(new Alien(*alienGO, 8));
-	alienGO->box.SetPos(512 - alienGO->box.w / 2, 300 - alienGO->box.h / 2);
+	alienGO->box.SetCenterPos(512, 300);
 	this->AddObject(alienGO);
 
+	// FIXME: Remove this comment
 	// this->music.Play();
 }
 
@@ -45,12 +46,6 @@ void State::Update(float dt) {
 	this->bg->Update(dt);
 	this->mapGameObj->Update(dt);
 
-	// if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-	// 	Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(), InputManager::GetInstance().GetMouseY())
-	// 									.Rotate(200, rand() % 360);
-	// 	this->AddObject((int)objPos.x, (int)objPos.y);
-	// }
-
   for (auto &gameObj : this->objectArray)
     gameObj->Update(dt);
 
@@ -68,24 +63,6 @@ void State::Render() {
 	for (auto &gameObj : this->objectArray)
 		gameObj->Render();
 }
-
-// void State::AddObject(int mouseX, int mouseY) {
-// 	GameObject *gameObj = new GameObject();
-
-// 	Sprite *sprite = new Sprite(*gameObj, "img/penguinface.png");
-// 	Sound *sound = new Sound(*gameObj, "audio/boom.wav");
-// 	Face *face = new Face(*gameObj);
-
-// 	gameObj->AddComponent(sprite);
-// 	gameObj->AddComponent(sound);
-// 	gameObj->AddComponent(face);
-
-// 	this->objectArray.emplace_back(gameObj);
-// 	gameObj->box = Rect((mouseX - sprite->GetWidth() / 2),
-// 											(mouseY - sprite->GetHeight() / 2),
-// 											sprite->GetWidth(),
-// 											sprite->GetHeight());
-// }
 
 bool State::QuitRequested() {
   return quitRequested;
