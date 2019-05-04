@@ -1,6 +1,7 @@
 #ifndef VEC2_H
 #define VEC2_H
-#define PI 3.1415926535
+
+#include "Math.h"
 
 class Vec2 {
 public:
