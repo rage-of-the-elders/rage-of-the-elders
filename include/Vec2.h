@@ -1,7 +1,7 @@
 #ifndef VEC2_H
 #define VEC2_H
 
-#include "Math.h"
+#include "MathHelper.h"
 
 class Vec2 {
 public:
@@ -12,6 +12,7 @@ public:
   static float Cos(float angle);
   static float Sin(float angle);
   static float Acos(float angle);
+  static float Atan2(float a, float b);
   Vec2 Rotate(float distance = 0, float angle = 0);
   float GetDeltaX(float targetX);  
   float GetDeltaY(float targetY);
@@ -20,6 +21,7 @@ public:
   static float Module(float x, float y);
   float GetAngle(Vec2 target);
   Vec2 GetSpeed(Vec2 pos);
+  static Vec2 GetSpeed(float angle);
 
   Vec2 operator+(const Vec2 &other) const;
   Vec2 operator+(const float other) const;
