@@ -19,7 +19,7 @@ bool Rect::Contains(float pX, float pY) {
 }
 
 Vec2 Rect::GetCenter() {
-  return Vec2((x + w)/2.0, (y + h)/2.0);
+  return Vec2((x + w/2.0), (y + h/2.0));
 }
 
 Vec2 Rect::GetPos() {
@@ -34,4 +34,14 @@ void Rect::SetPos(float x, float y) {
 void Rect::SetPos(Vec2 pos) {
 	x = pos.x;
 	y = pos.y;
+}
+
+void Rect::SetCenterPos(float centerX, float centerY) {
+  this->x = (centerX - w / 2);
+  this->y = (centerY - h / 2);
+}
+
+void Rect::SetCenterPos(Vec2 center) {
+  this->x = (center.x - w / 2);
+  this->y = (center.y - h / 2);
 }
