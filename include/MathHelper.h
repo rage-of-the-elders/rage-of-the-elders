@@ -7,6 +7,7 @@ class Math {
 public:
   static bool Equals(float a, float b);
   static float Radians(float degree);
+  static float Degrees(float radians);
 };
 
 #endif

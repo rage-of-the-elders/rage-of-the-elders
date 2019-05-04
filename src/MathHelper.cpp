@@ -1,4 +1,4 @@
-#include "Math.h"
+#include "MathHelper.h"
 #include <iostream>
 
 bool Math::Equals(float a, float b) {
@@ -6,4 +6,8 @@ bool Math::Equals(float a, float b) {
 }
 float Math::Radians(float degree) {
   return (degree * (PI / 180.0));
+}
+
+float Math::Degrees(float radians) {
+  return (radians * (180.0 / PI));
 }
