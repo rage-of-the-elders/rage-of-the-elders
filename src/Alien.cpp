@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Minion.h"
 #include "Game.h"
+#include "Math.h"
 
 Alien::Action::Action(ActionType type, float x, float y) {
 	this->type = type;
@@ -26,10 +27,6 @@ Alien::~Alien() {
 void Alien::Start() {
   for (int i = 0; i < this->nMinions; i++) {
     GameObject *go = new GameObject();
-    // go->AddComponent(new Minion(*go, std::make_shared<GameObject>(this->associated), i * (360 / this->nMinions)));
-
-    // printf("nminions %d\n",i);
-    // printf("%f\n", i * (360.0 / this->nMinions));
     go->AddComponent(new Minion(*go, this->associated, i * (360.0 / this->nMinions)));
     minionArray.push_back(Game::GetInstance().GetState().AddObject(go));
   }
@@ -69,7 +66,7 @@ void Alien::Update(float dt) {
         associatedBox.y += speed.y * dt;
       }
 
-      if ((associatedBox.x == targetPos.x) && (associatedBox.y == targetPos.y))
+      if (Math::Equals(associatedBox.x, targetPos.x) && Math::Equals(associatedBox.y, targetPos.y))
         taskQueue.pop();
 
       this->associated.box = associatedBox;
