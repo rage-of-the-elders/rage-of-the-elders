@@ -37,11 +37,9 @@ void Rect::SetPos(Vec2 pos) {
 }
 
 void Rect::SetCenterPos(float centerX, float centerY) {
-  this->x = (centerX - w / 2);
-  this->y = (centerY - h / 2);
+  this->SetPos((centerX - w / 2), (centerY - h / 2));
 }
 
 void Rect::SetCenterPos(Vec2 center) {
-  this->x = (center.x - w / 2);
-  this->y = (center.y - h / 2);
+  this->SetPos((center.x - w / 2), (center.y - h / 2));
 }
