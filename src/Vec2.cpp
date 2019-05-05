@@ -25,7 +25,7 @@ float Vec2::Acos(float angle) {
 }
 
 float Vec2::Atan2(float a, float b) {
-	return atan2(a, b);
+	return Math::Degrees(atan2(a, b));
 }
 
 Vec2 Vec2::Rotate(float distance, float angle) {
