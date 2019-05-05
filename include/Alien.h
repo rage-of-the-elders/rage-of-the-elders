@@ -23,6 +23,8 @@ private:
   Vec2 speed;
   std::queue<Action> taskQueue;
   std::vector<std::weak_ptr<GameObject> > minionArray;
+
+  int GetNearestMinion(Vec2 target);
   
 
 public:

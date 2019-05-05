@@ -4,6 +4,7 @@
 #include "Minion.h"
 #include "Game.h"
 #include "MathHelper.h"
+#include <map>
 
 Alien::Action::Action(ActionType type, float x, float y) {
 	this->type = type;
@@ -73,10 +74,12 @@ void Alien::Update(float dt) {
     } break;
 
     case Action::SHOOT: {
-        Minion* minion = (Minion*) minionArray[rand() % minionArray.size()].lock()->GetComponent("Minion");
+      if (this->minionArray.size() > 0) {
+        Minion *minion = (Minion *) minionArray[GetNearestMinion(targetPos)].lock()->GetComponent("Minion");
         minion->Shoot(targetPos);
-        taskQueue.pop();
-      } break;
+      }
+      taskQueue.pop();
+    } break;
 
     default:
       break;
@@ -98,4 +101,14 @@ bool Alien::Is(std::string type) {
 
 bool Alien::IsDead() {
   return this->hp <= 0;
+}
+
+int Alien::GetNearestMinion(Vec2 target) {
+  std::map<float, int> distances;
+  int idx = 0;
+  for(auto &i : this->minionArray) {
+    distances[(i.lock()->box.GetCenter().GetDistance(target))] = idx++;
+  }
+
+  return distances.begin()->second;
 }
