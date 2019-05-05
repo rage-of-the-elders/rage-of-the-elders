@@ -3,7 +3,7 @@
 #include "InputManager.h"
 #include "Minion.h"
 #include "Game.h"
-#include "Math.h"
+#include "MathHelper.h"
 
 Alien::Action::Action(ActionType type, float x, float y) {
 	this->type = type;
