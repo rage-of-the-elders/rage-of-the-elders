@@ -14,6 +14,7 @@ public:
   Vec2 GetCenter();
   void SetPos(float x, float y);
   void SetPos(Vec2 pos);
+  void UpdatePos(Vec2 pos);
   void SetCenterPos(float centerX, float centerY);
   void SetCenterPos(Vec2 center);
 };

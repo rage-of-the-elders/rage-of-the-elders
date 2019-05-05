@@ -32,8 +32,13 @@ void Rect::SetPos(float x, float y) {
 }
 
 void Rect::SetPos(Vec2 pos) {
-	x = pos.x;
-	y = pos.y;
+	this->x = pos.x;
+	this->y = pos.y;
+}
+
+void Rect::UpdatePos(Vec2 pos) {
+	this->x += pos.x;
+	this->y += pos.y;
 }
 
 void Rect::SetCenterPos(float centerX, float centerY) {
