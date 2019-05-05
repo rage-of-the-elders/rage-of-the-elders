@@ -8,23 +8,21 @@
 
 Minion::Minion(GameObject &associated, GameObject &alienCenter,
                float arcOffsetDeg) : Component(associated) {
-
   this->alienCenter = Game::GetInstance().GetState().GetObjectPtr(&alienCenter);
   this->associated.AddComponent(new Sprite(associated, "img/minion.png"));
   this->arc = arcOffsetDeg;
 }
 
 void Minion::Shoot(Vec2 target) {
-  puts("shoot");
-  // float angle = this->associated.box.GetCenter().GetAngle(target);
-  // float speed = 500;
-  // float damage = 10;
-  // float maxDistance = this->associated.box.GetCenter().GetDistance(target);
-  // GameObject *bullet = new GameObject();
-  // bullet->AddComponent(new Bullet(associated, angle, speed, damage, maxDistance, "img/minionbullet1.png"));
+  float angle = this->associated.box.GetCenter().GetAngle(target);
+  float speed = 150;
+  float damage = 10;
+  float maxDistance = this->associated.box.GetCenter().GetDistance(target);
 
-  // bullet->box.SetPos(associated.box.GetCenter() - Vec2(bullet->box.w / 2, bullet->box.h / 2));
-  // Game::GetInstance().GetState().AddObject(bullet);
+  GameObject *bullet = new GameObject();
+  bullet->AddComponent(new Bullet(*bullet, angle, speed, damage, maxDistance, "img/minionbullet1.png"));
+  bullet->box.SetPos(this->associated.box.GetCenter());
+  Game::GetInstance().GetState().AddObject(bullet);
 }
 
 void Minion::Update(float dt) {
