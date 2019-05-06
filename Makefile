@@ -204,7 +204,8 @@ clean:
 notes: todo
 
 todo:
-	grep --color --exclude='Makefile' --exclude='LICENSE' --exclude-dir='.git' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
+	@echo "Searching notes..."
+	@grep --color --exclude='Makefile' --exclude='LICENSE' --exclude-dir='.git' --exclude-dir='assets' -rni 'TODO\|FIXME\|TO DO\|FIX ME' .
 .PRECIOUS: $(DEP_PATH)/%.D
 
 .PHONY: debug clean release

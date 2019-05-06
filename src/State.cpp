@@ -17,8 +17,7 @@ State::State() : music("audio/stageState.ogg") {
 	alienGO->box.SetCenterPos(512, 300);
 	this->AddObject(alienGO);
 
-	// FIXME: Remove this comment
-	// this->music.Play();
+	this->music.Play();
 }
 
 State::~State() {
