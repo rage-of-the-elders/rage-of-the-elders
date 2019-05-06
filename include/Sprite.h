@@ -26,6 +26,7 @@ public:
   int GetWidth();
   int GetHeight();
   Vec2 GetScale();
+  void SetScaleX(float scale);
   void SetScaleX(float scaleX, float scaleY);
   bool IsOpen();
   void Update(float dt);

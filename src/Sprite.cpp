@@ -67,6 +67,10 @@ Vec2 Sprite::GetScale() {
   
 }
   
+void Sprite::SetScaleX(float scale) {
+  this->SetScaleX(scale, scale);
+}
+
 void Sprite::SetScaleX(float scaleX, float scaleY) {
   // TODO: mova a box dele de forma a manter o centro no mesmo lugar de antes da mudança de escala
   this->scale = Vec2(scaleX, scaleY);
