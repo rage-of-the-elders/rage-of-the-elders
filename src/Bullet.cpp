@@ -4,6 +4,7 @@
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage,
                float maxDistance, std::string sprite) : Component(associated) {
   this->associated.AddComponent(new Sprite(associated, sprite));
+  this->associated.angleDeg = angle;
   this->speed = Vec2::GetSpeed(angle) * speed;
   this->damage = damage;
   this->distanceLeft = maxDistance;
