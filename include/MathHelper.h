@@ -8,6 +8,7 @@ public:
   static bool Equals(float a, float b);
   static float Radians(float degree);
   static float Degrees(float radians);
+  static float GetRand(float min, float max);
 };
 
 #endif

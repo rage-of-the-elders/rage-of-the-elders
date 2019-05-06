@@ -11,3 +11,7 @@ float Math::Radians(float degree) {
 float Math::Degrees(float radians) {
   return (radians * (180.0 / PI));
 }
+
+float Math::GetRand(float min, float max) {
+  return min + static_cast<float> (rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+}
