@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "MathHelper.h"
 #include <map>
+#define ALIEN_ROTATION 2
 
 Alien::Action::Action(ActionType type, float x, float y) {
 	this->type = type;
@@ -34,6 +35,8 @@ void Alien::Start() {
 }
 
 void Alien::Update(float dt) {
+  this->associated.angleDeg -= ALIEN_ROTATION*dt;
+
   Rect associatedBox = this->associated.box;
 
   if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
