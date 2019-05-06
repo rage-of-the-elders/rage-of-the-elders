@@ -8,6 +8,7 @@ public:
   float x, y;
 
   Vec2();
+  Vec2(float xy);
   Vec2(float x, float y);
   static float Cos(float angle);
   static float Sin(float angle);
