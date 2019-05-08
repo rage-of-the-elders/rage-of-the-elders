@@ -10,8 +10,12 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->scale = Vec2(1);
 }
 
-Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated) {
+Sprite::Sprite(GameObject &associated, std::string file,  int frameCount, float frameTime) : Sprite(associated) {
   this->texture = nullptr;
+  this->frameCount = frameCount;
+  this->frameTime = frameTime;
+  this->currentFrame = 0;
+  this->timeElapsed = 0;
   this->Open(file);
 }
 
@@ -56,7 +60,7 @@ void Sprite::Render(int x, int y) {
 }
 
 int Sprite::GetWidth() {
-  return this->width * this->scale.x;
+  return round((this->width/this->frameCount) * this->scale.x);
 }
 
 int Sprite::GetHeight() {
@@ -76,13 +80,43 @@ void Sprite::SetScaleX(float scaleX, float scaleY) {
   this->scale = Vec2(scaleX, scaleY);
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
-} 
+}
+
+void Sprite::SetFrame(int frame) {
+  this->currentFrame = frame;
+  this->UpdateFrame();
+}
+
+void Sprite::SetFrameCount(int frameCount) {
+  this->frameCount = frameCount;
+  this->currentFrame = 0;
+  this->UpdateFrame(); // TODO: Check this
+}
+
+void Sprite::SetFrameTime(float frameTime) {
+  this->frameTime = frameTime;
+}
 
 bool Sprite::IsOpen() {
   return this->texture != nullptr;
 }
 
 void Sprite::Update(float dt) {
+  this->timeElapsed += dt;
+
+  if (this->timeElapsed > this->frameTime) {
+    this->currentFrame = (this->currentFrame + 1) % this->frameCount; // TODO: Check this
+    this->timeElapsed -= this->frameTime; // "Restarting" the counter
+    this->UpdateFrame();
+  }
+}
+
+void Sprite::UpdateFrame() {
+  float frameWidth = this->width / this->frameCount;
+  this->SetClip(this->currentFrame * frameWidth,
+                0,
+                frameWidth,
+                height);
 }
 
 bool Sprite::Is(std::string type) {
