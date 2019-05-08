@@ -24,9 +24,12 @@ void Minion::Shoot(Vec2 target) {
   float speed = 150;
   float damage = 10;
   float maxDistance = this->associated.box.GetCenter().GetDistance(target);
+  int frameCount = 3;
+  float frameTime = 0.5;
 
   GameObject *bullet = new GameObject();
-  bullet->AddComponent(new Bullet(*bullet, angle, speed, damage, maxDistance, "img/minionbullet1.png"));
+  bullet->AddComponent(new Bullet(*bullet, angle, speed, damage, maxDistance, "img/minionbullet2.png",
+                                   frameCount, frameTime));
   bullet->box.SetPos(this->associated.box.GetCenter());
   Game::GetInstance().GetState().AddObject(bullet);
 }

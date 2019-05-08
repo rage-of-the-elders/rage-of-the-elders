@@ -2,8 +2,8 @@
 #include "Sprite.h"
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage,
-               float maxDistance, std::string sprite) : Component(associated) {
-  this->associated.AddComponent(new Sprite(associated, sprite));
+               float maxDistance, std::string sprite, int frameCount, float frameTime) : Component(associated) {
+  this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.angleDeg = angle;
   this->speed = Vec2::GetSpeed(angle) * speed;
   this->damage = damage;
