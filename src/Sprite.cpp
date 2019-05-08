@@ -64,7 +64,7 @@ int Sprite::GetHeight() {
 }
 
 Vec2 Sprite::GetScale() {
-  
+  return this->scale;
 }
   
 void Sprite::SetScaleX(float scale) {
