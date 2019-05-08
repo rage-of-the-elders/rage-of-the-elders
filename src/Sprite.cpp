@@ -10,7 +10,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->scale = Vec2(1);
 }
 
-Sprite::Sprite(GameObject &associated, std::string file,  int frameCount, float frameTime) : Sprite(associated) {
+Sprite::Sprite(GameObject &associated, std::string file, int frameCount, float frameTime) : Sprite(associated) {
   this->texture = nullptr;
   this->frameCount = frameCount;
   this->frameTime = frameTime;
@@ -32,7 +32,7 @@ void Sprite::Open(std::string file) {
     exit(-1);
   }
 
-  SetClip(0, 0, width, height);
+  SetClip(0, 0, (this->width / this->frameCount), this->height);
   associated.box.w = GetWidth();
   associated.box.h = GetHeight();
 }
