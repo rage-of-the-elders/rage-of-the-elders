@@ -48,3 +48,12 @@ void Rect::SetCenterPos(float centerX, float centerY) {
 void Rect::SetCenterPos(Vec2 center) {
   this->SetPos((center.x - w / 2), (center.y - h / 2));
 }
+
+void Rect::SetSize(float w, float h) {
+	this->w = w;
+	this->h = h;
+}
+
+void Rect::SetSize(Vec2 size) {
+	SetSize(size.x, size.y);
+}
