@@ -9,6 +9,10 @@
 #define DOWN_ARROW_KEY SDLK_DOWN
 #define SPACE_KEY SDLK_SPACE
 #define ESCAPE_KEY SDLK_ESCAPE
+#define W_KEY SDLK_w
+#define A_KEY SDLK_a
+#define S_KEY SDLK_s
+#define D_KEY SDLK_d
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
