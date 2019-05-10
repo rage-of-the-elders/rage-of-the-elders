@@ -14,7 +14,8 @@ public:
   static float Sin(float angle);
   static float Acos(float angle);
   static float Atan2(float a, float b);
-  Vec2 Rotate(float distance = 0, float angle = 0);
+  Vec2 Rotate(float distance, float angle);
+  Vec2 Rotate(float angle);
   float GetDeltaX(float targetX);  
   float GetDeltaY(float targetY);
   float GetDistance(Vec2 target);
@@ -23,6 +24,7 @@ public:
   float GetAngle(Vec2 target);
   Vec2 GetSpeed(Vec2 pos);
   static Vec2 GetSpeed(float angle);
+  Vec2 GetNormalized();
 
   Vec2 operator+(const Vec2 &other) const;
   Vec2 operator+(const float other) const;

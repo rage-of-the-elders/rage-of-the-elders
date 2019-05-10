@@ -34,12 +34,12 @@ float Vec2::Atan2(float a, float b) {
 }
 
 Vec2 Vec2::Rotate(float distance, float angle) {
-	return Vec2((x + distance) * Cos(angle), (y + distance) * Sin(angle));
+	return Vec2(((x + distance) * Cos(angle)) - (y * Sin(angle)), (y * Cos(angle)) + ((x + distance) * Sin(angle)));
 }
 
-// Vec2 Vec2::Rotate(float angle) {
-// 	return Vec2(x * cos(angle) - y * sin(angle), y * cos(angle) + x * sin(angle));
-// }
+Vec2 Vec2::Rotate(float angle) {
+	return Vec2((x * Cos(angle)) - (y * Sin(angle)), (y * Cos(angle)) + (x * Sin(angle)));
+}
 
 Vec2 Vec2::GetSpeed(Vec2 pos) {
 	float distance = this->GetDistance(pos);
@@ -64,7 +64,11 @@ float Vec2::GetDeltaY(float targetY) {
 }
 
 float Vec2::Module(float x, float y) {
-	return sqrt(pow(x , 2) + pow(y, 2));
+	return std::sqrt(pow(x , 2) + pow(y, 2));
+}
+
+Vec2 Vec2::GetNormalized() {
+	return (*this) * (1.f / this->GetModule());
 }
 
 float Vec2::GetModule() {
