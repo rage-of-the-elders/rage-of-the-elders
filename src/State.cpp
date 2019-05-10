@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "CameraFollower.h"
 #include "Alien.h"
+#include "PenguinBody.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -16,6 +17,13 @@ State::State() : music("audio/stageState.ogg") {
 	alienGO->AddComponent(new Alien(*alienGO, 8));
 	alienGO->box.SetCenterPos(512, 300);
 	this->AddObject(alienGO);
+
+	GameObject *penguinGO = new GameObject();
+	penguinGO->AddComponent(new PenguinBody(*penguinGO));
+	penguinGO->box.SetCenterPos(704, 640);
+	this->AddObject(penguinGO);
+
+	Camera::Follow(penguinGO);
 
 	this->music.Play();
 }
