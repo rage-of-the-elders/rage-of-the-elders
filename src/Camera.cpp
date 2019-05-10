@@ -16,19 +16,10 @@ void Camera::Unfollow() {
 
 void Camera::Update(float dt) {
   if (focus != nullptr) {
-    if (InputManager::GetInstance().IsKeyDown(UP_ARROW_KEY))
-      focus->box.y -= speed.y;
-    if (InputManager::GetInstance().IsKeyDown(DOWN_ARROW_KEY))
-      focus->box.y += speed.y;
-    if (InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY))
-      focus->box.x -= speed.x;
-    if (InputManager::GetInstance().IsKeyDown(RIGHT_ARROW_KEY))
-      focus->box.x += speed.x;
-
-    int screenWidth, screenHeight;
+    int screenWidth, screenHeight; // TODO: Maybe save on Game
     SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
-    pos.x = focus->box.GetCenter().x;
-    pos.y = focus->box.GetCenter().y;
+    pos.x = focus->box.GetCenter().x - screenWidth / 2.0;
+    pos.y = focus->box.GetCenter().y - screenHeight / 2.0;
   } else {
     if(InputManager::GetInstance().IsKeyDown(UP_ARROW_KEY))
 			pos.y -= speed.y*dt;
