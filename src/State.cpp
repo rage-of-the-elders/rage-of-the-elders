@@ -39,18 +39,17 @@ void State::LoadAssets() {
 }
 
 void State::Update(float dt) {
-  this->quitRequested = InputManager::GetInstance().QuitRequested();
+	this->quitRequested = InputManager::GetInstance().QuitRequested();
 
 	Camera::Update(dt);
 	this->bg->Update(dt);
 	this->mapGameObj->Update(dt);
 
-  for (auto &gameObj : this->objectArray)
-    gameObj->Update(dt);
+	for (unsigned i = 0; i < this->objectArray.size(); i++)
+		this->objectArray[i]->Update(dt);
 
   for (int i = objectArray.size() - 1; i >= 0; i--)
     if (objectArray[i]->IsDead()) {
-			Camera::Unfollow();
       objectArray.erase(objectArray.begin() + i);
 		}
 }
@@ -70,9 +69,8 @@ bool State::QuitRequested() {
 void State::Start() {
 	this->LoadAssets();
 
-	for (auto &obj : this->objectArray)
-		obj->Start();
-
+	for (unsigned i = 0; i < this->objectArray.size(); i++)
+		this->objectArray[i]->Start();
 	this->started = true;
 }
 
@@ -86,11 +84,10 @@ std::weak_ptr<GameObject> State::AddObject(GameObject *go) {
 }
 
 std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
-	for (auto &obj : objectArray) {
-		if (obj.get() == go) {
-			std::weak_ptr<GameObject> weakPtr = obj;
-			return weakPtr;
-		}
-	}
+
+	for (unsigned i = 0; i < objectArray.size(); i++)
+		if (objectArray[i].get() == go)
+			return objectArray[i];
+
 	return std::weak_ptr<GameObject>();
 }
