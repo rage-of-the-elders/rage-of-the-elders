@@ -6,7 +6,7 @@
 #include "Collider.h"
 #include <iostream>
 
-#define MINION_ROTATION 13
+#define MINION_ROTATION 10
 
 Minion::Minion(GameObject &associated, GameObject &alienCenter,
                float arcOffsetDeg) : Component(associated) {
@@ -42,7 +42,7 @@ void Minion::Update(float dt) {
     associated.angleDeg = arc - 90;
     // this->associated.angleDeg += MINION_ROTATION*dt;
 
-    Vec2 newPos = Vec2().Rotate(200, arc) + this->alienCenter.lock()->box.GetCenter();
+    Vec2 newPos = Vec2().Rotate(250, arc) + this->alienCenter.lock()->box.GetCenter();
     associated.box.SetCenterPos(newPos);
   } else {
     this->associated.RequestDelete();
