@@ -11,6 +11,7 @@ PenguinCannon::PenguinCannon(GameObject &associated, GameObject& penguinBody) : 
   this->angle = 0;
   this->associated.AddComponent(new Sprite(associated, "img/cubngun.png"));
   this->associated.AddComponent(new Collider(associated));
+  this->shootCooldown = Timer();
 }
 
 void PenguinCannon::Update(float dt) {
@@ -18,6 +19,7 @@ void PenguinCannon::Update(float dt) {
     this->associated.box.SetCenterPos(this->pbody.lock()->box.GetCenter());
     this->angle = this->associated.box.GetCenter().GetAngle(InputManager::GetInstance().GetMousePos());
     this->associated.angleDeg = angle;
+    this->shootCooldown.Update(dt);
 
     if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
       this->Shoot();
@@ -28,20 +30,23 @@ void PenguinCannon::Update(float dt) {
 }
 
 void PenguinCannon::Shoot() {
-  float bulletSpeed = 100;
-  float damage = 10;
-  Vec2 mousePos = InputManager::GetInstance().GetMousePos();
-  float maxDistance = this->associated.box.GetCenter().GetDistance(mousePos);
-  int frameCount = 4;
-  float frameTime = 0.85;
+  if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
+    float bulletSpeed = 100;
+    float damage = 10;
+    Vec2 mousePos = InputManager::GetInstance().GetMousePos();
+    float maxDistance = this->associated.box.GetCenter().GetDistance(mousePos);
+    int frameCount = 4;
+    float frameTime = 0.85;
 
-  GameObject *bullet = new GameObject();
-  Vec2 cannonCenter = this->associated.box.GetCenter();
-  bullet->box.SetCenterPos(cannonCenter);
-  bullet->AddComponent(new Bullet(*bullet, this->angle, bulletSpeed, damage,
-                                  maxDistance, "img/penguinbullet.png",
-                                  frameCount, frameTime, false));
-  Game::GetInstance().GetState().AddObject(bullet);
+    GameObject *bullet = new GameObject();
+    Vec2 cannonCenter = this->associated.box.GetCenter();
+    bullet->box.SetCenterPos(cannonCenter);
+    bullet->AddComponent(new Bullet(*bullet, this->angle, bulletSpeed, damage,
+                                    maxDistance, "img/penguinbullet.png",
+                                    frameCount, frameTime, false));
+    Game::GetInstance().GetState().AddObject(bullet);
+    this->shootCooldown.Restart();
+  }
 }
 
 void PenguinCannon::Render() {
