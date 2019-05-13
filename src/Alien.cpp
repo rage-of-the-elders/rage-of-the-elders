@@ -24,7 +24,7 @@ Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
   this->nMinions = nMinions;
 
   this->associated.AddComponent(new Sprite(associated, "img/alien.png"));
-  this->associated.AddComponent(new Collider(associated));
+  this->associated.AddComponent(new Collider(associated, 0.5, {-10, 0}));
 }
 
 Alien::~Alien() {
