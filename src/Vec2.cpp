@@ -38,7 +38,7 @@ Vec2 Vec2::Rotate(float distance, float angle) {
 }
 
 Vec2 Vec2::Rotate(float angle) {
-	return Vec2((x * Cos(angle)) - (y * Sin(angle)), (y * Cos(angle)) + (x * Sin(angle)));
+	return Vec2((x * Cos(angle)) - (y * Sin(angle)), (x * Sin(angle) + (y * Cos(angle))));
 }
 
 Vec2 Vec2::GetSpeed(Vec2 pos) {
