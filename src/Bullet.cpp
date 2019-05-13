@@ -2,14 +2,15 @@
 #include "Sprite.h"
 #include "Collider.h"
 
-Bullet::Bullet(GameObject &associated, float angle, float speed, int damage,
-               float maxDistance, std::string sprite, int frameCount, float frameTime) : Component(associated) {
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance,
+               std::string sprite, int frameCount, float frameTime, bool targetsPlayer) : Component(associated) {
   this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.AddComponent(new Collider(associated));
   this->associated.angleDeg = angle;
   this->speed = Vec2::GetSpeed(angle) * speed;
   this->damage = damage;
   this->distanceLeft = maxDistance;
+  this->targetsPlayer = targetsPlayer;
 }
 
 void Bullet::Update(float dt) {
@@ -22,7 +23,7 @@ void Bullet::Update(float dt) {
 }
 
 void Bullet::Render() {
-  
+
 }
 
 bool Bullet::Is(std::string type) {
@@ -34,7 +35,17 @@ int Bullet::GetDamage() {
 }
 
 void Bullet::NotifyCollision(GameObject &other) {
-  if (other.GetComponent("PenguinBody") != nullptr || other.GetComponent("PenguinCannon") != nullptr) {
-    this->associated.RequestDelete();
+  if (this->targetsPlayer) {
+    if (other.GetComponent("PenguinBody") != nullptr || other.GetComponent("PenguinCannon") != nullptr) {
+      this->associated.RequestDelete();
+    }
+  } else {
+    if (other.GetComponent("Alien") != nullptr || other.GetComponent("Minion") != nullptr) {
+      this->associated.RequestDelete();
+    }
   }
+}
+
+bool Bullet::TargetsPlayer() {
+  return this->targetsPlayer;
 }

@@ -20,7 +20,7 @@ void PenguinCannon::Update(float dt) {
     this->associated.angleDeg = angle;
 
     if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
-      // this->Shoot();
+      this->Shoot();
     }
   } else {
     this->associated.RequestDelete();
@@ -40,7 +40,7 @@ void PenguinCannon::Shoot() {
   bullet->box.SetCenterPos(cannonCenter);
   bullet->AddComponent(new Bullet(*bullet, this->angle, bulletSpeed, damage,
                                   maxDistance, "img/penguinbullet.png",
-                                  frameCount, frameTime));
+                                  frameCount, frameTime, false));
   Game::GetInstance().GetState().AddObject(bullet);
 }
 
@@ -62,6 +62,7 @@ void PenguinCannon::ApplyDamage(int damage) {
 void PenguinCannon::NotifyCollision(GameObject &other) {
   if(other.GetComponent("Bullet") != nullptr) {
     Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
-    this->ApplyDamage(bullet->GetDamage());
+    if (bullet->TargetsPlayer())
+      this->ApplyDamage(bullet->GetDamage());
   }
 }

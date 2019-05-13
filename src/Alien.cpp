@@ -129,6 +129,7 @@ void Alien::ApplyDamage(int damage) {
 void Alien::NotifyCollision(GameObject &other) {
   if (other.GetComponent("Bullet")) {
     Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
-    this->ApplyDamage(bullet->GetDamage());
+    if (not bullet->TargetsPlayer())
+      this->ApplyDamage(bullet->GetDamage());
   }
 }

@@ -83,6 +83,7 @@ void PenguinBody::ApplyDamage(int damage) {
 void PenguinBody::NotifyCollision(GameObject &other) {
   if(other.GetComponent("Bullet") != nullptr) {
     Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
-    this->ApplyDamage(bullet->GetDamage());
+    if (bullet->TargetsPlayer())
+      this->ApplyDamage(bullet->GetDamage());
   }
 }
