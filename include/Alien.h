@@ -35,6 +35,8 @@ public:
   void Render();
   bool Is(std::string type);
   bool IsDead();
+  void ApplyDamage(int damage);
+  void NotifyCollision(GameObject &other);
 };
 
 #endif

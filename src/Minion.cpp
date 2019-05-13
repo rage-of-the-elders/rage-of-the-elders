@@ -3,9 +3,10 @@
 #include "Game.h"
 #include "Bullet.h"
 #include "MathHelper.h"
+#include "Collider.h"
 #include <iostream>
 
-#define ROTATION 13
+#define MINION_ROTATION 13
 
 Minion::Minion(GameObject &associated, GameObject &alienCenter,
                float arcOffsetDeg) : Component(associated) {
@@ -14,6 +15,7 @@ Minion::Minion(GameObject &associated, GameObject &alienCenter,
   Sprite *minionSprite = new Sprite(associated, "img/minion.png");
   minionSprite->SetScaleX(Math::GetRand(1.0, 1.5));
   this->associated.AddComponent(minionSprite);
+  this->associated.AddComponent(new Collider(associated));
 
   this->arc = arcOffsetDeg;
   // this->associated.angleDeg = arcOffsetDeg;
@@ -21,11 +23,11 @@ Minion::Minion(GameObject &associated, GameObject &alienCenter,
 
 void Minion::Shoot(Vec2 target) {
   float angle = this->associated.box.GetCenter().GetAngle(target);
-  float speed = 150;
+  float speed = 50;
   float damage = 10;
   float maxDistance = this->associated.box.GetCenter().GetDistance(target);
   int frameCount = 3;
-  float frameTime = 0.5;
+  float frameTime = 0.85;
 
   GameObject *bullet = new GameObject();
   bullet->AddComponent(new Bullet(*bullet, angle, speed, damage, maxDistance, "img/minionbullet2.png",
@@ -36,9 +38,9 @@ void Minion::Shoot(Vec2 target) {
 
 void Minion::Update(float dt) {
   if(not alienCenter.expired()) {
-    this->arc += ROTATION*dt;
+    this->arc += MINION_ROTATION*dt;
     associated.angleDeg = arc - 90;
-    // this->associated.angleDeg += ROTATION*dt;
+    // this->associated.angleDeg += MINION_ROTATION*dt;
 
     Vec2 newPos = Vec2().Rotate(200, arc) + this->alienCenter.lock()->box.GetCenter();
     associated.box.SetCenterPos(newPos);

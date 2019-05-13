@@ -4,7 +4,11 @@
 #include "Minion.h"
 #include "Game.h"
 #include "MathHelper.h"
+#include "Collider.h"
+#include "Bullet.h"
+
 #include <map>
+
 #define ALIEN_ROTATION 2
 
 Alien::Action::Action(ActionType type, float x, float y) {
@@ -20,6 +24,7 @@ Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
   this->nMinions = nMinions;
 
   this->associated.AddComponent(new Sprite(associated, "img/alien.png"));
+  this->associated.AddComponent(new Collider(associated));
 }
 
 Alien::~Alien() {
@@ -64,7 +69,8 @@ void Alien::Update(float dt) {
       } else {
         associatedBox.x += speed.x * dt;
       }
-      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y) || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y)) {
+      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y)
+          || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y)) {
         associatedBox.y = targetPos.y;
       } else {
         associatedBox.y += speed.y * dt;
@@ -114,4 +120,15 @@ int Alien::GetNearestMinion(Vec2 target) {
   }
 
   return distances.begin()->second;
+}
+
+void Alien::ApplyDamage(int damage) {
+  this->hp -= damage;
+}
+
+void Alien::NotifyCollision(GameObject &other) {
+  if (other.GetComponent("Bullet")) {
+    Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
+    this->ApplyDamage(bullet->GetDamage());
+  }
 }

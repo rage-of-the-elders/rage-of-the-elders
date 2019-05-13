@@ -7,6 +7,8 @@
 #include "CameraFollower.h"
 #include "Alien.h"
 #include "PenguinBody.h"
+#include "Collision.h"
+#include "Collider.h"
 
 State::State() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -56,7 +58,20 @@ void State::Update(float dt) {
 	for (unsigned i = 0; i < this->objectArray.size(); i++)
 		this->objectArray[i]->Update(dt);
 
-  for (int i = objectArray.size() - 1; i >= 0; i--)
+	for (unsigned i = 0; i < this->objectArray.size(); i++) 
+		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
+			Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
+			Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+
+			if(objA && objB) {
+				if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+					this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+					this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+				}
+			}
+		}
+
+	for (int i = objectArray.size() - 1; i >= 0; i--)
     if (objectArray[i]->IsDead()) {
       objectArray.erase(objectArray.begin() + i);
 		}

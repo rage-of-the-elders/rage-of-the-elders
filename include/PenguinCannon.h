@@ -14,6 +14,8 @@ public:
   void Render();
   bool Is(std::string type);
   void Shoot();
+  void ApplyDamage(int damage);
+  void NotifyCollision(GameObject &other);
 };
 
 #endif

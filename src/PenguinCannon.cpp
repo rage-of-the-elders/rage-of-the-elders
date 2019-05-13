@@ -3,11 +3,14 @@
 #include "Game.h"
 #include "InputManager.h"
 #include "Bullet.h"
+#include "Collider.h"
+#include "PenguinBody.h"
 
 PenguinCannon::PenguinCannon(GameObject &associated, GameObject& penguinBody) : Component(associated) {
   this->pbody = Game::GetInstance().GetState().GetObjectPtr(&penguinBody);
   this->angle = 0;
   this->associated.AddComponent(new Sprite(associated, "img/cubngun.png"));
+  this->associated.AddComponent(new Collider(associated));
 }
 
 void PenguinCannon::Update(float dt) {
@@ -17,7 +20,7 @@ void PenguinCannon::Update(float dt) {
     this->associated.angleDeg = angle;
 
     if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
-      this->Shoot();
+      // this->Shoot();
     }
   } else {
     this->associated.RequestDelete();
@@ -25,12 +28,12 @@ void PenguinCannon::Update(float dt) {
 }
 
 void PenguinCannon::Shoot() {
-  float bulletSpeed = 150;
+  float bulletSpeed = 100;
   float damage = 10;
   Vec2 mousePos = InputManager::GetInstance().GetMousePos();
   float maxDistance = this->associated.box.GetCenter().GetDistance(mousePos);
   int frameCount = 4;
-  float frameTime = 0.5;
+  float frameTime = 0.85;
 
   GameObject *bullet = new GameObject();
   Vec2 cannonCenter = this->associated.box.GetCenter();
@@ -47,4 +50,18 @@ void PenguinCannon::Render() {
 
 bool PenguinCannon::Is(std::string type) {
   return type == "PenguinCannon";
+}
+
+void PenguinCannon::ApplyDamage(int damage) {
+  if (not this->pbody.expired()) {
+    PenguinBody *body = (PenguinBody *) (this->pbody.lock()->GetComponent("PenguinBody"));
+    body->ApplyDamage(damage);
+  }
+}
+
+void PenguinCannon::NotifyCollision(GameObject &other) {
+  if(other.GetComponent("Bullet") != nullptr) {
+    Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
+    this->ApplyDamage(bullet->GetDamage());
+  }
 }
