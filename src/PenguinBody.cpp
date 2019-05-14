@@ -101,3 +101,7 @@ void PenguinBody::NotifyCollision(GameObject &other) {
       this->ApplyDamage(bullet->GetDamage());
   }
 }
+
+Vec2 PenguinBody::GetPenguinCenter() {
+  return this->associated.box.GetCenter();
+}

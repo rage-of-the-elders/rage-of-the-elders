@@ -22,6 +22,7 @@ public:
   bool IsDead();
   void ApplyDamage(int damage);
   void NotifyCollision(GameObject &other);
+  Vec2 GetPenguinCenter();
 };
 
 #endif
