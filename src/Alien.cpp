@@ -124,6 +124,20 @@ int Alien::GetNearestMinion(Vec2 target) {
 
 void Alien::ApplyDamage(int damage) {
   this->hp -= damage;
+
+  if (this->IsDead()) {
+    GameObject *go = new GameObject();
+    go->box = this->associated.box;
+
+    int frameCount = 4;
+    float frameTime = 0.5;
+    go->AddComponent(new Sprite(*go, "img/aliendeath.png", frameCount, frameTime, frameCount * frameTime));
+
+    go->AddComponent(new Sound(*go, "audio/boom.wav"));
+    Game::GetInstance().GetState().AddObject(go);
+    Sound *sound = (Sound *) go->GetComponent("Sound");
+    sound->Play(1);
+  }
 }
 
 void Alien::NotifyCollision(GameObject &other) {

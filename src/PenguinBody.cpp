@@ -78,6 +78,20 @@ bool PenguinBody::IsDead() {
 
 void PenguinBody::ApplyDamage(int damage) {
   this->hp -= damage;
+
+  if (this->IsDead()) {
+    GameObject *go = new GameObject();
+    go->box = this->associated.box;
+
+    int frameCount = 5;
+    float frameTime = 0.5;
+    go->AddComponent(new Sprite(*go, "img/penguindeath.png", frameCount, frameTime, frameCount * frameTime));
+
+    go->AddComponent(new Sound(*go, "audio/boom.wav"));
+    Game::GetInstance().GetState().AddObject(go);
+    Sound *sound = (Sound *) go->GetComponent("Sound");
+    sound->Play(1);
+  }
 }
 
 void PenguinBody::NotifyCollision(GameObject &other) {
