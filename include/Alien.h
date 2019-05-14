@@ -1,33 +1,30 @@
 #ifndef ALIEN_H
 #define ALIEN_H
 
+#define ALIEN_ROTATION 2
+#define ALIEN_COOLDOWN 7
+#define ALIEN_BASE_SPEED 100
+
 #include "Component.h"
-
+#include "Timer.h"
 #include <string>
-#include <queue>
-
 
 class Alien : public Component {
 private:
-  class Action {
-    public:
-      enum ActionType {MOVE, SHOOT};
-      ActionType type;
-      Vec2 pos;
-
-     Action (ActionType type, float x, float y);
-  };
-
   int hp;
   int nMinions;
   Vec2 speed;
-  std::queue<Action> taskQueue;
   std::vector<std::weak_ptr<GameObject> > minionArray;
-
+  enum AlienState { MOVING, RESTING };
+  AlienState state;
+  Timer restTimer;
+  Vec2 destination;
   int GetNearestMinion(Vec2 target);
   
 
 public:
+  static int alienCount;
+
   Alien(GameObject &associated, int nMinions);
   ~Alien();
   void Start();

@@ -6,29 +6,29 @@
 #include "MathHelper.h"
 #include "Collider.h"
 #include "Bullet.h"
+#include "PenguinBody.h"
 
 #include <map>
 
-#define ALIEN_ROTATION 2
-
-Alien::Action::Action(ActionType type, float x, float y) {
-	this->type = type;
-  this->pos = Vec2(x, y);
-}
+int Alien::alienCount = 0;
 
 Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
   this->hp = 100;
   this->speed = Vec2();
-  this->taskQueue = std::queue<Action>();
   this->minionArray = std::vector<std::weak_ptr<GameObject>>();
   this->nMinions = nMinions;
+  this->state = AlienState::RESTING;
+  this->destination= Vec2();
+  this->restTimer = Timer();
 
   this->associated.AddComponent(new Sprite(associated, "img/alien.png"));
-  this->associated.AddComponent(new Collider(associated, 0.5, {-10, 0}));
+  this->associated.AddComponent(new Collider(associated, 0.5));
+  Alien::alienCount++;
 }
 
 Alien::~Alien() {
   this->minionArray.clear();
+  Alien::alienCount--;
 }
 
 void Alien::Start() {
@@ -42,57 +42,52 @@ void Alien::Start() {
 void Alien::Update(float dt) {
   this->associated.angleDeg -= ALIEN_ROTATION*dt;
 
-  Rect associatedBox = this->associated.box;
+  if(PenguinBody::player) {
+    switch (this->state) {
+    case AlienState::RESTING: {
+      this->restTimer.Update(dt);
 
-  if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
-    this->taskQueue.push(Action(Action::SHOOT,
-                                (float)InputManager::GetInstance().GetMouseX(),
-                                (float)InputManager::GetInstance().GetMouseY()));
-
-  }
-  if (InputManager::GetInstance().MousePress(RIGHT_MOUSE_BUTTON)) {
-    this->taskQueue.push(Action(Action::MOVE,
-                                (float)InputManager::GetInstance().GetMouseX() - associatedBox.w / 2,
-                                (float)InputManager::GetInstance().GetMouseY() - associatedBox.h / 2));
-  }
-
-  if (this->taskQueue.size() > 0) {
-    Vec2 targetPos = this->taskQueue.front().pos;
-
-    switch (this->taskQueue.front().type) {
-    case Action::MOVE: {
-      this->speed = associatedBox.GetPos().GetSpeed(targetPos) * 200;
-
-      if ((associatedBox.x + speed.x * dt > targetPos.x && targetPos.x > associatedBox.x)
-          || (associatedBox.x + speed.x * dt < targetPos.x && targetPos.x < associatedBox.x)) {
-        associatedBox.x = targetPos.x;
-      } else {
-        associatedBox.x += speed.x * dt;
+      if (this->restTimer.Get() > ALIEN_COOLDOWN) {
+        this->destination = PenguinBody::player->GetPenguinCenter();
+        this->state = AlienState::MOVING;
+        // this->restTimer.Restart();
       }
-      if ((associatedBox.y + speed.y * dt > targetPos.y && targetPos.y > associatedBox.y)
-          || (associatedBox.y + speed.y * dt < targetPos.y && targetPos.y < associatedBox.y)) {
-        associatedBox.y = targetPos.y;
-      } else {
-        associatedBox.y += speed.y * dt;
-      }
-
-      if (Math::Equals(associatedBox.x, targetPos.x) && Math::Equals(associatedBox.y, targetPos.y))
-        taskQueue.pop();
-
-      this->associated.box = associatedBox;
     } break;
 
-    case Action::SHOOT: {
-      if (this->minionArray.size() > 0) {
-        Minion *minion = (Minion *) minionArray[GetNearestMinion(targetPos)].lock()->GetComponent("Minion");
-        minion->Shoot(targetPos);
+    case AlienState::MOVING: {
+      Vec2 pos = this->associated.box.GetCenter();
+      Vec2 speed = pos.GetSpeed(this->destination) * ALIEN_BASE_SPEED;
+
+      if ((pos.x + speed.x * dt > this->destination.x && this->destination.x > pos.x)
+          || (pos.x + speed.x * dt < this->destination.x && this->destination.x < pos.x)) {
+        pos.x = this->destination.x;
+      } else {
+        pos.x += speed.x * dt;
       }
-      taskQueue.pop();
+      if ((pos.y + speed.y * dt > this->destination.y && this->destination.y > pos.y)
+          || (pos.y + speed.y * dt < this->destination.y && this->destination.y < pos.y)) {
+        pos.y = this->destination.y;
+      } else {
+        pos.y += speed.y * dt;
+      }
+      this->associated.box.SetCenterPos(pos);
+
+      if (Math::Equals(pos.x, this->destination.x) && Math::Equals(pos.y, this->destination.y)) {
+        this->state = AlienState::RESTING;
+        this->restTimer.Restart();
+        this->destination = PenguinBody::player->GetPenguinCenter();
+
+        if (this->minionArray.size() > 0) {
+          Minion *minion = (Minion *) minionArray[GetNearestMinion(this->destination)].lock()->GetComponent("Minion");
+          minion->Shoot(this->destination);
+        }
+      }
     } break;
 
     default:
       break;
     }
+
   }
 
   if(this->IsDead())
