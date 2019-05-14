@@ -18,12 +18,11 @@ Minion::Minion(GameObject &associated, GameObject &alienCenter,
   this->associated.AddComponent(new Collider(associated));
 
   this->arc = arcOffsetDeg;
-  // this->associated.angleDeg = arcOffsetDeg;
 }
 
 void Minion::Shoot(Vec2 target) {
   float angle = this->associated.box.GetCenter().GetAngle(target);
-  float speed = 50;
+  float speed = 80;
   float damage = 10;
   float maxDistance = this->associated.box.GetCenter().GetDistance(target);
   int frameCount = 3;
@@ -40,7 +39,6 @@ void Minion::Update(float dt) {
   if(not alienCenter.expired()) {
     this->arc += MINION_ROTATION*dt;
     associated.angleDeg = arc - 90;
-    // this->associated.angleDeg += MINION_ROTATION*dt;
 
     Vec2 newPos = Vec2().Rotate(250, arc) + this->alienCenter.lock()->box.GetCenter();
     associated.box.SetCenterPos(newPos);
