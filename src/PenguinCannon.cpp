@@ -7,7 +7,7 @@
 #include "PenguinBody.h"
 
 PenguinCannon::PenguinCannon(GameObject &associated, GameObject& penguinBody) : Component(associated) {
-  this->pbody = Game::GetInstance().GetState().GetObjectPtr(&penguinBody);
+  this->pbody = Game::GetInstance().GetCurrentState().GetObjectPtr(&penguinBody);
   this->angle = 0;
   this->associated.AddComponent(new Sprite(associated, "img/cubngun.png"));
   this->associated.AddComponent(new Collider(associated));
@@ -44,7 +44,7 @@ void PenguinCannon::Shoot() {
     bullet->AddComponent(new Bullet(*bullet, this->angle, bulletSpeed, damage,
                                     maxDistance, "img/penguinbullet.png",
                                     frameCount, frameTime, false));
-    Game::GetInstance().GetState().AddObject(bullet);
+    Game::GetInstance().GetCurrentState().AddObject(bullet);
     this->shootCooldown.Restart();
   }
 }

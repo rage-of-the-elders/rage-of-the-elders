@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "Collider.h"
 #include "Bullet.h"
+#include "Sprite.h"
+#include "Sound.h"
 
 #define PENGUIN_ACELERATION 15
 #define FOWARD_SPEED_LIMIT 150
@@ -31,8 +33,8 @@ PenguinBody::~PenguinBody() {
 void PenguinBody::Start() {
   GameObject* go = new GameObject();
   go->AddComponent(new PenguinCannon(*go, this->associated));
-  Game::GetInstance().GetState().AddObject(go);
-  this->pcannon = Game::GetInstance().GetState().GetObjectPtr(go);
+  Game::GetInstance().GetCurrentState().AddObject(go);
+  this->pcannon = Game::GetInstance().GetCurrentState().GetObjectPtr(go);
 }
 
 void PenguinBody::Update(float dt) {
@@ -88,7 +90,7 @@ void PenguinBody::ApplyDamage(int damage) {
     go->AddComponent(new Sprite(*go, "img/penguindeath.png", frameCount, frameTime, frameCount * frameTime));
 
     go->AddComponent(new Sound(*go, "audio/boom.wav"));
-    Game::GetInstance().GetState().AddObject(go);
+    Game::GetInstance().GetCurrentState().AddObject(go);
     Sound *sound = (Sound *) go->GetComponent("Sound");
     sound->Play(1);
   }

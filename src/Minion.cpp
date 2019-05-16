@@ -10,7 +10,7 @@
 
 Minion::Minion(GameObject &associated, GameObject &alienCenter,
                float arcOffsetDeg) : Component(associated) {
-  this->alienCenter = Game::GetInstance().GetState().GetObjectPtr(&alienCenter);
+  this->alienCenter = Game::GetInstance().GetCurrentState().GetObjectPtr(&alienCenter);
 
   Sprite *minionSprite = new Sprite(associated, "img/minion.png");
   minionSprite->SetScaleX(Math::GetRand(1.0, 1.5));
@@ -32,7 +32,7 @@ void Minion::Shoot(Vec2 target) {
   bullet->AddComponent(new Bullet(*bullet, angle, speed, damage, maxDistance, "img/minionbullet2.png",
                                    frameCount, frameTime, true));
   bullet->box.SetPos(this->associated.box.GetCenter());
-  Game::GetInstance().GetState().AddObject(bullet);
+  Game::GetInstance().GetCurrentState().AddObject(bullet);
 }
 
 void Minion::Update(float dt) {

@@ -5,25 +5,28 @@
 
 #include "SDL_include.h"
 #include "State.h"
+#include <stack>
 
 class Game {
 private:
   static Game* instance;
   SDL_Window* window;
   SDL_Renderer* renderer;
-  State* state;
+  State* storedState;
   int frameStart;
   float dt;
+  std::stack<std::unique_ptr<State>> stateStack;
 
-  Game(std::string title, int width, int height);
   void CalculateDeltaTime();
 
 public:
+  Game(std::string title, int width, int height);
   ~Game();
-  void Run();
   SDL_Renderer* GetRenderer();
-  State& GetState();
+  State& GetCurrentState();
   static Game& GetInstance();
+  void Push(State *state);
+  void Run();
   float GetDeltaTime();
 };
 

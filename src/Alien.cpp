@@ -1,5 +1,6 @@
 #include "Alien.h"
 #include "Sprite.h"
+#include "Sound.h"
 #include "InputManager.h"
 #include "Minion.h"
 #include "Game.h"
@@ -35,7 +36,7 @@ void Alien::Start() {
   for (int i = 0; i < this->nMinions; i++) {
     GameObject *go = new GameObject();
     go->AddComponent(new Minion(*go, this->associated, i * (360.0 / this->nMinions)));
-    minionArray.push_back(Game::GetInstance().GetState().AddObject(go));
+    minionArray.push_back(Game::GetInstance().GetCurrentState().AddObject(go));
   }
 }
 
@@ -129,7 +130,7 @@ void Alien::ApplyDamage(int damage) {
     go->AddComponent(new Sprite(*go, "img/aliendeath.png", frameCount, frameTime, frameCount * frameTime));
 
     go->AddComponent(new Sound(*go, "audio/boom.wav"));
-    Game::GetInstance().GetState().AddObject(go);
+    Game::GetInstance().GetCurrentState().AddObject(go);
     Sound *sound = (Sound *) go->GetComponent("Sound");
     sound->Play(1);
   }
