@@ -22,6 +22,7 @@ public:
   static void ClearMusics();
   static Mix_Chunk* GetSound(std::string file);
   static void ClearSounds();
+  static void Clear();
 };
 
 #endif
