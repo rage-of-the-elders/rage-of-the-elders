@@ -77,12 +77,18 @@ Game::Game(std::string title, int width, int height) {
   }
 
   srand(time(NULL));
-  state = new State();
+
+  this->storedState = nullptr;
 }
 
-Game::~Game(){
-  if (state != nullptr)
-	  delete state;
+Game::~Game() {
+  if (this->storedState != nullptr)
+    delete this->storedState;
+
+  while(not this->stateStack.empty())
+    this->stateStack.pop();
+
+  Resources::Clear();
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
@@ -92,25 +98,48 @@ Game::~Game(){
   SDL_Quit();
 }
 
-void Game::Run() {
-  this->CalculateDeltaTime();
-  this->state->Start();
-
-  while (not state->QuitRequested()) {
-    InputManager::GetInstance().Update();
-    state->Update(this->GetDeltaTime());
-    state->Render();
-    SDL_RenderPresent(renderer);
-    SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
-  }
-
-  Resources::ClearImages();
-  Resources::ClearMusics();
-  Resources::ClearSounds();
+void Game::Push(State *state) {
+  this->storedState = state;
 }
 
-State& Game::GetState() {
-  return *state;
+void Game::Run() {
+  if (this->storedState != nullptr) {
+    this->stateStack.emplace(this->storedState);
+    this->GetCurrentState().Start();
+    this->storedState = nullptr;
+  }
+
+  if (not this->stateStack.empty()) {
+    this->CalculateDeltaTime(); // TODO: Where to put this?
+
+    while (!this->GetCurrentState().QuitRequested() && !this->stateStack.empty()) {
+      if (this->GetCurrentState().PopRequested()) {
+        this->stateStack.pop();
+        if (not this->stateStack.empty()) {
+          this->GetCurrentState().Resume();
+        } else {
+          break;
+        }
+      }
+
+      if (this->storedState != nullptr) {
+        this->GetCurrentState().Pause();
+        this->stateStack.emplace(this->storedState);
+        this->GetCurrentState().Start();
+        this->storedState = nullptr;
+      }
+
+      InputManager::GetInstance().Update();
+      this->GetCurrentState().Update(this->GetDeltaTime());
+      this->GetCurrentState().Render();
+      SDL_RenderPresent(renderer);
+      SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
+    }
+  }
+}
+
+State& Game::GetCurrentState() {
+  return *(this->stateStack.top());
 }
 
 SDL_Renderer* Game::GetRenderer() {
