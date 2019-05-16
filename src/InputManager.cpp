@@ -36,9 +36,6 @@ void InputManager::Update() {
     int keyId, buttonId;
 
     if (not event.key.repeat) {
-      if (event.key.keysym.sym == SDLK_ESCAPE)
-        this->quitRequested = true;
-
       switch (event.type) {
         case SDL_MOUSEBUTTONDOWN:
           buttonId = event.button.button;

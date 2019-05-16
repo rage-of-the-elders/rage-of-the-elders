@@ -9,6 +9,8 @@
 #include "PenguinBody.h"
 #include "Collision.h"
 #include "Collider.h"
+#include "Game.h"
+#include "TitleState.h"
 
 StageState::StageState() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -50,6 +52,9 @@ void StageState::LoadAssets() {
 
 void StageState::Update(float dt) {
 	this->quitRequested = InputManager::GetInstance().QuitRequested();
+
+	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY))
+		Game::GetInstance().Push(new TitleState());
 
 	Camera::Update(dt);
 	this->bg->Update(dt);

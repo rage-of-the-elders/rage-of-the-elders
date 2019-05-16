@@ -1,5 +1,5 @@
-#ifndef STATE_STATE_H
-#define STATE_STATE_H
+#ifndef STAGE_STATE_H
+#define STAGE_STATE_H
 
 #include "State.h"
 #include "GameObject.h"
