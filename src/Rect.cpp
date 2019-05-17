@@ -49,6 +49,10 @@ void Rect::SetCenterPos(Vec2 center) {
   this->SetPos((center.x - w / 2), (center.y - h / 2));
 }
 
+Vec2 Rect::GetSize() {
+  return Vec2(this->w, this->h);
+}
+
 void Rect::SetSize(float w, float h) {
 	this->w = w;
 	this->h = h;
