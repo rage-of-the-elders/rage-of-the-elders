@@ -1,11 +1,11 @@
 #include "Game.h"
 #include "Resources.h"
 
-std::unordered_map<std::string, SDL_Texture *> Resources::imageTable = std::unordered_map<std::string, SDL_Texture *>();
+std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> Resources::imageTable = std::unordered_map<std::string, std::shared_ptr<SDL_Texture>>();
 std::unordered_map<std::string, Mix_Music *> Resources::musicTable = std::unordered_map<std::string, Mix_Music *>();
 std::unordered_map<std::string, Mix_Chunk *> Resources::soundTable = std::unordered_map<std::string, Mix_Chunk *>();
 
-SDL_Texture *Resources::GetImage(std::string file) {
+std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
   if (imageTable.find(file) == imageTable.end()) {
     SDL_Texture *texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), (ASSETS_PATH + file).c_str());
 
@@ -13,7 +13,7 @@ SDL_Texture *Resources::GetImage(std::string file) {
       printf("IMG Load Texture: %s\n", SDL_GetError());
       exit(-1);
     }
-    imageTable.emplace(file, texture);
+    imageTable.emplace(file, std::shared_ptr<SDL_Texture>(texture, [](SDL_Texture *ptexture) { SDL_DestroyTexture(ptexture); }));
   }
 
   return imageTable[file];
@@ -21,9 +21,8 @@ SDL_Texture *Resources::GetImage(std::string file) {
 
 void Resources::ClearImages() {
   for(auto texture : imageTable)
-    SDL_DestroyTexture(texture.second);
-
-  imageTable.clear();
+    if (texture.second.unique())
+      imageTable.erase(texture.first);
 }
 
 Mix_Music *Resources::GetMusic(std::string file) {

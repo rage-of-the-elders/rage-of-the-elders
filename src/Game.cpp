@@ -115,6 +115,7 @@ void Game::Run() {
     while (!this->GetCurrentState().QuitRequested() && !this->stateStack.empty()) {
       if (this->GetCurrentState().PopRequested()) {
         this->stateStack.pop();
+        Resources::Clear();
         if (not this->stateStack.empty()) {
           this->GetCurrentState().Resume();
         } else {

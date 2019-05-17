@@ -10,7 +10,7 @@
 
 class Sprite : public Component {
 private:
-  SDL_Texture* texture;
+  std::shared_ptr<SDL_Texture> texture;
   int width;
   int height;
   SDL_Rect clipRect;

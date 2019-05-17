@@ -28,7 +28,7 @@ Sprite::~Sprite() {
 void Sprite::Open(std::string file) {
   this->texture = Resources::GetImage(file);
 
-  int queryTexture = SDL_QueryTexture(this->texture, nullptr, nullptr, &width, &height);
+  int queryTexture = SDL_QueryTexture(this->texture.get(), nullptr, nullptr, &width, &height);
 
   if (queryTexture) {
     printf("SDL Query Texture: %s\n", SDL_GetError());
@@ -54,7 +54,7 @@ void Sprite::Render(int x, int y) {
                               int(clipRect.w * this->scale.x),
                               int(clipRect.h * this->scale.y)};
   SDL_RenderCopyEx(Game::GetInstance().GetRenderer(),
-                   this->texture,
+                   this->texture.get(),
                    &clipRect,
                    &dstRect,
                    this->associated.angleDeg,
