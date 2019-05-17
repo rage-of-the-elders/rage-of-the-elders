@@ -59,6 +59,11 @@ Game::Game(std::string title, int width, int height) {
     exit(-1);
   }
 
+  if(TTF_Init()) {
+    printf("TTF_Init: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+  }
+
   // Window creation
   window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED, width, height, 0);
@@ -92,6 +97,7 @@ Game::~Game() {
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  TTF_Quit();
   Mix_Quit();
   Mix_CloseAudio();
   IMG_Quit();

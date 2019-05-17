@@ -7,16 +7,23 @@
 #include "CameraFollower.h"
 
 TitleState::TitleState() {
-  GameObject *go = new GameObject();
-  go->AddComponent(new Sprite(*go, "img/title.jpg"));
-  go->box = Rect();
-  this->AddObject(go);
+  GameObject *bg = new GameObject();
+  bg->AddComponent(new Sprite(*bg, "img/title.jpg"));
+  bg->AddComponent(new CameraFollower(*bg));
+  this->AddObject(bg);
 
-  go->AddComponent(new CameraFollower(*go));
+  this->LoadAssets();
 }
 
 TitleState::~TitleState() {}
-void TitleState::LoadAssets() {}
+
+void TitleState::LoadAssets() {
+  GameObject *text = new GameObject();
+  text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 70, Text::SOLID,
+                              "PRESS SPACE TO CONTINUE", DARK_BLUE));
+  text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
+  this->AddObject(text);
+}
 
 void TitleState::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
@@ -35,6 +42,7 @@ void TitleState::Render() {
 }
 void TitleState::Start() {
   this->StartArray();
+  this->started = true;
 }
 
 void TitleState::Pause() {}

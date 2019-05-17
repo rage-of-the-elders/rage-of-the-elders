@@ -90,6 +90,8 @@ std::shared_ptr<TTF_Font> Resources::GetFont(std::string file, int size) {
 
 		fontTable.emplace(file + sizeStr, font);
   }
+
+  return fontTable[file + sizeStr];
 }
 
 void Resources::ClearFonts() {
