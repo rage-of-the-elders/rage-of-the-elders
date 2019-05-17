@@ -122,18 +122,18 @@ void Game::Run() {
       if (this->GetCurrentState().PopRequested()) {
         this->stateStack.pop();
         Resources::Clear();
+
+        if (this->storedState != nullptr) {
+          this->stateStack.emplace(this->storedState);
+          this->GetCurrentState().Start();
+          this->storedState = nullptr;
+        }
+
         if (not this->stateStack.empty()) {
           this->GetCurrentState().Resume();
         } else {
           break;
         }
-      }
-
-      if (this->storedState != nullptr) {
-        this->GetCurrentState().Pause();
-        this->stateStack.emplace(this->storedState);
-        this->GetCurrentState().Start();
-        this->storedState = nullptr;
       }
 
       InputManager::GetInstance().Update();
