@@ -11,6 +11,8 @@
 #include "Collider.h"
 #include "Game.h"
 #include "TitleState.h"
+#include "EndState.h"
+#include "GameData.h"
 
 StageState::StageState() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -53,8 +55,10 @@ void StageState::LoadAssets() {
 void StageState::Update(float dt) {
 	this->quitRequested = InputManager::GetInstance().QuitRequested();
 
-	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY))
+	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
+		this->popRequested = true;
 		Game::GetInstance().Push(new TitleState());
+	}
 
 	Camera::Update(dt);
 	this->bg->Update(dt);
@@ -74,11 +78,12 @@ void StageState::Update(float dt) {
 				}
 			}
 		}
-
+	
 	for (int i = objectArray.size() - 1; i >= 0; i--) // TODO: Move to function
 		if (objectArray[i]->IsDead()) {
       objectArray.erase(objectArray.begin() + i);
 		}
+	this->CheckGameEnd();
 }
 
 void StageState::Render() {
@@ -94,5 +99,26 @@ void StageState::Start() {
 	this->started = true;
 }
 
-void StageState::Pause() {}
-void StageState::Resume() {}
+bool StageState::PlayerWon() {
+	return Alien::alienCount <= 0;
+}
+
+bool StageState::PlayerLose() {
+	return PenguinBody::player == nullptr;
+}
+
+void StageState::CheckGameEnd() {
+	if (this->PlayerWon()) {
+		GameData::playerVictory = true;
+		Game::GetInstance().Push(new EndState());
+		this->popRequested = true;
+	}
+	else if (this->PlayerLose()) {
+		GameData::playerVictory = false;
+		Game::GetInstance().Push(new EndState());
+		this->popRequested = true;
+	}
+}
+
+	void StageState::Pause() {}
+	void StageState::Resume() {}

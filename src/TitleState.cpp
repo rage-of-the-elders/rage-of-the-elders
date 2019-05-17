@@ -19,8 +19,8 @@ TitleState::~TitleState() {}
 
 void TitleState::LoadAssets() {
   GameObject *text = new GameObject();
-  text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 70, Text::SOLID,
-                              "PRESS SPACE TO CONTINUE", DARK_BLUE));
+  text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 60, Text::SOLID,
+                              "PRESS SPACE TO CONTINUE", WHITE));
   text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
   this->AddObject(text);
 }
@@ -31,8 +31,10 @@ void TitleState::Update(float dt) {
   if (InputManager::GetInstance().KeyPress(ESCAPE_KEY))
     this->quitRequested = true;
 
-  if (InputManager::GetInstance().KeyPress(SPACE_KEY))
+  if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+    this->popRequested = true;
     Game::GetInstance().Push(new StageState());
+  }
 
   this->UpdateArray(dt);
 }

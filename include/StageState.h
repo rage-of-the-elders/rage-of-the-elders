@@ -27,6 +27,10 @@ public:
   void Start();
   void Pause();
   void Resume();
-};
+  bool PlayerWon();
+  bool PlayerLose();
+  void CheckGameEnd();
+
+  };
 
 #endif
