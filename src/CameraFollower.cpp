@@ -1,12 +1,13 @@
 #include "CameraFollower.h"
 #include "Camera.h"
 
-CameraFollower::CameraFollower(GameObject &associated) : Component(associated) {
+CameraFollower::CameraFollower(GameObject &associated, Vec2 offset) : Component(associated) {
+  this->offset = offset;
 }
 
 void CameraFollower::Update(float dt) {
-  this->associated.box.x = Camera::pos.x;
-  this->associated.box.y = Camera::pos.y;
+  this->associated.box.x = Camera::pos.x + CameraFollower::offset.x;
+  this->associated.box.y = Camera::pos.y + CameraFollower::offset.y;
 }
 
 void CameraFollower::Render() {
