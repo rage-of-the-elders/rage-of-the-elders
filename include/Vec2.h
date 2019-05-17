@@ -32,6 +32,7 @@ public:
   Vec2 operator-(const float other) const;
   Vec2 operator*(const float other) const;
   float operator*(const Vec2 &other) const; // Dot product
+  Vec2 operator/(const float other) const;
 };
 
 #endif
