@@ -12,9 +12,9 @@
 #include "Component.h"
 #include "Timer.h"
 
-// #include <unordered_map>
+#include <unordered_map>
 #include <string>
-// #include <memory>
+#include <memory>
 
 class Text : public Component {
 public:
@@ -29,11 +29,11 @@ public:
   void SetStyle(TextStyle style);
   void SetFontFile(std::string fontFile);
   void SetFontSize(int fontSize);
-  static TTF_Font* LoadFont(std::string fontFile, int size);
+  static std::shared_ptr<TTF_Font> LoadFont(std::string fontFile, int size);
   void LoadFont();
 
 private:
-  TTF_Font* font;
+  std::shared_ptr<TTF_Font> font;
   SDL_Texture* texture;
   std::string text;
   TextStyle style;

@@ -27,7 +27,9 @@ void Text::Update(float dt) {
   flickerTimer.Update(dt);
   if (this->flickerTime != NO_FLICK && flickerTimer.Get() > this->flickerTime) {
     this->flicker = not this->flicker;
-    SDL_SetTextureAlphaMod(this->texture, flicker ? 0 : 255);
+    if (SDL_SetTextureAlphaMod(this->texture, flicker ? 0 : 255)) {
+      printf("Could not update texture alpha channel: %s\n", SDL_GetError());
+    }
     flickerTimer.Restart();
   }
 }
@@ -94,11 +96,11 @@ void Text::RemakeTexture() {
 
   SDL_Surface *surface = nullptr;
   if (this->style == TextStyle::SOLID)
-    surface = TTF_RenderText_Solid(this->font, this->text.c_str(), this->color);
+    surface = TTF_RenderText_Solid(this->font.get(), this->text.c_str(), this->color);
   if (this->style == TextStyle::SHADED)
-    surface = TTF_RenderText_Shaded(this->font, this->text.c_str(), this->color, SDL_Color{});
+    surface = TTF_RenderText_Shaded(this->font.get(), this->text.c_str(), this->color, SDL_Color{});
   if (this->style == TextStyle::BLENDED)
-    surface = TTF_RenderText_Blended(this->font, this->text.c_str(), this->color);
+    surface = TTF_RenderText_Blended(this->font.get(), this->text.c_str(), this->color);
 
   if(surface == nullptr){
 		printf("%s\n", SDL_GetError());
@@ -113,10 +115,10 @@ void Text::RemakeTexture() {
   this->associated.box.SetSize(width, height);
 }
 
-TTF_Font* Text::LoadFont(std::string fontFile, int fontSize) {
-	return Resources::GetFont(fontFile, fontSize).get();
+std::shared_ptr<TTF_Font> Text::LoadFont(std::string fontFile, int fontSize) {
+	return Resources::GetFont(fontFile, fontSize);
 }
 
 void Text::LoadFont() {
-	this->font = Resources::GetFont(this->fontFile, this->fontSize).get();
+	this->font = Resources::GetFont(this->fontFile, this->fontSize);
 }
