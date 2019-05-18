@@ -67,24 +67,8 @@ void StageState::Update(float dt) {
 	this->mapGameObj->Update(dt);
 
 	this->UpdateArray(dt);
-
-	for (unsigned i = 0; i < this->objectArray.size(); i++) // TODO: Move to function
-		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
-			Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
-			Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
-
-			if(objA && objB) {
-				if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
-					this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
-					this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
-				}
-			}
-		}
-	
-	for (int i = objectArray.size() - 1; i >= 0; i--) // TODO: Move to function
-		if (objectArray[i]->IsDead()) {
-      objectArray.erase(objectArray.begin() + i);
-		}
+	this->CollisionCheck();
+	this->DeletionCheck();	
 	this->CheckGameEnd();
 }
 
@@ -122,5 +106,27 @@ void StageState::CheckGameEnd() {
 	}
 }
 
-	void StageState::Pause() {}
-	void StageState::Resume() {}
+void StageState::CollisionCheck() {
+	for (unsigned i = 0; i < this->objectArray.size(); i++) {
+		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
+			Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
+			Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+
+			if(objA && objB) {
+				if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+					this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+					this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+				}
+			}
+		}
+	}
+}
+void StageState::DeletionCheck() {
+	for (int i = objectArray.size() - 1; i >= 0; i--)
+		if (objectArray[i]->IsDead()) {
+      objectArray.erase(objectArray.begin() + i);
+		}
+}
+
+void StageState::Pause() {}
+void StageState::Resume() {}

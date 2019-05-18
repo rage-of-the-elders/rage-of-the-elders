@@ -45,7 +45,6 @@ private:
   bool flicker;
 
   void RemakeTexture();
-  // TODO: MAKE TEXT FLICKER
 };
 
 #endif

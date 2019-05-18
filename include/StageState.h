@@ -27,10 +27,11 @@ public:
   void Start();
   void Pause();
   void Resume();
+  void CollisionCheck();
+  void DeletionCheck();
   bool PlayerWon();
   bool PlayerLose();
   void CheckGameEnd();
-
-  };
+};
 
 #endif
