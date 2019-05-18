@@ -4,13 +4,16 @@
 #include "Game.h"
 
 Text::Text(GameObject &associated, std::string fontFile, int fontSize, TextStyle style,
-           std::string text, SDL_Color color) : Component(associated) {
+           std::string text, SDL_Color color, float flickerTime) : Component(associated) {
   this->texture = nullptr;
   this->text = text;
   this->style = style;
   this->fontFile = fontFile;
   this->fontSize = fontSize;
   this->color = color;
+  this->flickerTime = flickerTime;
+  this->flickerTimer = Timer();
+  this->flicker = false;
   this->LoadFont();
   this->RemakeTexture();
 }
@@ -21,6 +24,12 @@ Text::~Text() {
 }
 
 void Text::Update(float dt) {
+  flickerTimer.Update(dt);
+  if (this->flickerTime != NO_FLICK && flickerTimer.Get() > this->flickerTime) {
+    this->flicker = not this->flicker;
+    SDL_SetTextureAlphaMod(this->texture, flicker ? 0 : 255);
+    flickerTimer.Restart();
+  }
 }
 
 void Text::Render() {
@@ -50,16 +59,19 @@ bool Text::Is(std::string type) {
 
 void Text::SetText(std::string text) {
   this->text = text;
+  this->LoadFont();
   this->RemakeTexture();
 }
 
 void Text::SetColor(SDL_Color color) {
   this->color = color;
+  this->LoadFont();
   this->RemakeTexture();
 }
 
 void Text::SetStyle(TextStyle style) {
   this->style = style;
+  this->LoadFont();
   this->RemakeTexture();
 }
 
@@ -70,11 +82,13 @@ void Text::SetFontFile(std::string fontFile) {
 
 void Text::SetFontSize(int fontSize) {
   this->fontSize = fontSize;
+  this->LoadFont();
   this->RemakeTexture();
 }
 
 void Text::RemakeTexture() {
   if (this->texture != nullptr) {
+    puts("wtf");
     SDL_DestroyTexture(this->texture);
   }
 

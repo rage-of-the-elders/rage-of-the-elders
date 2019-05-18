@@ -3,12 +3,14 @@
 
 #define INCLUDE_SDL_TTF
 
+#define NO_FLICK -1
 #define WHITE {255, 255, 255, 255}
 #define BLACK {0, 0, 0, 255}
 #define DARK_BLUE {3, 50, 77, 255}
 
 #include "SDL_include.h"
 #include "Component.h"
+#include "Timer.h"
 
 // #include <unordered_map>
 #include <string>
@@ -17,7 +19,7 @@
 class Text : public Component {
 public:
   enum TextStyle { SOLID, SHADED, BLENDED };
-  Text(GameObject &associated, std::string fontFile, int fontSize, TextStyle style, std::string text, SDL_Color color);
+  Text(GameObject &associated, std::string fontFile, int fontSize, TextStyle style, std::string text, SDL_Color color, float flickerTime = NO_FLICK);
   ~Text();
   void Update(float dt);
   void Render();
@@ -38,8 +40,12 @@ private:
   std::string fontFile;
   int fontSize;
   SDL_Color color;
+  float flickerTime;
+  Timer flickerTimer;
+  bool flicker;
 
   void RemakeTexture();
+  // TODO: MAKE TEXT FLICKER
 };
 
 #endif
