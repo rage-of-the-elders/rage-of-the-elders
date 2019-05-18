@@ -2,7 +2,7 @@
 #define ALIEN_H
 
 #define ALIEN_ROTATION 2
-#define ALIEN_COOLDOWN 7
+#define ALIEN_COOLDOWN 5
 #define ALIEN_BASE_SPEED 100
 
 #include "Component.h"
@@ -13,19 +13,21 @@ class Alien : public Component {
 private:
   int hp;
   int nMinions;
+  float timeOffset;
   Vec2 speed;
   std::vector<std::weak_ptr<GameObject> > minionArray;
   enum AlienState { MOVING, RESTING };
   AlienState state;
   Timer restTimer;
   Vec2 destination;
+
   int GetNearestMinion(Vec2 target);
   
 
 public:
   static int alienCount;
 
-  Alien(GameObject &associated, int nMinions);
+  Alien(GameObject &associated, int nMinions, float timeOffset = 0);
   ~Alien();
   void Start();
   void Update(float dt);

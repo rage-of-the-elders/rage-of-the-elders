@@ -13,7 +13,7 @@
 
 int Alien::alienCount = 0;
 
-Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
+Alien::Alien(GameObject &associated, int nMinions, float timeOffset) : Component(associated) {
   this->hp = 100;
   this->speed = Vec2();
   this->minionArray = std::vector<std::weak_ptr<GameObject>>();
@@ -21,6 +21,7 @@ Alien::Alien(GameObject &associated, int nMinions) : Component(associated) {
   this->state = AlienState::RESTING;
   this->destination= Vec2();
   this->restTimer = Timer();
+  this->timeOffset = timeOffset;
 
   this->associated.AddComponent(new Sprite(associated, "img/alien.png"));
   this->associated.AddComponent(new Collider(associated, 0.5));
@@ -48,7 +49,7 @@ void Alien::Update(float dt) {
     case AlienState::RESTING: {
       this->restTimer.Update(dt);
 
-      if (this->restTimer.Get() > ALIEN_COOLDOWN) {
+      if (this->restTimer.Get() > ALIEN_COOLDOWN + this->timeOffset) {
         this->destination = PenguinBody::player->GetPenguinCenter();
         this->state = AlienState::MOVING;
         // this->restTimer.Restart();

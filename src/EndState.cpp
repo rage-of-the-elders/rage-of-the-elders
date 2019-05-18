@@ -29,9 +29,15 @@ EndState::~EndState() {
 void EndState::LoadAssets() {
   GameObject *text = new GameObject();
   text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 70, Text::SOLID,
-                              "PRESS SPACE TO CONTINUE", WHITE));
+                              "PRESS SPACE TO CONTINUE", BLACK));
   text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
   this->AddObject(text);
+
+  GameObject *quitText = new GameObject();
+  quitText->AddComponent(new Text(*quitText, "assets/font/Call me maybe.ttf", 70, Text::SOLID,
+                                  "PRESS ESC TO CLOSE", BLACK));
+  quitText->AddComponent(new CameraFollower(*quitText, Vec2(512, 25) - (quitText->box.GetSize() / 2.0)));
+  this->AddObject(quitText);
 }
 
 void EndState::Update(float dt) {

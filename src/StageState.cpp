@@ -18,20 +18,6 @@ StageState::StageState() : music("audio/stageState.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
-
-	GameObject *alienGO = new GameObject();
-	alienGO->AddComponent(new Alien(*alienGO, 8));
-	alienGO->box.SetCenterPos(512, 300);
-	this->AddObject(alienGO);
-
-	GameObject *penguinGO = new GameObject();
-	penguinGO->AddComponent(new PenguinBody(*penguinGO));
-	penguinGO->box.SetCenterPos(704, 640);
-	this->AddObject(penguinGO);
-
-	Camera::Follow(penguinGO);
-
-	this->music.Play();
 }
 
 StageState::~StageState() {
@@ -50,6 +36,22 @@ void StageState::LoadAssets() {
 	mapGameObj->box = Rect();
 
 	bg->AddComponent(new CameraFollower(*bg));
+
+	for(int i = 0; i < 3; i++) {
+		GameObject* go = new GameObject();
+		go->AddComponent(new Alien(*go, (int) Math::GetRand(4, 8), Math::GetRand(1, 5)));
+		go->box.SetCenterPos(rand()%1024, rand()%600);
+		AddObject(go);
+	}
+
+	GameObject *penguinGO = new GameObject();
+	penguinGO->AddComponent(new PenguinBody(*penguinGO));
+	penguinGO->box.SetCenterPos(704, 640);
+	this->AddObject(penguinGO);
+
+	Camera::Follow(penguinGO);
+
+	this->music.Play();
 }
 
 void StageState::Update(float dt) {
