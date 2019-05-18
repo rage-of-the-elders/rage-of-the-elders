@@ -7,10 +7,13 @@
 #include "Bullet.h"
 #include "Sprite.h"
 #include "Sound.h"
+#include "math.h"
 
 #define PENGUIN_ACELERATION 15
-#define FOWARD_SPEED_LIMIT 150
+#define FOWARD_SPEED_LIMIT 120
 #define BACKWARDS_SPEED_LIMIT -FOWARD_SPEED_LIMIT / 2.0
+#define MAP_X_LIMIT 1408
+#define MAP_Y_LIMIT 1280
 
 PenguinBody *PenguinBody::player;
 
@@ -56,9 +59,19 @@ void PenguinBody::Update(float dt) {
   }
 
   this->speed = Vec2::GetSpeed(angle) * this->linearSpeed;
-  this->associated.box.UpdatePos(speed * dt);
+  Vec2 newPos = speed * dt;
+
+  this->associated.box.UpdatePos(newPos);
   this->associated.angleDeg = angle;
-  // printf("hp: %d\n", hp);
+
+  if (this->associated.box.GetCenter().x  > MAP_X_LIMIT)
+    this->associated.box.SetCenterPos(MAP_X_LIMIT, this->associated.box.GetCenter().y);
+  else if ((this->associated.box.GetCenter().y > MAP_Y_LIMIT))
+    this->associated.box.SetCenterPos(this->associated.box.GetCenter().x, MAP_Y_LIMIT);
+  else if (this->associated.box.GetCenter().x <= 0)
+    this->associated.box.SetCenterPos(0, this->associated.box.GetCenter().y);
+  else if (this->associated.box.GetCenter().y <= 0)
+    this->associated.box.SetCenterPos(this->associated.box.GetCenter().x, 0);
 
   if (this->IsDead()) {
     this->pcannon.lock()->RequestDelete();
