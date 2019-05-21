@@ -22,6 +22,7 @@ private:
   float frameTime;
   Timer selfDestructCount;
   float secondsToSelfDestruct;
+  bool finished;
 
 public:
   Sprite(GameObject &associated);
@@ -34,6 +35,7 @@ public:
   int GetWidth();
   int GetHeight();
   Vec2 GetScale();
+  bool IsFinished();
   void SetScaleX(float scale);
   void SetScaleX(float scaleX, float scaleY);
   void SetFrame (int frame);
@@ -42,6 +44,7 @@ public:
   void UpdateFrame();
   bool IsOpen();
   void Update(float dt);
+  void SetFinished(bool finished);
   bool Is(std::string type);
   void SetRepeat(bool repeat);
   bool GetRepeat();

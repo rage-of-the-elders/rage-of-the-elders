@@ -3,6 +3,8 @@
 #include "Resources.h"
 #include "Camera.h"
 
+#include <iostream>
+
 Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->texture = nullptr;
   this->width = 0;
@@ -21,6 +23,7 @@ Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
   this->selfDestructCount = Timer();
   this->Open(file);
   this->repeat = repeat;
+  this->finished = false;
 }
 
 Sprite::~Sprite() {
@@ -119,9 +122,15 @@ void Sprite::Update(float dt) {
       this->currentFrame++; // TODO: Check this
     else if(this->repeat)
       this->currentFrame = 0;
+    
     this->UpdateFrame();
+  
+    if(not this->repeat && this->currentFrame == this->frameCount-1){
+      this->finished = true;
+    }
   }
 }
+  
 
 void Sprite::UpdateFrame() {
   float frameWidth = this->width / this->frameCount;
@@ -133,6 +142,14 @@ void Sprite::UpdateFrame() {
 
 bool Sprite::Is(std::string type) {
   return type == "Sprite";
+}
+
+void Sprite::SetFinished(bool finished){
+  this->finished = finished;
+}
+
+bool Sprite::IsFinished(){
+  return this->finished;
 }
 
 void Sprite::SetRepeat(bool repeat){
