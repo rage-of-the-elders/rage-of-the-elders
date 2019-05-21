@@ -16,20 +16,26 @@ private:
 
 public:
   Rect box;
+  bool active;
   bool started;
   float angleDeg;
 
   GameObject();
   ~GameObject();
-  void Update(float dt);
+  
+  void Start();
   void Render();
   bool IsDead();
+  bool IsActive();
+  void Activate();
+  void Desactivate();
   void RequestDelete();
+  void Update(float dt);
   void AddComponent(Component *cpt);
   void RemoveComponent(Component *cpt);
-  Component *GetComponent(std::string type);
-  void Start();
   void NotifyCollision(GameObject &other);
+  Component *GetComponent(std::string type);
+  void ReplaceComponent(Component *cpt, Component *replaceCpt);
 };
 
 #endif
