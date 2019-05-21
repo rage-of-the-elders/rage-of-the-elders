@@ -13,6 +13,7 @@
 #include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
+#include "Veteran.h"
 
 StageState::StageState() : music("audio/stageState.ogg") {
   this->quitRequested = false;
@@ -37,19 +38,12 @@ void StageState::LoadAssets() {
 
 	bg->AddComponent(new CameraFollower(*bg));
 
-	for(int i = 0; i < 3; i++) {
-		GameObject* go = new GameObject();
-		go->AddComponent(new Alien(*go, (int) Math::GetRand(4, 8), Math::GetRand(1, 5)));
-		go->box.SetCenterPos(rand()%1024, rand()%600);
-		AddObject(go);
-	}
+	GameObject *veteranGO = new GameObject();
+	veteranGO->AddComponent(new Veteran(*veteranGO));
+	veteranGO->box.SetCenterPos(704, 640);
+	this->AddObject(veteranGO);
 
-	GameObject *penguinGO = new GameObject();
-	penguinGO->AddComponent(new PenguinBody(*penguinGO));
-	penguinGO->box.SetCenterPos(704, 640);
-	this->AddObject(penguinGO);
-
-	Camera::Follow(penguinGO);
+	Camera::Follow(veteranGO);
 
 	this->music.Play();
 }
