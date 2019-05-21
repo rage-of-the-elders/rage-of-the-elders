@@ -15,7 +15,7 @@
 #include "GameData.h"
 #include "Veteran.h"
 
-StageState::StageState() : music("audio/stageState.ogg") {
+StageState::StageState() : music("audio/background.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
