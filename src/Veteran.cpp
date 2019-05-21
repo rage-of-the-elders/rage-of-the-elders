@@ -39,13 +39,72 @@ void Veteran::Start() {
 }
 
 void Veteran::Update(float dt) {
-  if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
+  if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+      this->currentState = ATTACKING;
+  }
+  else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
     this->speed = Vec2::GetSpeed(0);
     this->associated.box.UpdatePos((speed*10) * dt);
-  }  
-  else if(InputManager::GetInstance().KeyPress(S_KEY)) {
-      this->currentState = ATTACKING;
+
+    if(InputManager::GetInstance().IsKeyDown(W_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(45);
+      this->associated.box.UpdatePos((speed*-10) * dt);
+    }
+    else if(InputManager::GetInstance().IsKeyDown(S_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(135);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+  }
+  else if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+    this->currentState = MOVING;
+    this->speed = Vec2::GetSpeed(0);
+    this->associated.box.UpdatePos((speed*-10) * dt);
+    
+    if(InputManager::GetInstance().IsKeyDown(W_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(315);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+    else if(InputManager::GetInstance().IsKeyDown(S_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(45);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+  }
+  else if(InputManager::GetInstance().IsKeyDown(S_KEY)){
+    this->currentState = MOVING;
+    this->speed = Vec2::GetSpeed(90);
+    this->associated.box.UpdatePos((speed*10) * dt);
+
+    if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(45);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+    else if(InputManager::GetInstance().IsKeyDown(D_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(135);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+  }
+  else if(InputManager::GetInstance().IsKeyDown(W_KEY)){
+    this->currentState = MOVING;
+    this->speed = Vec2::GetSpeed(270);
+    this->associated.box.UpdatePos((speed*10) * dt);
+
+    if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(315);
+      this->associated.box.UpdatePos((speed*10) * dt);
+    }
+    else if(InputManager::GetInstance().IsKeyDown(D_KEY)){
+      this->currentState = MOVING;
+      this->speed = Vec2::GetSpeed(45);
+      this->associated.box.UpdatePos((speed*-10) * dt);
+    }
   }
 
   switch (this->currentState) {
