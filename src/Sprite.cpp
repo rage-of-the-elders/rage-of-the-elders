@@ -11,7 +11,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
 }
 
 Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
-               float frameTime, float secondsToSelfDestruct) : Sprite(associated) {
+               float frameTime, float secondsToSelfDestruct, bool repeat) : Sprite(associated) {
   this->texture = nullptr;
   this->frameCount = frameCount;
   this->frameTime = frameTime;
@@ -20,6 +20,7 @@ Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
   this->secondsToSelfDestruct = secondsToSelfDestruct;
   this->selfDestructCount = Timer();
   this->Open(file);
+  this->repeat = repeat;
 }
 
 Sprite::~Sprite() {
@@ -113,8 +114,11 @@ void Sprite::Update(float dt) {
   this->timeElapsed += dt;
 
   if (this->timeElapsed > this->frameTime) {
-    this->currentFrame = (this->currentFrame + 1) % this->frameCount;
     this->timeElapsed -= this->frameTime; // "Restarting" the counter
+    if(this->currentFrame < this->frameCount -1)
+      this->currentFrame++; // TODO: Check this
+    else if(this->repeat)
+      this->currentFrame = 0;
     this->UpdateFrame();
   }
 }
@@ -129,4 +133,12 @@ void Sprite::UpdateFrame() {
 
 bool Sprite::Is(std::string type) {
   return type == "Sprite";
+}
+
+void Sprite::SetRepeat(bool repeat){
+  this->repeat = repeat;
+}
+
+bool Sprite::GetRepeat(){
+  return this->repeat;
 }
