@@ -13,9 +13,9 @@ Veteran::Veteran(GameObject &associated) : Component(associated) {
   this->sprite = std::vector<Sprite*>(IDLE);
   this->sound = std::vector<Sound*>(IDLE);
 
-  this->sprite[MOVING] = new Sprite(this->associated, "img/veteran2.png", 42, 0.1, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/moving-r.png", 42, 0.1, 0, true);
   this->sprite[ATTACKING] = new Sprite(this->associated, "img/attacking.png", 5, 4, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/veteran3.png", 2, 8, 0, true);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/idle.png", 2, 8, 0, true);
 
   this->sprite[IDLE]->Activate();
   this->sprite[ATTACKING]->Desactivate();
