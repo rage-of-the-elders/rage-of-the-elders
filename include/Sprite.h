@@ -48,6 +48,7 @@ public:
   bool Is(std::string type);
   void SetRepeat(bool repeat);
   bool GetRepeat();
+  void Desactivate();
 };
 
 #endif

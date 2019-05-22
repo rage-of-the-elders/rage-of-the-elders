@@ -159,3 +159,8 @@ void Sprite::SetRepeat(bool repeat){
 bool Sprite::GetRepeat(){
   return this->repeat;
 }
+
+void Sprite::Desactivate() {
+  this->active = false;
+  this->SetFrame(0);
+}

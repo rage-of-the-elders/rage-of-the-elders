@@ -43,7 +43,7 @@ void StageState::LoadAssets() {
 
 	Camera::Follow(veteranGO);
 
-	// this->music.Play();
+	this->music.Play();
 }
 
 void StageState::Update(float dt) {
