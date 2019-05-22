@@ -10,16 +10,14 @@ Veteran::Veteran(GameObject &associated) : Component(associated) {
   this->currentState = IDLE;
   this->active = true;
 
-  this->sprite = std::vector<Sprite*>(IDLE);
-  this->sound = std::vector<Sound*>(IDLE);
+  this->sprite = std::vector<Sprite*>(LAST);
+  this->sound = std::vector<Sound*>(LAST);
 
   this->sprite[MOVING] = new Sprite(this->associated, "img/moving-r.png", 42, 0.1, 0, true);
   this->sprite[ATTACKING] = new Sprite(this->associated, "img/attacking.png", 5, 4, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/idle.png", 2, 8, 0, true);
 
-  this->sprite[IDLE]->Activate();
-  this->sprite[ATTACKING]->Desactivate();
-  this->sprite[MOVING]->Desactivate();
+  this->ActivateSprite(IDLE);
 
   this->sprite[MOVING]->SetScaleX(0.6);
   this->sprite[ATTACKING]->SetScaleX(2.4);
@@ -75,9 +73,7 @@ void Veteran::Update(float dt) {
   switch (this->currentState) {
     case Veteran::MOVING: {
       if(not this->sprite[MOVING]->IsActive()) {
-        this->sprite[IDLE]->Desactivate();
-        this->sprite[ATTACKING]->Desactivate();
-        this->sprite[MOVING]->Activate();
+        this->ActivateSprite(MOVING);
 
         this->sound[MOVING]->Activate();
         this->sound[MOVING]->Play(-1);
@@ -87,26 +83,19 @@ void Veteran::Update(float dt) {
               InputManager::GetInstance().IsKeyDown(A_KEY) ||
               InputManager::GetInstance().IsKeyDown(S_KEY) ||
               InputManager::GetInstance().IsKeyDown(W_KEY))) {
-        
         this->currentState = IDLE;
-
         this->sound[MOVING]->Desactivate();
         this->sound[MOVING]->Stop();
       }
     } break;
     case Veteran::IDLE: {
       if(not this->sprite[IDLE]->IsActive()) {
-        this->sprite[MOVING]->Desactivate();
-        this->sprite[ATTACKING]->Desactivate();   
-        this->sprite[IDLE]->Activate();
+        this->ActivateSprite(IDLE);        
       }
     } break;
     case Veteran::ATTACKING: {
       if(not this->sprite[ATTACKING]->IsActive()) {
-        this->sprite[MOVING]->Desactivate();
-        this->sprite[IDLE]->Desactivate();
-        this->sprite[ATTACKING]->Activate();
-
+        this->ActivateSprite(ATTACKING);
         this->sound[ATTACKING]->Play(1);
       }
       if(this->sprite[ATTACKING]->IsFinished()){
@@ -131,4 +120,15 @@ bool Veteran::Is(std::string type) {
 
 void Veteran::NotifyCollision(GameObject &other) {
 
+}
+
+void Veteran::ActivateSprite(VeteranState state) {
+  for(int enumState = FIRST; enumState < this->LAST; enumState++) {
+    VeteranState currentEnumState = static_cast<VeteranState>(enumState);
+    if (currentEnumState == state) {
+      sprite[state]->Activate();
+    } else if (currentEnumState != FIRST && currentEnumState != LAST){
+      sprite[currentEnumState]->Desactivate();
+    }
+  }
 }

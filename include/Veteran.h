@@ -14,7 +14,7 @@ class Veteran : public Component {
   private:
   int hp;
   Vec2 speed;
-  enum VeteranState { MOVING, ATTACKING, IDLE };
+  enum VeteranState { FIRST, MOVING, ATTACKING, IDLE, LAST };
   VeteranState currentState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
@@ -29,6 +29,7 @@ public:
   void Render();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
+  void ActivateSprite(VeteranState state);
 };
 
 #endif
