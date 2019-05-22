@@ -5,8 +5,6 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "CameraFollower.h"
-#include "Alien.h"
-#include "PenguinBody.h"
 #include "Collision.h"
 #include "Collider.h"
 #include "Game.h"
@@ -45,7 +43,7 @@ void StageState::LoadAssets() {
 
 	Camera::Follow(veteranGO);
 
-	this->music.Play();
+	// this->music.Play();
 }
 
 void StageState::Update(float dt) {
@@ -62,7 +60,7 @@ void StageState::Update(float dt) {
 
 	this->UpdateArray(dt);
 	this->CollisionCheck();
-	this->DeletionCheck();	
+	this->DeletionCheck();
 	this->CheckGameEnd();
 }
 
@@ -80,11 +78,11 @@ void StageState::Start() {
 }
 
 bool StageState::PlayerWon() {
-	return Alien::alienCount <= 0;
+	return false;
 }
 
 bool StageState::PlayerLose() {
-	return PenguinBody::player == nullptr;
+	return false;
 }
 
 void StageState::CheckGameEnd() {

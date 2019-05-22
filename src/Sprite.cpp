@@ -119,7 +119,7 @@ void Sprite::Update(float dt) {
   if (this->timeElapsed > this->frameTime) {
     this->timeElapsed -= this->frameTime; // "Restarting" the counter
     if(this->currentFrame < this->frameCount -1)
-      this->currentFrame++; // TODO: Check this
+      this->currentFrame++;
     else if(this->repeat)
       this->currentFrame = 0;
     
