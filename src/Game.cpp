@@ -8,7 +8,7 @@
 
 Game *Game::instance = nullptr;
 
-Game::Game(std::string title, int width, int height) {  
+Game::Game(std::string title, int width, int height) {
   if (instance != nullptr) {
     printf("There's already an instance of Game running!");
     exit(-1); // TODO: HANDLE THIS ERROR
@@ -71,7 +71,7 @@ Game::Game(std::string title, int width, int height) {
     printf("SDL Create Window: %s\n", SDL_GetError());
     exit(-1);
   }
-                               
+
   // Renderer creation
   int SUPPORTED_RENDERER = -1;
   renderer = SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);

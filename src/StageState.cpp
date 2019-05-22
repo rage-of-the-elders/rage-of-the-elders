@@ -33,8 +33,8 @@ void StageState::LoadAssets() {
 	this->bg->box = Rect();
 
 	this->mapGameObj = new GameObject();
-	this->tileSet = new TileSet(*mapGameObj, 64, 64, "img/tileset.png");
-	TileMap *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
+	this->tileSet = new TileSet(*mapGameObj, 560, 722, "img/stage1.png");
+	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
 
@@ -52,7 +52,7 @@ void StageState::LoadAssets() {
 
 	GameObject *wall = new GameObject();
 	wall->AddComponent(new Barrier(*wall, Rect(300,400,1000,40)));
-	
+
 	this->AddObject(wall);
 
 	Camera::Follow(veteranGO);
@@ -82,7 +82,7 @@ void StageState::Render() {
 	this->bg->Render();
 	this->mapGameObj->GetComponent("TileMap")->Render();
 
-	this->RenderArray();	
+	this->RenderArray();
 }
 
 void StageState::Start() {
