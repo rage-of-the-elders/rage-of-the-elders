@@ -46,12 +46,17 @@ void Veteran::Start() {
 }
 
 void Veteran::Update(float dt) {
+  this->ManageInput(dt);
+  this->UpdateStateMachine();
+}
+
+void Veteran::ManageInput(float dt) {
   if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
       this->currentState = ATTACKING;
   }
   if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0);
+    this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Updat
     this->associated.box.UpdatePos((speed*10) * dt);
   }
   if(InputManager::GetInstance().IsKeyDown(A_KEY)){
@@ -69,7 +74,9 @@ void Veteran::Update(float dt) {
     this->speed = Vec2::GetSpeed(270);
     this->associated.box.UpdatePos((speed*10) * dt);
   }
+}
 
+void Veteran::UpdateStateMachine() {
   switch (this->currentState) {
     case Veteran::MOVING: {
       if(not this->sprite[MOVING]->IsActive()) {
