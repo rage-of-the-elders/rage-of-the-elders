@@ -15,6 +15,8 @@ class Veteran : public Component {
   int hp;
   Vec2 speed;
   enum VeteranState { FIRST, MOVING, ATTACKING, IDLE, LAST };
+  enum Orientation { LEFT, RIGTH };
+  Orientation orientation;
   VeteranState currentState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;

@@ -9,6 +9,7 @@ Veteran::Veteran(GameObject &associated) : Component(associated) {
   this->speed = VETERAN_SPEED;
   this->currentState = IDLE;
   this->active = true;
+  this->orientation = RIGTH;
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -58,11 +59,13 @@ void Veteran::ManageInput(float dt) {
     this->currentState = MOVING;
     this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
     this->associated.box.UpdatePos((speed*10) * dt);
+    this->orientation = RIGTH;
   }
   if(InputManager::GetInstance().IsKeyDown(A_KEY)){
     this->currentState = MOVING;
     this->speed = Vec2::GetSpeed(0);
     this->associated.box.UpdatePos((speed*-10) * dt);
+    this->orientation = LEFT;
   }
   if(InputManager::GetInstance().IsKeyDown(S_KEY)){
     this->currentState = MOVING;
@@ -77,6 +80,12 @@ void Veteran::ManageInput(float dt) {
 }
 
 void Veteran::UpdateStateMachine() {
+
+  if(this->orientation == LEFT)
+    this->associated.flip = SDL_FLIP_HORIZONTAL;
+  else
+    this->associated.flip = SDL_FLIP_NONE;
+
   switch (this->currentState) {
     case Veteran::MOVING: {
       if(not this->sprite[MOVING]->IsActive()) {

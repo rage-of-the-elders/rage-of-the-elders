@@ -63,7 +63,7 @@ void Sprite::Render(int x, int y) {
                    &dstRect,
                    this->associated.angleDeg,
                    nullptr, // Rotates around the center
-                   SDL_FLIP_NONE);
+                   this->associated.flip);
 }
 
 int Sprite::GetWidth() {
