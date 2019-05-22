@@ -5,6 +5,7 @@
 #include <vector>
 #include "Vec2.h"
 #include "Sprite.h"
+#include "Sound.h"
 
 #define VETERAN_HP 100
 #define VETERAN_SPEED Vec2(10)
@@ -16,6 +17,7 @@ class Veteran : public Component {
   enum VeteranState { MOVING, ATTACKING, IDLE };
   VeteranState currentState;
   std::vector<Sprite*> sprite;
+  std::vector<Sound*> sound;
   bool a;
 
 public:
