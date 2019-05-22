@@ -40,8 +40,8 @@ void Sprite::Open(std::string file) {
   }
 
   SetClip(0, 0, (this->width / this->frameCount), this->height);
-  associated.box.w = GetWidth();
-  associated.box.h = GetHeight();
+  this->associated.box.w = GetWidth();
+  this->associated.box.h = GetHeight();
 }
 
 void Sprite::SetClip(int x, int y, int w, int h) {

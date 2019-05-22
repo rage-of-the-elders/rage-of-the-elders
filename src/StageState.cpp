@@ -41,6 +41,13 @@ void StageState::LoadAssets() {
 	veteranGO->box.SetCenterPos(704, 640);
 	this->AddObject(veteranGO);
 
+	GameObject *wall = new GameObject();
+	wall->box.SetPos(754, 0);
+	wall->box.SetSize(40, 1000);
+	wall->AddComponent(new Collider(*wall));
+	
+	this->AddObject(wall);
+
 	Camera::Follow(veteranGO);
 
 	this->music.Play();
@@ -98,16 +105,20 @@ void StageState::CheckGameEnd() {
 	}
 }
 
-void StageState::CollisionCheck() {
+#include<iostream>
+
+void StageState::CollisionCheck() { // FIXME: Check isActive
 	for (unsigned i = 0; i < this->objectArray.size(); i++) {
 		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
-			Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
-			Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+			if (objectArray[i]->IsActive() && objectArray[j]->IsActive()) {
+				Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
+				Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
 
-			if(objA && objB) {
-				if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
-					this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
-					this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+				if(objA && objB) {
+					if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+						this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+						this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+					}
 				}
 			}
 		}

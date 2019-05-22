@@ -18,7 +18,9 @@ class Veteran : public Component {
   VeteranState currentState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
-  bool a;
+
+  void ManageInput(float dt);
+  void UpdateStateMachine();
 
 public:
 

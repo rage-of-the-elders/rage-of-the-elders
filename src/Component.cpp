@@ -1,6 +1,7 @@
 #include "Component.h"
 
 Component::Component(GameObject &associated) : associated(associated) {
+  this->active = true;
 }
 
 Component::~Component() {

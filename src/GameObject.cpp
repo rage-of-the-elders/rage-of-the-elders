@@ -6,6 +6,7 @@ GameObject::GameObject() {
   this->started = false;
   this->angleDeg = 0;
   this->box = Rect();
+  this->active = true;
 }
 
 GameObject::~GameObject() {
@@ -60,7 +61,7 @@ void GameObject::Start() {
 }
 
 void GameObject::NotifyCollision(GameObject &other) {
-  for(int i = 0; i < other.components.size(); i++)
+  for(int i = 0; i < this->components.size(); i++)
     if(this->components[i]->IsActive())
       this->components[i]->NotifyCollision(other);
 }

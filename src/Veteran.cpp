@@ -14,8 +14,8 @@ Veteran::Veteran(GameObject &associated) : Component(associated) {
   this->sound = std::vector<Sound*>(LAST);
 
   this->sprite[MOVING] = new Sprite(this->associated, "img/moving-r.png", 42, 0.1, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/attacking.png", 5, 4, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/idle.png", 2, 8, 0, true);
+  this->sprite[ATTACKING] = new Sprite(this->associated, "img/attacking.png", 5, 1, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/idle.png", 2, 3, 0, true);
 
   this->ActivateSprite(IDLE);
 
@@ -56,7 +56,7 @@ void Veteran::ManageInput(float dt) {
   }
   if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Updat
+    this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
     this->associated.box.UpdatePos((speed*10) * dt);
   }
   if(InputManager::GetInstance().IsKeyDown(A_KEY)){
@@ -126,7 +126,7 @@ bool Veteran::Is(std::string type) {
 }
 
 void Veteran::NotifyCollision(GameObject &other) {
-
+  puts("veteran collided with something");
 }
 
 void Veteran::ActivateSprite(VeteranState state) {
