@@ -15,8 +15,6 @@
 #include "Nurse.h"
 #include "Barrier.h"
 
-#include<iostream>
-
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
   this->started = false;
