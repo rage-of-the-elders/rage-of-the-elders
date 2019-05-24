@@ -155,7 +155,7 @@ SDL_Renderer* Game::GetRenderer() {
 
 Game &Game::GetInstance() {
   if (instance == nullptr)
-    instance = new Game("Matheus Richard - 150043023", 1024, 720);
+    instance = new Game("Rage of the Elders", 1024, 720);
 
   return *instance;
 }

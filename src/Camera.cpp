@@ -18,7 +18,7 @@ void Camera::Update(float dt) {
   if (focus != nullptr) {
     int screenWidth, screenHeight; // TODO: Maybe save on Game
     SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
-    pos.x = focus->box.GetCenter().x - screenWidth / 2.0;
+    pos.x = focus->box.GetCenter().x;
     pos.y = focus->box.GetCenter().y - screenHeight / 2.0;
   } else {
     if(InputManager::GetInstance().IsKeyDown(UP_ARROW_KEY))
