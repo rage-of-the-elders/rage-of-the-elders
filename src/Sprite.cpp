@@ -109,6 +109,10 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
+  //TODO check this.
+  this->associated.box.w = GetWidth();
+  this->associated.box.h = GetHeight();
+  
   if (this->secondsToSelfDestruct > 0) {
     this->selfDestructCount.Update(dt);
     if (this->selfDestructCount.Get() > this->secondsToSelfDestruct)
