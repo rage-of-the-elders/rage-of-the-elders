@@ -11,7 +11,7 @@
 #define FIGHTER_SPEED Vec2(10)
 
 class Fighter : public Component {
-private:
+protected:
   int hp;
   Vec2 speed;
   enum FighterState { FIRST, MOVING, ATTACKING, IDLE, LAST };

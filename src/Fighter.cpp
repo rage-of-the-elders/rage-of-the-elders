@@ -5,8 +5,8 @@
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated, std::string character) : Component(associated) {
-  this->hp = FIGHTER_HP;
-  this->speed = FIGHTER_SPEED;
+  this->hp = FIGHTER_HP; // Maybe we should receive this on the constructor
+  this->speed = FIGHTER_SPEED; // Maybe we should receive this on the constructor
   this->currentState = IDLE;
   this->orientation = RIGHT;
   this->active = true;
