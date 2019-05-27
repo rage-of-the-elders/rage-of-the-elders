@@ -19,7 +19,6 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[ATTACKING]);
   this->associated.AddComponent(this->sprite[MOVING]);
-  this->associated.AddComponent(new Collider(this->associated));
 }
 
 Nurse::~Nurse() {
@@ -80,5 +79,5 @@ bool Nurse::Is(std::string type) {
 }
 
 void Nurse::NotifyCollision(GameObject &other) {
-  puts("Nurse collided with something");
+  Fighter::NotifyCollision(other);
 }
