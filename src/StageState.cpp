@@ -11,8 +11,8 @@
 #include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
-#include "Fighter.h"
 #include "Veteran.h"
+#include "Nurse.h"
 
 StageState::StageState() : music("audio/background.ogg") {
   this->quitRequested = false;
@@ -42,21 +42,21 @@ void StageState::LoadAssets() {
 	veteranGO->box.SetCenterPos(704, 640);
 	this->AddObject(veteranGO);
 
-	GameObject *figherGO = new GameObject();
-	figherGO->AddComponent(new Fighter(*figherGO, "veteran"));
-	figherGO->box.SetCenterPos(704, 640);
-	this->AddObject(figherGO);
+	GameObject *nurseGO = new GameObject();
+	nurseGO->AddComponent(new Nurse(*nurseGO));
+	nurseGO->box.SetCenterPos(900, 640);
+	this->AddObject(nurseGO);
 
-	GameObject *wall = new GameObject();
-	wall->box.SetPos(754, 0);
-	wall->box.SetSize(40, 1000);
-	wall->AddComponent(new Collider(*wall));
+	// GameObject *wall = new GameObject();
+	// wall->box.SetPos(754, 0);
+	// wall->box.SetSize(40, 1000);
+	// wall->AddComponent(new Collider(*wall));
 	
-	this->AddObject(wall);
+	// this->AddObject(wall);
 
 	Camera::Follow(veteranGO);
 
-	this->music.Play();
+	// this->music.Play();
 }
 
 void StageState::Update(float dt) {

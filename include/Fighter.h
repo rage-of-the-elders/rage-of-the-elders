@@ -24,7 +24,7 @@ protected:
   void UpdateStateMachine();
 public:
 
-  Fighter(GameObject &associated, std::string character);
+  Fighter(GameObject &associated);
   ~Fighter();
   void Start();
   virtual void Update(float dt);
