@@ -16,7 +16,7 @@ public:
   Music(std::string file);
   ~Music();
   void Play(int times = -1);
-  void Stop(int msToStop = 1500);
+  void Stop(int msToStop = 500);
   void Open(std::string file);
   bool IsOpen();
 };
