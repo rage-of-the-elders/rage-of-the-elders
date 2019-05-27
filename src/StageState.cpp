@@ -14,7 +14,9 @@
 #include "Veteran.h"
 #include "Nurse.h"
 
-StageState::StageState() : music("audio/background.ogg") {
+#include<iostream>
+
+StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
@@ -47,12 +49,13 @@ void StageState::LoadAssets() {
 	nurseGO->box.SetCenterPos(900, 640);
 	this->AddObject(nurseGO);
 
-	// GameObject *wall = new GameObject();
-	// wall->box.SetPos(754, 0);
-	// wall->box.SetSize(40, 1000);
-	// wall->AddComponent(new Collider(*wall));
+	GameObject *wall = new GameObject();
+	wall->box.SetCenterPos(300, 400);
+	wall->box.SetSize(1000, 40);
+	// wall->angleDeg = 30;
+	wall->AddComponent(new Collider(*wall));
 	
-	// this->AddObject(wall);
+	this->AddObject(wall);
 
 	Camera::Follow(veteranGO);
 

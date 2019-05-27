@@ -13,6 +13,7 @@ public:
   Vec2 GetPos();
   Vec2 GetCenter();
   Vec2 GetSize();
+  Rect GetFoot();
   void SetPos(float x, float y);
   void SetPos(Vec2 pos);
   void UpdatePos(Vec2 pos);
