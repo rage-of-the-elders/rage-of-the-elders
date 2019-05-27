@@ -2,21 +2,21 @@
 #include "Sprite.h"
 #include "Collider.h"
 #include "InputManager.h"
-#include<iostream>
+#include <iostream>
 
 Veteran::Veteran(GameObject &associated) : Component(associated) {
   this->hp = VETERAN_HP;
   this->speed = VETERAN_SPEED;
   this->currentState = IDLE;
   this->active = true;
-  this->orientation = RIGTH;
+  this->orientation = RIGHT;
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
 
-  this->sprite[MOVING] = new Sprite(this->associated, "img/moving-r.png", 42, 0.1, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/attacking.png", 5, 1, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/idle.png", 2, 3, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/veteran/moving.png", 42, 0.1, 0, true);
+  this->sprite[ATTACKING] = new Sprite(this->associated, "img/veteran/attacking.png", 5, 1, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/veteran/idle.png", 2, 3, 0, true);
 
   this->ActivateSprite(IDLE);
 
@@ -59,7 +59,7 @@ void Veteran::ManageInput(float dt) {
     this->currentState = MOVING;
     this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
     this->associated.box.UpdatePos((speed*10) * dt);
-    this->orientation = RIGTH;
+    this->orientation = RIGHT;
   }
   if(InputManager::GetInstance().IsKeyDown(A_KEY)){
     this->currentState = MOVING;

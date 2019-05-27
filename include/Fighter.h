@@ -1,5 +1,5 @@
-#ifndef VETERAN_H
-#define VETERAN_H
+#ifndef FIGHTER_H
+#define FIGHTER_H
 
 #include "Component.h"
 #include <vector>
@@ -7,33 +7,31 @@
 #include "Sprite.h"
 #include "Sound.h"
 
-#define VETERAN_HP 100
-#define VETERAN_SPEED Vec2(10)
+#define FIGHTER_HP 100
+#define FIGHTER_SPEED Vec2(10)
 
-class Veteran : public Component {
-  private:
+class Fighter : public Component {
+private:
   int hp;
   Vec2 speed;
-  enum VeteranState { FIRST, MOVING, ATTACKING, IDLE, LAST };
+  enum FighterState { FIRST, MOVING, ATTACKING, IDLE, LAST };
   enum Orientation { LEFT, RIGHT };
   Orientation orientation;
-  VeteranState currentState;
+  FighterState currentState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
 
-  void ManageInput(float dt);
   void UpdateStateMachine();
-
 public:
 
-  Veteran(GameObject &associated);
-  ~Veteran();
+  Fighter(GameObject &associated, std::string character);
+  ~Fighter();
   void Start();
-  void Update(float dt);
+  virtual void Update(float dt);
   void Render();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
-  void ActivateSprite(VeteranState state);
+  void ActivateSprite(FighterState state);
 };
 
 #endif

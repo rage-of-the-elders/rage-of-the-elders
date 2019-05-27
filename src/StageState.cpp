@@ -11,6 +11,7 @@
 #include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
+#include "Fighter.h"
 #include "Veteran.h"
 
 StageState::StageState() : music("audio/background.ogg") {
@@ -40,6 +41,11 @@ void StageState::LoadAssets() {
 	veteranGO->AddComponent(new Veteran(*veteranGO));
 	veteranGO->box.SetCenterPos(704, 640);
 	this->AddObject(veteranGO);
+
+	GameObject *figherGO = new GameObject();
+	figherGO->AddComponent(new Fighter(*figherGO, "veteran"));
+	figherGO->box.SetCenterPos(704, 640);
+	this->AddObject(figherGO);
 
 	GameObject *wall = new GameObject();
 	wall->box.SetPos(754, 0);
