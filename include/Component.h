@@ -7,16 +7,21 @@
 class Component {
 protected:
   GameObject& associated;
+  bool active;
 
 public:
   float x, y;
 
   Component(GameObject& associated);
   virtual ~Component();
-  virtual void Update(float dt) = 0;
-  virtual void Render() = 0;
-  virtual bool Is(std::string type) = 0;
+  
   virtual void Start();
+  virtual bool IsActive();
+  virtual void Activate();
+	virtual void Desactivate();
+  virtual void Render() = 0;
+  virtual void Update(float dt) = 0;
+  virtual bool Is(std::string type) = 0;
   virtual void NotifyCollision(GameObject &other);
 };
 

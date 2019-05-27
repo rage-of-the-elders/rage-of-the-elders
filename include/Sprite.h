@@ -13,6 +13,7 @@ private:
   std::shared_ptr<SDL_Texture> texture;
   int width;
   int height;
+  bool repeat;
   SDL_Rect clipRect;
   Vec2 scale;
   int frameCount;
@@ -21,10 +22,11 @@ private:
   float frameTime;
   Timer selfDestructCount;
   float secondsToSelfDestruct;
+  bool finished;
 
 public:
   Sprite(GameObject &associated);
-  Sprite(GameObject &associated, std::string file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0);
+  Sprite(GameObject &associated, std::string file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0, bool repeat = true);
   ~Sprite();
   void Open(std::string file);
   void SetClip(int x, int y, int w, int h);
@@ -33,6 +35,7 @@ public:
   int GetWidth();
   int GetHeight();
   Vec2 GetScale();
+  bool IsFinished();
   void SetScaleX(float scale);
   void SetScaleX(float scaleX, float scaleY);
   void SetFrame (int frame);
@@ -41,7 +44,11 @@ public:
   void UpdateFrame();
   bool IsOpen();
   void Update(float dt);
+  void SetFinished(bool finished);
   bool Is(std::string type);
+  void SetRepeat(bool repeat);
+  bool GetRepeat();
+  void Desactivate();
 };
 
 #endif

@@ -5,16 +5,18 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "CameraFollower.h"
-#include "Alien.h"
-#include "PenguinBody.h"
 #include "Collision.h"
 #include "Collider.h"
 #include "Game.h"
 #include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
+#include "Veteran.h"
+#include "Nurse.h"
 
-StageState::StageState() : music("audio/stageState.ogg") {
+#include<iostream>
+
+StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
@@ -37,21 +39,27 @@ void StageState::LoadAssets() {
 
 	bg->AddComponent(new CameraFollower(*bg));
 
-	for(int i = 0; i < 3; i++) {
-		GameObject* go = new GameObject();
-		go->AddComponent(new Alien(*go, (int) Math::GetRand(4, 8), Math::GetRand(1, 5)));
-		go->box.SetCenterPos(rand()%1024, rand()%600);
-		AddObject(go);
-	}
+	GameObject *veteranGO = new GameObject();
+	veteranGO->AddComponent(new Veteran(*veteranGO));
+	veteranGO->box.SetCenterPos(704, 640);
+	this->AddObject(veteranGO);
 
-	GameObject *penguinGO = new GameObject();
-	penguinGO->AddComponent(new PenguinBody(*penguinGO));
-	penguinGO->box.SetCenterPos(704, 640);
-	this->AddObject(penguinGO);
+	GameObject *nurseGO = new GameObject();
+	nurseGO->AddComponent(new Nurse(*nurseGO));
+	nurseGO->box.SetCenterPos(900, 640);
+	this->AddObject(nurseGO);
 
-	Camera::Follow(penguinGO);
+	GameObject *wall = new GameObject();
+	wall->box.SetCenterPos(300, 400);
+	wall->box.SetSize(1000, 40);
+	// wall->angleDeg = 30;
+	wall->AddComponent(new Collider(*wall));
+	
+	this->AddObject(wall);
 
-	this->music.Play();
+	Camera::Follow(veteranGO);
+
+	// this->music.Play();
 }
 
 void StageState::Update(float dt) {
@@ -68,7 +76,7 @@ void StageState::Update(float dt) {
 
 	this->UpdateArray(dt);
 	this->CollisionCheck();
-	this->DeletionCheck();	
+	this->DeletionCheck();
 	this->CheckGameEnd();
 }
 
@@ -86,11 +94,11 @@ void StageState::Start() {
 }
 
 bool StageState::PlayerWon() {
-	return Alien::alienCount <= 0;
+	return false;
 }
 
 bool StageState::PlayerLose() {
-	return PenguinBody::player == nullptr;
+	return false;
 }
 
 void StageState::CheckGameEnd() {
@@ -106,16 +114,20 @@ void StageState::CheckGameEnd() {
 	}
 }
 
-void StageState::CollisionCheck() {
+#include<iostream>
+
+void StageState::CollisionCheck() { // FIXME: Check isActive
 	for (unsigned i = 0; i < this->objectArray.size(); i++) {
 		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
-			Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
-			Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+			if (objectArray[i]->IsActive() && objectArray[j]->IsActive()) {
+				Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
+				Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
 
-			if(objA && objB) {
-				if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
-					this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
-					this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+				if(objA && objB) {
+					if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+						this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+						this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+					}
 				}
 			}
 		}

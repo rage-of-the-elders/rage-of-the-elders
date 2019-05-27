@@ -3,6 +3,8 @@
 #include "Resources.h"
 #include "Camera.h"
 
+#include <iostream>
+
 Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->texture = nullptr;
   this->width = 0;
@@ -11,7 +13,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
 }
 
 Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
-               float frameTime, float secondsToSelfDestruct) : Sprite(associated) {
+               float frameTime, float secondsToSelfDestruct, bool repeat) : Sprite(associated) {
   this->texture = nullptr;
   this->frameCount = frameCount;
   this->frameTime = frameTime;
@@ -20,6 +22,8 @@ Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
   this->secondsToSelfDestruct = secondsToSelfDestruct;
   this->selfDestructCount = Timer();
   this->Open(file);
+  this->repeat = repeat;
+  this->finished = false;
 }
 
 Sprite::~Sprite() {
@@ -36,8 +40,8 @@ void Sprite::Open(std::string file) {
   }
 
   SetClip(0, 0, (this->width / this->frameCount), this->height);
-  associated.box.w = GetWidth();
-  associated.box.h = GetHeight();
+  this->associated.box.w = GetWidth();
+  this->associated.box.h = GetHeight();
 }
 
 void Sprite::SetClip(int x, int y, int w, int h) {
@@ -59,7 +63,7 @@ void Sprite::Render(int x, int y) {
                    &dstRect,
                    this->associated.angleDeg,
                    nullptr, // Rotates around the center
-                   SDL_FLIP_NONE);
+                   this->associated.flip);
 }
 
 int Sprite::GetWidth() {
@@ -105,6 +109,10 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
+  //TODO check this.
+  this->associated.box.w = GetWidth();
+  this->associated.box.h = GetHeight();
+  
   if (this->secondsToSelfDestruct > 0) {
     this->selfDestructCount.Update(dt);
     if (this->selfDestructCount.Get() > this->secondsToSelfDestruct)
@@ -113,11 +121,20 @@ void Sprite::Update(float dt) {
   this->timeElapsed += dt;
 
   if (this->timeElapsed > this->frameTime) {
-    this->currentFrame = (this->currentFrame + 1) % this->frameCount;
     this->timeElapsed -= this->frameTime; // "Restarting" the counter
+    if(this->currentFrame < this->frameCount -1)
+      this->currentFrame++;
+    else if(this->repeat)
+      this->currentFrame = 0;
+    
     this->UpdateFrame();
+  
+    if(not this->repeat && this->currentFrame == this->frameCount-1){
+      this->finished = true;
+    }
   }
 }
+  
 
 void Sprite::UpdateFrame() {
   float frameWidth = this->width / this->frameCount;
@@ -129,4 +146,25 @@ void Sprite::UpdateFrame() {
 
 bool Sprite::Is(std::string type) {
   return type == "Sprite";
+}
+
+void Sprite::SetFinished(bool finished){
+  this->finished = finished;
+}
+
+bool Sprite::IsFinished(){
+  return this->finished;
+}
+
+void Sprite::SetRepeat(bool repeat){
+  this->repeat = repeat;
+}
+
+bool Sprite::GetRepeat(){
+  return this->repeat;
+}
+
+void Sprite::Desactivate() {
+  this->active = false;
+  this->SetFrame(0);
 }

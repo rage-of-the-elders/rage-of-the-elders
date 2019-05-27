@@ -11,6 +11,7 @@
 Collider::Collider(GameObject &associated, Vec2 scale, Vec2 offset) : Component(associated) {
   this->scale = scale;
   this->offset = offset;
+  this->active = true;
 }
 
 void Collider::Update(float dt) {

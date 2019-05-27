@@ -6,6 +6,7 @@ GameObject::GameObject() {
   this->started = false;
   this->angleDeg = 0;
   this->box = Rect();
+  this->active = true;
 }
 
 GameObject::~GameObject() {
@@ -14,12 +15,14 @@ GameObject::~GameObject() {
 
 void GameObject::Update(float dt) {
   for (auto &component : components)
-    component->Update(dt);
+    if(component->IsActive())
+      component->Update(dt);
 }
 
 void GameObject::Render() {
   for (auto &component : components)
-    component->Render();
+    if(component->IsActive())    
+      component->Render();
 }
 
 bool GameObject::IsDead() {
@@ -58,6 +61,19 @@ void GameObject::Start() {
 }
 
 void GameObject::NotifyCollision(GameObject &other) {
-  for(int i = 0; i < other.components.size(); i++)
-    this->components[i]->NotifyCollision(other);
+  for(int i = 0; i < this->components.size(); i++)
+    if(this->components[i]->IsActive())
+      this->components[i]->NotifyCollision(other);
+}
+
+void GameObject::Activate() {
+  this->active = true;
+}
+
+void GameObject::Desactivate() {
+  this->active = false;
+}
+
+bool GameObject::IsActive() {
+  return this->active;
 }

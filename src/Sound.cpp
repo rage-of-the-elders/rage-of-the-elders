@@ -5,6 +5,7 @@
 Sound::Sound(GameObject &associated) : Component (associated) {
   this->chunk = nullptr;
   this->channel = -1;
+  this->active = true;
 }
 
 Sound::Sound(GameObject &associated, std::string file) : Sound (associated) {
@@ -28,10 +29,14 @@ void Sound::Play(int times) {
 }
 
 void Sound::Stop() {
-  if (not IsPlaying()) {
+  //CHECK that part after
+  // if (not IsPlaying()) {
     Mix_HaltChannel(this->channel);
-  }
+  // }
   this->channel = -1;
+  
+  // if(IsPlaying())
+  //   Mix_HaltChannel(-1);
 }
 
 void Sound::Open(std::string file) {
