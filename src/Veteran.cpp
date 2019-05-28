@@ -7,9 +7,11 @@
 #include "Camera.h"
 #include <iostream>
 
+Veteran *Veteran::player;
 Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->hp = VETERAN_HP;
   this->speed = VETERAN_SPEED;
+  this->player = this;
 
   std::string character = "veteran";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 42, 0.1, 0, true);
@@ -25,6 +27,8 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[ATTACKING]);
   this->associated.AddComponent(this->sprite[MOVING]);
+
+  this->associated.AddComponent(new Collider(this->associated));
 }
 
 Veteran::~Veteran() {
