@@ -29,6 +29,7 @@ public:
   void Start();
   virtual void Update(float dt);
   void Render();
+  Rect GetBox();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);

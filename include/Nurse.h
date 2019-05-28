@@ -2,13 +2,13 @@
 #define NURSE_H
 
 #define NURSE_HP 100
-#define NURSE_SPEED 20
+#define NURSE_SPEED 10
 
 #include "Fighter.h"
 
 class Nurse : public Fighter {
 private:
-  Vec2 target;
+  Rect target;
   void UpdateStateMachine();
 
 public:
@@ -17,6 +17,7 @@ public:
   void Start();
   void Update(float dt);
   void Render();
+  bool TargetIsInRange();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
 };

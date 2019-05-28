@@ -20,8 +20,6 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
 
   this->associated.AddComponent(this->sound[MOVING]);
   this->associated.AddComponent(this->sound[ATTACKING]);
-
-  this->associated.AddComponent(new Collider(this->associated));
 }
 
 Fighter::~Fighter() {}
@@ -31,6 +29,10 @@ void Fighter::Render() {}
 
 bool Fighter::Is(std::string type) {
   return(type == "Fighter");
+}
+
+Rect Fighter::GetBox() {
+  return this->associated.box;
 }
 
 void Fighter::NotifyCollision(GameObject &other) {

@@ -40,8 +40,8 @@ void StageState::LoadAssets() {
 	bg->AddComponent(new CameraFollower(*bg));
 
 	GameObject *veteranGO = new GameObject();
+	veteranGO->box.SetCenterPos(600, 640);
 	veteranGO->AddComponent(new Veteran(*veteranGO));
-	veteranGO->box.SetCenterPos(704, 640);
 	this->AddObject(veteranGO);
 
 	GameObject *nurseGO = new GameObject();
