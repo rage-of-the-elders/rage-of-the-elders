@@ -45,9 +45,9 @@ void Fighter::NotifyCollision(GameObject &other) {
       
       float objY;
 
-      float distanceToBottom = VeteranFoot.y - (abs(other.box.y) + other.box.h);
+      float distanceToBottom = VeteranFoot.y - (other.box.y + other.box.h);
 
-      float distanceToTop = (VeteranFoot.y + VeteranFoot.h) - abs(other.box.y);
+      float distanceToTop = (VeteranFoot.y + VeteranFoot.h) - other.box.y;
 
       if(abs(distanceToBottom) > abs(distanceToTop)) {
         objY = other.box.y;
