@@ -26,7 +26,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
 
 Fighter::~Fighter() {}
 void Fighter::Start() {}
-void Fighter::Update(float dt) {}
+void Fighter::Update(float) {}
 void Fighter::Render() {}
 
 bool Fighter::Is(std::string type) {

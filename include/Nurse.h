@@ -2,12 +2,13 @@
 #define NURSE_H
 
 #define NURSE_HP 100
-#define NURSE_SPEED Vec2(10)
+#define NURSE_SPEED 20
 
 #include "Fighter.h"
 
 class Nurse : public Fighter {
-  private:
+private:
+  Vec2 target;
   void UpdateStateMachine();
 
 public:

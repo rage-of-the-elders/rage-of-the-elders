@@ -8,12 +8,12 @@
 #include "Sound.h"
 
 #define FIGHTER_HP 100
-#define FIGHTER_SPEED Vec2(10)
+#define FIGHTER_SPEED 20
 
 class Fighter : public Component {
 protected:
   int hp;
-  Vec2 speed;
+  float speed;
   enum FighterState { FIRST, MOVING, ATTACKING, IDLE, LAST };
   enum Orientation { LEFT, RIGHT };
   Orientation orientation;

@@ -46,25 +46,25 @@ void Veteran::ManageInput(float dt) {
   }
   if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
-    this->associated.box.UpdatePos((speed*10) * dt);
+    Vec2 direction = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
     this->orientation = RIGHT;
   }
   if(InputManager::GetInstance().IsKeyDown(A_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0);
-    this->associated.box.UpdatePos((speed*-20) * dt);
+    Vec2 direction = Vec2::GetSpeed(0);
+    this->associated.box.UpdatePos((direction * -this->speed) * dt);
     this->orientation = LEFT;
   }
   if(InputManager::GetInstance().IsKeyDown(S_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(90);
-    this->associated.box.UpdatePos((speed*20) * dt);
+    Vec2 direction = Vec2::GetSpeed(90);
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
   }
   if(InputManager::GetInstance().IsKeyDown(W_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(270);
-    this->associated.box.UpdatePos((speed*20) * dt);
+    Vec2 direction = Vec2::GetSpeed(270);
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
   }
 }
 
