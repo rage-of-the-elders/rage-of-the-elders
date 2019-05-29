@@ -21,7 +21,7 @@ void TileSet::RenderTile(unsigned index, float x, float y) {
 
 void TileSet::RenderInitialTile(int cameraX, int cameraY) {
   tileSet.SetClip(0, 0, this->initialTileWidth, this->tileHeight);
-  this->tileSet.Render(-cameraX, -cameraY);
+  this->tileSet.Render(-cameraX, 0);
 }
 
 int TileSet::GetTileWidth() {

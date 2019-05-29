@@ -58,7 +58,7 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
                                   - (i * GAP)
                                   - cameraX
                                   + this->tileSet->GetInitialTileWidth() - GAP),
-                                (j * this->tileSet->GetTileHeight()) - cameraY);
+                                (j * this->tileSet->GetTileHeight()));
 }
 
 void TileMap::Render() {
