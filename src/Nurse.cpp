@@ -85,8 +85,6 @@ void Nurse::UpdateStateMachine() {
   }
 }
 
-void Nurse::Render() {}
-
 bool Nurse::Is(std::string type) {
   return(type == "Nurse");
 }
