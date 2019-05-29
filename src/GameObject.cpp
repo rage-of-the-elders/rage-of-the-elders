@@ -77,3 +77,7 @@ void GameObject::Desactivate() {
 bool GameObject::IsActive() {
   return this->active;
 }
+
+bool GameObject::Has(std::string type) {
+  return(this->GetComponent(type) != nullptr);
+}
