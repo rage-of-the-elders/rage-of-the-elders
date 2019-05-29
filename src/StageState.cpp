@@ -13,6 +13,7 @@
 #include "GameData.h"
 #include "Veteran.h"
 #include "Nurse.h"
+#include "Barrier.h"
 
 #include<iostream>
 
@@ -50,16 +51,13 @@ void StageState::LoadAssets() {
 	this->AddObject(nurseGO);
 
 	GameObject *wall = new GameObject();
-	wall->box.SetCenterPos(300, 400);
-	wall->box.SetSize(1000, 40);
-	// wall->angleDeg = 30;
-	wall->AddComponent(new Collider(*wall));
+	wall->AddComponent(new Barrier(*wall, Rect(300,400,1000,40)));
 	
 	this->AddObject(wall);
 
 	Camera::Follow(veteranGO);
 
-	// this->music.Play();
+	this->music.Play();
 }
 
 void StageState::Update(float dt) {

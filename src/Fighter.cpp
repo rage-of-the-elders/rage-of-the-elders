@@ -62,56 +62,60 @@ Rect Fighter::GetBox() {
 }
 
 void Fighter::NotifyCollision(GameObject &other) {
-  Rect fighterFoot = this->associated.box.GetFoot();
 
-  if(Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
-    
-    float collisionX = std::min( abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
-    float collisionY = std::min( abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
+  if(other.Has("Barrier")) {
 
-    if( collisionX > collisionY) {
+    Rect fighterFoot = this->associated.box.GetFoot();
+
+    if(Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
       
-      float objY;
+      float collisionX = std::min( abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
+      float collisionY = std::min( abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
 
-      float distanceToBottom = fighterFoot.y - (other.box.y + other.box.h);
+      if( collisionX > collisionY) {
+        
+        float objY;
 
-      float distanceToTop = (fighterFoot.y + fighterFoot.h) - other.box.y;
+        float distanceToBottom = fighterFoot.y - (other.box.y + other.box.h);
 
-      if(abs(distanceToBottom) > abs(distanceToTop)) {
-        objY = other.box.y;
+        float distanceToTop = (fighterFoot.y + fighterFoot.h) - other.box.y;
 
-        if( (fighterFoot.y + fighterFoot.h) > objY ) {
-          this->associated.box.y = other.box.y - this->associated.box.h;
+        if(abs(distanceToBottom) > abs(distanceToTop)) {
+          objY = other.box.y;
+
+          if( (fighterFoot.y + fighterFoot.h) > objY ) {
+            this->associated.box.y = other.box.y - this->associated.box.h;
+          }
+        }
+        else {
+          objY = other.box.y + other.box.h;
+
+          if( fighterFoot.y < objY ) {
+            this->associated.box.y = other.box.y + other.box.h - this->associated.box.h + fighterFoot.h;
+          }
         }
       }
       else {
-        objY = other.box.y + other.box.h;
 
-        if( fighterFoot.y < objY ) {
-          this->associated.box.y = other.box.y + other.box.h - this->associated.box.h + fighterFoot.h;
+        float objX;
+
+        float distanceToRight = fighterFoot.x - (abs(other.box.x) + other.box.w);
+
+        float distanceToLeft = (fighterFoot.x + fighterFoot.w) - abs(other.box.x);
+
+        if(abs(distanceToRight) > abs(distanceToLeft)) {
+          objX = other.box.x;
+
+          if( (fighterFoot.x + fighterFoot.w) > objX ) {
+            this->associated.box.x = other.box.x - fighterFoot.w;
+          }
         }
-      }
-    }
-    else {
+        else{
+          objX = other.box.x + other.box.w;
 
-      float objX;
-
-      float distanceToRight = fighterFoot.x - (abs(other.box.x) + other.box.w);
-
-      float distanceToLeft = (fighterFoot.x + fighterFoot.w) - abs(other.box.x);
-
-      if(abs(distanceToRight) > abs(distanceToLeft)) {
-        objX = other.box.x;
-
-        if( (fighterFoot.x + fighterFoot.w) > objX ) {
-          this->associated.box.x = other.box.x - fighterFoot.w;
-        }
-      }
-      else{
-        objX = other.box.x + other.box.w;
-
-        if( fighterFoot.x < objX ) {
-          this->associated.box.x = other.box.x + other.box.w;
+          if( fighterFoot.x < objX ) {
+            this->associated.box.x = other.box.x + other.box.w;
+          }
         }
       }
     }
