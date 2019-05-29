@@ -14,7 +14,7 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->ActivateSprite(MOVING);
 
   this->sprite[MOVING]->SetScaleX(1);
-  this->sprite[ATTACKING]->SetScaleX(2.4);
+  this->sprite[ATTACKING]->SetScaleX(3.2);
   this->sprite[IDLE]->SetScaleX(0.3);
 
   this->associated.AddComponent(this->sprite[IDLE]);
@@ -26,15 +26,15 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
 Nurse::~Nurse() {}
 void Nurse::Start() {}
 
-bool Nurse::TargetIsInRange() {
+bool Nurse::TargetIsInRange() { // FIXME: This is not finished
   // return (this->associated.box.GetCenter().GetDistance(this->target.GetCenter()));
-  return (Math::InRange(this->target.x, this->GetBox().x - 100, this->GetBox().x + 100));
-          // && Math::InRange(this->target.y, this->GetBox().y - 10, this->GetBox().y + 10));
+  return (Math::InRange(this->target.GetCenter().x, this->GetBox().GetCenter().x - 100, this->GetBox().GetCenter().x + 100));
+  // && Math::InRange(this->target.y, this->GetBox().y - 10, this->GetBox().y + 10));
 }
 
 void Nurse::Update(float dt) {
   this->target = Veteran::player->GetBox();
-  if (this->target.x < this->GetBox().x)
+  if (this->target.GetCenter().x < this->GetBox().GetCenter().x)
     this->orientation = LEFT;
   else
     this->orientation = RIGHT;
