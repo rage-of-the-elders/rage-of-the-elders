@@ -49,6 +49,7 @@ public:
   void SetRepeat(bool repeat);
   bool GetRepeat();
   void Desactivate();
+  Rect GetPosition();
 };
 
 #endif
