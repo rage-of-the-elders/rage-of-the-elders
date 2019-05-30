@@ -15,13 +15,19 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
 
   std::string character = "veteran";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.15, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 50, 0.1, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 30, 0.2, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 15, 0.1, 0, false);
+  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.1, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
+  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 50, 0.1, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
 
   this->associated.AddComponent(this->sprite[IDLE]);
-  this->associated.AddComponent(this->sprite[ATTACKING]);
+  this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
+  this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
+  this->associated.AddComponent(this->sprite[COMBO]);
+  this->associated.AddComponent(this->sprite[ULTIMATE]);
   this->associated.AddComponent(this->sprite[MOVING]);
 
   this->associated.AddComponent(new Collider(this->associated));
@@ -41,16 +47,25 @@ void Veteran::Update(float dt) {
 }
 
 void Veteran::ManageInput(float dt) {
-  if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-    this->currentState = ATTACKING;
+  if(InputManager::GetInstance().KeyPress(F_KEY)) {
+    this->currentState = BASIC_ATTACK_ONE;
   }
-  if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
+  else if(InputManager::GetInstance().KeyPress(G_KEY)) {
+    this->currentState = BASIC_ATTACK_TWO;
+  }
+  else if(InputManager::GetInstance().KeyPress(H_KEY)) {
+    this->currentState = COMBO;
+  }
+  else if(InputManager::GetInstance().KeyPress(J_KEY)) {
+    this->currentState = ULTIMATE;
+  }
+  else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
     Vec2 direction = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
     this->associated.box.UpdatePos((direction * this->speed) * dt);
     this->orientation = RIGHT;
   }
-  if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+  else if(InputManager::GetInstance().IsKeyDown(A_KEY)){
     this->currentState = MOVING;
     Vec2 direction = Vec2::GetSpeed(0);
     this->associated.box.UpdatePos((direction * -this->speed) * dt);
@@ -97,18 +112,50 @@ void Veteran::UpdateStateMachine() {
         this->ActivateSprite(IDLE);        
       }
     } break;
-    case Veteran::ATTACKING: {
-      if(not this->sprite[ATTACKING]->IsActive()) {
-        this->ActivateSprite(ATTACKING);
-        this->sound[ATTACKING]->Play(1);
+    case Veteran::BASIC_ATTACK_ONE: {
+      if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
+        this->ActivateSprite(BASIC_ATTACK_ONE);
+        this->sound[BASIC_ATTACK_ONE]->Play(1);
       }
-      if(this->sprite[ATTACKING]->IsFinished()){
+      if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
         this->currentState = IDLE;
-        this->sprite[ATTACKING]->SetFrame(0);
-        this->sprite[ATTACKING]->SetFinished(false);
+        this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
+        this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
       }
     } break;
-    
+    case Veteran::BASIC_ATTACK_TWO: {
+      if(not this->sprite[BASIC_ATTACK_TWO]->IsActive()) {
+        this->ActivateSprite(BASIC_ATTACK_TWO);
+        this->sound[BASIC_ATTACK_TWO]->Play(1);
+      }
+      if(this->sprite[BASIC_ATTACK_TWO]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[BASIC_ATTACK_TWO]->SetFrame(0);
+        this->sprite[BASIC_ATTACK_TWO]->SetFinished(false);
+      }
+    } break;
+    case Veteran::COMBO: {
+      if(not this->sprite[COMBO]->IsActive()) {
+        this->ActivateSprite(COMBO);
+        this->sound[COMBO]->Play(1);
+      }
+      if(this->sprite[COMBO]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[COMBO]->SetFrame(0);
+        this->sprite[COMBO]->SetFinished(false);
+      }
+    } break;
+    case Veteran::ULTIMATE: {
+      if(not this->sprite[ULTIMATE]->IsActive()) {
+        this->ActivateSprite(ULTIMATE);
+        this->sound[ULTIMATE]->Play(1);
+      }
+      if(this->sprite[ULTIMATE]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[ULTIMATE]->SetFrame(0);
+        this->sprite[ULTIMATE]->SetFinished(false);
+      }
+    } break;
     default:
       break;
   }

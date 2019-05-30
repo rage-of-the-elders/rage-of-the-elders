@@ -10,16 +10,11 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
 
   std::string character = "nurse";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 26, 0.2, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 26, 0.1, 0, false);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 27, 0.1, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 26, 3, 0, true);
 
-
-  this->sprite[MOVING]->SetScaleX(0.5);
-  this->sprite[ATTACKING]->SetScaleX(0.5);
-  this->sprite[IDLE]->SetScaleX(0.5);
-
   this->associated.AddComponent(this->sprite[IDLE]);
-  this->associated.AddComponent(this->sprite[ATTACKING]);
+  this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[MOVING]);
   
   this->ActivateSprite(MOVING);
@@ -31,9 +26,9 @@ Nurse::~Nurse() {}
 void Nurse::Start() {}
 
 bool Nurse::TargetIsInRange() { // FIXME: This is not finished
-  float nurseAttackX = this->sprite[ATTACKING]->GetBox().GetCenter().x;
-  float nurseAttackY = (this->sprite[ATTACKING]->GetBox().y + this->sprite[ATTACKING]->GetWidth());
-  float nurseAttackWidth = this->sprite[ATTACKING]->GetWidth();
+  float nurseAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
+  float nurseAttackY = (this->sprite[BASIC_ATTACK_ONE]->GetBox().y + this->sprite[BASIC_ATTACK_ONE]->GetWidth());
+  float nurseAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
   float nurseXRange = (nurseAttackWidth/2.0) + (this->target.w/2.0);
 
   float targetDistanceX = abs(target.GetCenter().x - nurseAttackX);
@@ -76,14 +71,14 @@ void Nurse::Update(float dt) {
       Vec2 direction = this->associated.box.GetCenter().GetSpeed(this->target.GetCenter());
       this->associated.box.UpdatePos((direction * this->speed) * dt);
     } break;
-    case Nurse::ATTACKING: {
-      if(not this->sprite[ATTACKING]->IsActive()) {
-        this->ActivateSprite(ATTACKING);
-        this->sound[ATTACKING]->Play(1);
+    case Nurse::BASIC_ATTACK_ONE: {
+      if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
+        this->ActivateSprite(BASIC_ATTACK_ONE);
+        this->sound[BASIC_ATTACK_ONE]->Play(1);
       }
-      if(this->sprite[ATTACKING]->IsFinished()){
-        this->sprite[ATTACKING]->SetFrame(0);
-        this->sprite[ATTACKING]->SetFinished(false);
+      if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()){
+        this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
+        this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
         this->currentState = MOVING;
       }
     } break;
@@ -95,7 +90,7 @@ void Nurse::Update(float dt) {
 
 void Nurse::UpdateStateMachine() {
   if (TargetIsInRange()) {
-    this->currentState = ATTACKING;
+    this->currentState = BASIC_ATTACK_ONE;
     }
   else {
     if(this->sprite[MOVING]->IsActive())
