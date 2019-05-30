@@ -2,6 +2,8 @@
 #include "Collider.h"
 #include "Veteran.h"
 
+#include <iostream>
+
 Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->hp = NURSE_HP;
   this->speed = NURSE_SPEED;
@@ -11,7 +13,6 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 5, 1, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 2, 3, 0, true);
 
-  this->ActivateSprite(MOVING);
 
   this->sprite[MOVING]->SetScaleX(1);
   this->sprite[ATTACKING]->SetScaleX(3.2);
@@ -20,6 +21,9 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[ATTACKING]);
   this->associated.AddComponent(this->sprite[MOVING]);
+  
+  this->ActivateSprite(MOVING);
+  
   this->associated.AddComponent(new Collider(this->associated));
 }
 
@@ -27,14 +31,29 @@ Nurse::~Nurse() {}
 void Nurse::Start() {}
 
 bool Nurse::TargetIsInRange() { // FIXME: This is not finished
-  // return (this->associated.box.GetCenter().GetDistance(this->target.GetCenter()));
-  return (Math::InRange(this->target.GetCenter().x, this->GetBox().GetCenter().x - 100, this->GetBox().GetCenter().x + 100));
-  // && Math::InRange(this->target.y, this->GetBox().y - 10, this->GetBox().y + 10));
+  float nurseAttackX = this->sprite[ATTACKING]->GetPosition().GetCenter().x;
+  float nurseAttackY = (this->sprite[ATTACKING]->GetPosition().y + this->sprite[ATTACKING]->GetHeight());
+  float nurseAttackWidth = this->sprite[ATTACKING]->GetWidth();
+  float nurseXRange = (nurseAttackWidth/2.0) + (this->target.w/2.0);
+
+  float targetDistanceX = abs(target.GetCenter().x - nurseAttackX);
+  float targetDistanceY = abs((target.y + target.h) - nurseAttackY);
+
+  // std::cout << "nurseAttackX: " << nurseAttackX << std::endl;
+  // std::cout << "nurseAttackWidth: " << nurseAttackWidth << std::endl;
+  // std::cout << "nurseXRange: " << nurseXRange << std::endl;
+  // std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
+  // std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
+  // std::cout << "targetX: " << target.x << std::endl;  
+  // std::cout << "bool: " << (nurseXRange > targetDistanceX) << std::endl;
+
+  return((nurseXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
 void Nurse::Update(float dt) {
   this->target = Veteran::player->GetBox();
-  if (this->target.GetCenter().x < this->GetBox().GetCenter().x)
+
+  if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
     this->orientation = LEFT;
   else
     this->orientation = RIGHT;
@@ -49,8 +68,9 @@ void Nurse::Update(float dt) {
   switch (this->currentState) {
     case Nurse::MOVING: {
       if(not this->sprite[MOVING]->IsActive()) {
+        
         this->ActivateSprite(MOVING);
-        this->sound[MOVING]->Activate();
+        
         this->sound[MOVING]->Play(-1);
       }
 
@@ -61,12 +81,11 @@ void Nurse::Update(float dt) {
       if(not this->sprite[ATTACKING]->IsActive()) {
         this->ActivateSprite(ATTACKING);
         this->sound[ATTACKING]->Play(1);
-        puts("ué");
       }
       if(this->sprite[ATTACKING]->IsFinished()){
-        this->currentState = MOVING;
         this->sprite[ATTACKING]->SetFrame(0);
         this->sprite[ATTACKING]->SetFinished(false);
+        this->currentState = MOVING;
       }
     } break;
     
@@ -77,11 +96,12 @@ void Nurse::Update(float dt) {
 
 void Nurse::UpdateStateMachine() {
   if (TargetIsInRange()) {
-    this->ActivateSprite(ATTACKING);
-  // } else if (this->currentState == HURTING) {
-    // this->ActivateSprite(SCAPING);
-  } else {
-    this->ActivateSprite(MOVING);
+    this->currentState = ATTACKING;
+    }
+  else {
+    if(this->sprite[MOVING]->IsActive())
+      if(this->sprite[MOVING]->IsFinished())
+        this->currentState = MOVING;
   }
 }
 
