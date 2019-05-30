@@ -10,6 +10,10 @@ Component::~Component() {
 void Component::Start() {
 }
 
+Rect Component::GetBox() {
+  return this->associated.box;
+}
+
 void Component::NotifyCollision(GameObject &other) {
 }
 

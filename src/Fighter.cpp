@@ -57,10 +57,6 @@ bool Fighter::Is(std::string type) {
   return(type == "Fighter");
 }
 
-Rect Fighter::GetBox() {
-  return this->associated.box;
-}
-
 void Fighter::NotifyCollision(GameObject &other) {
 
   if(other.Has("Barrier")) {
