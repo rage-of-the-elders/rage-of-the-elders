@@ -18,10 +18,13 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound = std::vector<Sound*>(LAST);
 
   this->sound[MOVING] = new Sound(this->associated, "audio/walking.ogg");
-  this->sound[ATTACKING] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[BASIC_ATTACK_ONE] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[BASIC_ATTACK_TWO] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[COMBO] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[ULTIMATE] = new Sound(this->associated, "audio/boom.wav");
 
   this->associated.AddComponent(this->sound[MOVING]);
-  this->associated.AddComponent(this->sound[ATTACKING]);
+  this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
 }
 
 Fighter::~Fighter() {}
@@ -124,7 +127,7 @@ void Fighter::ActivateSprite(FighterState state) {
     if (currentEnumState == state) {
       this->currentState = state;
       sprite[state]->Activate();
-    } else if (currentEnumState != FIRST && currentEnumState != LAST){
+    } else if (sprite[enumState]){
       sprite[currentEnumState]->Desactivate();
     }
   }

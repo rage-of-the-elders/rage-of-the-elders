@@ -14,7 +14,7 @@ class Fighter : public Component {
 protected:
   int hp;
   float speed;
-  enum FighterState { FIRST, MOVING, ATTACKING, IDLE, LAST };
+  enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE, IDLE, LAST };
   enum Orientation { LEFT, RIGHT };
   Orientation orientation;
   FighterState currentState;
