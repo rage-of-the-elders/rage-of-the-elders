@@ -9,14 +9,14 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->speed = NURSE_SPEED;
 
   std::string character = "nurse";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.2, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 5, 1, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 2, 3, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 26, 0.2, 0, true);
+  this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 26, 0.1, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 26, 3, 0, true);
 
 
-  this->sprite[MOVING]->SetScaleX(1);
-  this->sprite[ATTACKING]->SetScaleX(3.2);
-  this->sprite[IDLE]->SetScaleX(0.3);
+  this->sprite[MOVING]->SetScaleX(0.5);
+  this->sprite[ATTACKING]->SetScaleX(0.5);
+  this->sprite[IDLE]->SetScaleX(0.5);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[ATTACKING]);
@@ -31,8 +31,8 @@ Nurse::~Nurse() {}
 void Nurse::Start() {}
 
 bool Nurse::TargetIsInRange() { // FIXME: This is not finished
-  float nurseAttackX = this->sprite[ATTACKING]->GetPosition().GetCenter().x;
-  float nurseAttackY = (this->sprite[ATTACKING]->GetPosition().y + this->sprite[ATTACKING]->GetHeight());
+  float nurseAttackX = this->sprite[ATTACKING]->GetBox().GetCenter().x;
+  float nurseAttackY = (this->sprite[ATTACKING]->GetBox().y + this->sprite[ATTACKING]->GetWidth());
   float nurseAttackWidth = this->sprite[ATTACKING]->GetWidth();
   float nurseXRange = (nurseAttackWidth/2.0) + (this->target.w/2.0);
 
@@ -41,11 +41,10 @@ bool Nurse::TargetIsInRange() { // FIXME: This is not finished
 
   // std::cout << "nurseAttackX: " << nurseAttackX << std::endl;
   // std::cout << "nurseAttackWidth: " << nurseAttackWidth << std::endl;
-  // std::cout << "nurseXRange: " << nurseXRange << std::endl;
-  // std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
-  // std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
-  // std::cout << "targetX: " << target.x << std::endl;  
-  // std::cout << "bool: " << (nurseXRange > targetDistanceX) << std::endl;
+  std::cout << "nurseXRange: " << nurseXRange << std::endl;
+  std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
+  std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
+  // std::cout << "targetX: " << target.x << std::endl;
 
   return((nurseXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));
 }
