@@ -38,16 +38,17 @@ void StageState::LoadAssets() {
 
 	bg->AddComponent(new CameraFollower(*bg));
 
-	// GameObject *veteranGO = new GameObject();
-	// veteranGO->box.SetCenterPos(600, 640);
-	// veteranGO->AddComponent(new Veteran(*veteranGO));
-	// this->AddObject(veteranGO);
-  //
-	// GameObject *nurseGO = new GameObject();
-	// nurseGO->AddComponent(new Nurse(*nurseGO));
-	// nurseGO->box.SetCenterPos(900, 640);
-	// this->AddObject(nurseGO);
+	GameObject *veteranGO = new GameObject();
+	veteranGO->box.SetCenterPos(600, 300);
+	veteranGO->AddComponent(new Veteran(*veteranGO));
+	this->AddObject(veteranGO);
+  
+	GameObject *nurseGO = new GameObject();
+	nurseGO->AddComponent(new Nurse(*nurseGO));
+	nurseGO->box.SetCenterPos(900, 450);
+	this->AddObject(nurseGO);
 
+	// FIXME
 	GameObject *baseWall = new GameObject();
 	baseWall->AddComponent(new Barrier(*baseWall, Rect(0,515,12120,40)));
 	this->AddObject(baseWall);
@@ -64,6 +65,7 @@ void StageState::LoadAssets() {
   GameObject *finalWall = new GameObject();
   finalWall->AddComponent(new Barrier(*finalWall, Rect(12120,-50,40,820)));
   this->AddObject(finalWall);
+
 	// Camera::Follow(veteranGO);
 
 	this->music.Play();
