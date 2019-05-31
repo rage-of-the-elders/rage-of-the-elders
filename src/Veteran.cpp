@@ -58,7 +58,7 @@ void Veteran::ManageInput(float dt) {
   }
   else if(InputManager::GetInstance().KeyPress(J_KEY)) {
     this->currentState = ULTIMATE;
-    Camera::Flicker(9.3, 0.5);
+    Camera::Flicker(9.3, 0.3);
   }
   else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;

@@ -54,7 +54,7 @@ GameObject *Camera::GetFocus() {
 
 void Camera::AddBlack() {
   GameObject *blackGO = new GameObject();
-  black = new Sprite(*blackGO, "img/black.png");
+  black = new Sprite(*blackGO, "img/orange.png");
   blackGO->AddComponent(black);
   blackFollower = new CameraFollower(*blackGO);
   black->Desactivate();
@@ -69,6 +69,7 @@ void Camera::RenderBlack() {
   }
 }
 
+// TODO: Add FlickerWhile()
 void Camera::Flicker(float duration, float frequency) {
   if (not isFlickering) {
     flickerTimer = Timer();
