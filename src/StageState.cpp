@@ -31,8 +31,8 @@ void StageState::LoadAssets() {
 	this->bg->box = Rect();
 
 	this->mapGameObj = new GameObject();
-	this->tileSet = new TileSet(570, 560, 722, "img/stage1v2.png");
-	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1v2.txt", tileSet);
+	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
+	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
 
