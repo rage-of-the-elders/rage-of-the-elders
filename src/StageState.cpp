@@ -38,22 +38,33 @@ void StageState::LoadAssets() {
 
 	bg->AddComponent(new CameraFollower(*bg));
 
-	GameObject *veteranGO = new GameObject();
-	veteranGO->box.SetCenterPos(600, 640);
-	veteranGO->AddComponent(new Veteran(*veteranGO));
-	this->AddObject(veteranGO);
+	// GameObject *veteranGO = new GameObject();
+	// veteranGO->box.SetCenterPos(600, 640);
+	// veteranGO->AddComponent(new Veteran(*veteranGO));
+	// this->AddObject(veteranGO);
+  //
+	// GameObject *nurseGO = new GameObject();
+	// nurseGO->AddComponent(new Nurse(*nurseGO));
+	// nurseGO->box.SetCenterPos(900, 640);
+	// this->AddObject(nurseGO);
 
-	GameObject *nurseGO = new GameObject();
-	nurseGO->AddComponent(new Nurse(*nurseGO));
-	nurseGO->box.SetCenterPos(900, 640);
-	this->AddObject(nurseGO);
+	GameObject *baseWall = new GameObject();
+	baseWall->AddComponent(new Barrier(*baseWall, Rect(0,515,12120,40)));
+	this->AddObject(baseWall);
 
-	GameObject *wall = new GameObject();
-	wall->AddComponent(new Barrier(*wall, Rect(300,400,1000,40)));
+  GameObject *baseFloor = new GameObject();
+  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12120,40)));
+  this->AddObject(baseFloor);
 
-	this->AddObject(wall);
 
-	Camera::Follow(veteranGO);
+  GameObject *initialWall = new GameObject();
+  initialWall->AddComponent(new Barrier(*initialWall, Rect(295,0,40,720)));
+  this->AddObject(initialWall);
+
+  GameObject *finalWall = new GameObject();
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120,0,40,720)));
+  this->AddObject(finalWall);
+	// Camera::Follow(veteranGO);
 
 	this->music.Play();
 }
