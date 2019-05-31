@@ -80,10 +80,8 @@ void Camera::HandleFlicker(float dt) {
     blackFollower->Update(dt);
 
     if (flickerTimer.Get() < flickerDuration) {
-      if (flickerFrequencyTimer.Get() < flickerFrequency) {
-        black->Activate();
-      } else {
-        black->Desactivate();
+      if (flickerFrequencyTimer.Get() > flickerFrequency) {
+        black->ToggleActive();
         flickerFrequencyTimer = Timer();
       }
     } else {
