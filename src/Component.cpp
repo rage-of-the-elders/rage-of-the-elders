@@ -10,7 +10,7 @@ Component::~Component() {
 void Component::Start() {
 }
 
-void Component::NotifyCollision(GameObject &other) {
+void Component::NotifyCollision(GameObject&) {
 }
 
 void Component::Activate() {

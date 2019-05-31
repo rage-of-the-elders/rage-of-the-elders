@@ -61,7 +61,7 @@ void GameObject::Start() {
 }
 
 void GameObject::NotifyCollision(GameObject &other) {
-  for(int i = 0; i < this->components.size(); i++)
+  for(size_t i = 0; i < this->components.size(); i++)
     if(this->components[i]->IsActive())
       this->components[i]->NotifyCollision(other);
 }

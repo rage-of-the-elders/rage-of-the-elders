@@ -29,7 +29,7 @@ void Nurse::Start() {
 
 }
 
-void Nurse::Update(float dt) {
+void Nurse::Update(float) {
   if (this->orientation == LEFT)
     this->associated.flip = SDL_FLIP_HORIZONTAL;
   else

@@ -14,7 +14,7 @@ Collider::Collider(GameObject &associated, Vec2 scale, Vec2 offset) : Component(
   this->active = true;
 }
 
-void Collider::Update(float dt) {
+void Collider::Update(float) {
   this->box.SetSize(this->associated.box.w * this->scale.x,
                     this->associated.box.h * this->scale.y);
   this->box.SetCenterPos(Vec2().Rotate(this->associated.angleDeg));
