@@ -36,9 +36,9 @@ bool Nurse::TargetIsInRange() { // FIXME: This is not finished
 
   // std::cout << "nurseAttackX: " << nurseAttackX << std::endl;
   // std::cout << "nurseAttackWidth: " << nurseAttackWidth << std::endl;
-  std::cout << "nurseXRange: " << nurseXRange << std::endl;
-  std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
-  std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
+  // std::cout << "nurseXRange: " << nurseXRange << std::endl;
+  // std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
+  // std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
   // std::cout << "targetX: " << target.x << std::endl;
 
   return((nurseXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));

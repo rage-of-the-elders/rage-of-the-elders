@@ -16,6 +16,7 @@ public:
   Veteran(GameObject &associated);
   ~Veteran();
   void Start();
+  void Render();
   void Update(float dt);
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);

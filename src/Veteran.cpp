@@ -8,6 +8,7 @@
 #include <iostream>
 
 Veteran *Veteran::player;
+int dif = 0;
 Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->hp = VETERAN_HP;
   this->speed = VETERAN_SPEED;
@@ -23,12 +24,12 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
 
   this->ActivateSprite(IDLE);
 
-  this->associated.AddComponent(this->sprite[IDLE]);
-  this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
-  this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
-  this->associated.AddComponent(this->sprite[COMBO]);
-  this->associated.AddComponent(this->sprite[ULTIMATE]);
-  this->associated.AddComponent(this->sprite[MOVING]);
+  // this->associated.AddComponent(this->sprite[IDLE]);
+  // this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
+  // this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
+  // this->associated.AddComponent(this->sprite[COMBO]);
+  // this->associated.AddComponent(this->sprite[ULTIMATE]);
+  // this->associated.AddComponent(this->sprite[MOVING]);
 
   this->associated.AddComponent(new Collider(this->associated));
 }
@@ -44,9 +45,19 @@ void Veteran::Start() {
 void Veteran::Update(float dt) {
   this->ManageInput(dt);
   this->UpdateStateMachine();
+  this->sprite[currentState]->Update(dt);
+}
+
+void Veteran::Render() {
+  Fighter::Render();
+  int x = ((associated.box.x) - Camera::pos.x) - ((this->associated.box.w - dif)/2);
+  int y = (associated.box.y) - Camera::pos.y;
+
+  this->sprite[currentState]->Render(x, y);
 }
 
 void Veteran::ManageInput(float dt) {
+  dif = this->sprite[currentState]->GetWidth();
   if(InputManager::GetInstance().KeyPress(F_KEY)) {
     this->currentState = BASIC_ATTACK_ONE;
   }
