@@ -20,6 +20,7 @@ public:
   virtual void Activate();
 	virtual void Desactivate();
   Rect GetBox();
+  virtual void ToggleActive();
   virtual void Render() = 0;
   virtual void Update(float dt) = 0;
   virtual bool Is(std::string type) = 0;

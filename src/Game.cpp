@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Resources.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 Game *Game::instance = nullptr;
 
@@ -139,6 +140,7 @@ void Game::Run() {
       InputManager::GetInstance().Update();
       this->GetCurrentState().Update(this->GetDeltaTime());
       this->GetCurrentState().Render();
+      Camera::RenderBlack();
       SDL_RenderPresent(renderer);
       SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
     }

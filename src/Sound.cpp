@@ -47,11 +47,8 @@ bool Sound::IsOpen() {
   return this->chunk != nullptr;
 }
 
-void Sound::Update(float dt) {
-
-}
-void Sound::Render() {
-}
+void Sound::Update(float) {}
+void Sound::Render() {}
 
 bool Sound::IsPlaying() {
   return (Mix_Playing(this->channel));

@@ -50,20 +50,19 @@ void StageState::LoadAssets() {
 
 	// FIXME
 	GameObject *baseWall = new GameObject();
-	baseWall->AddComponent(new Barrier(*baseWall, Rect(0,515,12120,40)));
+	baseWall->AddComponent(new Barrier(*baseWall, Rect(0, 0, 12220, 555)));
 	this->AddObject(baseWall);
 
   GameObject *baseFloor = new GameObject();
-  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12120,40)));
+  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
   this->AddObject(baseFloor);
 
-
   GameObject *initialWall = new GameObject();
-  initialWall->AddComponent(new Barrier(*initialWall, Rect(295,-50,40,820)));
-  this->AddObject(initialWall);
+	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1120)));
+	this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();
-  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120,-50,40,820)));
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120, -400, 400, 1120)));
   this->AddObject(finalWall);
 
 	// Camera::Follow(veteranGO);
