@@ -58,11 +58,11 @@ void StageState::LoadAssets() {
 
 
   GameObject *initialWall = new GameObject();
-  initialWall->AddComponent(new Barrier(*initialWall, Rect(295,0,40,720)));
+  initialWall->AddComponent(new Barrier(*initialWall, Rect(295,-50,40,820)));
   this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();
-  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120,0,40,720)));
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120,-50,40,820)));
   this->AddObject(finalWall);
 	// Camera::Follow(veteranGO);
 
