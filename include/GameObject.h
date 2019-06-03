@@ -31,6 +31,7 @@ public:
   void Render();
   bool IsDead();
   bool IsActive();
+  bool Has(std::string type);
   void Activate();
   void Desactivate();
   void RequestDelete();

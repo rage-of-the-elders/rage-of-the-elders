@@ -5,7 +5,7 @@ CameraFollower::CameraFollower(GameObject &associated, Vec2 offset) : Component(
   this->offset = offset;
 }
 
-void CameraFollower::Update(float dt) {
+void CameraFollower::Update(float) {
   this->associated.box.x = Camera::pos.x + CameraFollower::offset.x;
   this->associated.box.y = Camera::pos.y + CameraFollower::offset.y;
 }

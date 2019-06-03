@@ -2,7 +2,7 @@
 #define VETERAN_H
 
 #define VETERAN_HP 100
-#define VETERAN_SPEED Vec2(10)
+#define VETERAN_SPEED 50
 
 #include "Fighter.h"
 
@@ -12,11 +12,11 @@ class Veteran : public Fighter {
   void UpdateStateMachine();
 
 public:
+  static Veteran *player;
   Veteran(GameObject &associated);
   ~Veteran();
   void Start();
   void Update(float dt);
-  void Render();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
 };

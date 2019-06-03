@@ -51,7 +51,7 @@ void State::RenderArray() {
 }
 
 void State::LoadAssets() {}
-void State::Update(float dt) {}
+void State::Update(float) {}
 void State::Render() {}
 void State::Start() {}
 void State::Pause() {}

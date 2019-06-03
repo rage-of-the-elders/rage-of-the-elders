@@ -13,6 +13,10 @@
 #define A_KEY SDLK_a
 #define S_KEY SDLK_s
 #define D_KEY SDLK_d
+#define F_KEY SDLK_f
+#define G_KEY SDLK_g
+#define H_KEY SDLK_h
+#define J_KEY SDLK_j
 
 #define INCLUDE_SDL
 #include "SDL_include.h"

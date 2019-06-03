@@ -1,3 +1,5 @@
+#define GAP 329
+
 #include "TileMap.h"
 #include "Game.h"
 #include "Camera.h"
@@ -21,7 +23,7 @@ void TileMap::Load(std::string file) {
   if (tileMapFile.good()) {
     int value;
     char comma;
-  
+
     tileMapFile >> this->mapWidth >> comma >> this->mapHeight >> comma >> this->mapDepth >> comma;
     for (int i = 0; i < this->mapDepth; i++) {
       for (int j = 0; j < this->mapHeight; j++) {
@@ -47,11 +49,16 @@ int &TileMap::At(int x, int y, int z) {
 }
 
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
+  this->tileSet->RenderInitialTile(cameraX, cameraY);
+
   for (int j = 0; j < this->mapHeight; j++)
     for (int i = 0; i < this->mapWidth; i++)
       this->tileSet->RenderTile(At(i, j, layer),
-                                i * this->tileSet->GetTileWidth() - cameraX,
-                                j * this->tileSet->GetTileHeight() - cameraY);
+                                ((i * this->tileSet->GetTileWidth())
+                                  - (i * GAP)
+                                  - cameraX
+                                  + this->tileSet->GetInitialTileWidth() - GAP),
+                                (j * this->tileSet->GetTileHeight()));
 }
 
 void TileMap::Render() {
@@ -75,6 +82,4 @@ bool TileMap::Is(std::string type) {
   return type == "TileMap";
 }
 
-void TileMap::Update(float dt) {
-
-}
+void TileMap::Update(float) {}

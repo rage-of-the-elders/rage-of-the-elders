@@ -168,3 +168,8 @@ void Sprite::Desactivate() {
   this->active = false;
   this->SetFrame(0);
 }
+
+Rect Sprite::GetPosition() {
+  Rect realPosition = Rect((this->associated.box.x + (this->width / (this->frameCount * 1.0))), this->associated.box.y, this->width / (this->frameCount * 1.0), this->height);
+  return realPosition;
+}

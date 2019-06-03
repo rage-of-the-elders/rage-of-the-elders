@@ -5,10 +5,11 @@
 #include "Game.h"
 #include "Resources.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 Game *Game::instance = nullptr;
 
-Game::Game(std::string title, int width, int height) {  
+Game::Game(std::string title, int width, int height) {
   if (instance != nullptr) {
     printf("There's already an instance of Game running!");
     exit(-1); // TODO: HANDLE THIS ERROR
@@ -71,7 +72,7 @@ Game::Game(std::string title, int width, int height) {
     printf("SDL Create Window: %s\n", SDL_GetError());
     exit(-1);
   }
-                               
+
   // Renderer creation
   int SUPPORTED_RENDERER = -1;
   renderer = SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);
@@ -139,6 +140,7 @@ void Game::Run() {
       InputManager::GetInstance().Update();
       this->GetCurrentState().Update(this->GetDeltaTime());
       this->GetCurrentState().Render();
+      Camera::RenderBlack();
       SDL_RenderPresent(renderer);
       SDL_Delay(33); // TODO: Remove magic number (it is in milliseconds)
     }
@@ -155,7 +157,7 @@ SDL_Renderer* Game::GetRenderer() {
 
 Game &Game::GetInstance() {
   if (instance == nullptr)
-    instance = new Game("Rage of the elders", 1024, 600);
+    instance = new Game("Rage of the Elders", 1280, 720);
 
   return *instance;
 }

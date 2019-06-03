@@ -7,24 +7,30 @@
 #include "Camera.h"
 #include <iostream>
 
+Veteran *Veteran::player;
 Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->hp = VETERAN_HP;
   this->speed = VETERAN_SPEED;
+  this->player = this;
 
   std::string character = "veteran";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 42, 0.1, 0, true);
-  this->sprite[ATTACKING] = new Sprite(this->associated, "img/" + character + "/attacking.png", 5, 1, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 2, 3, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.15, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 15, 0.1, 0, false);
+  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.1, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
+  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 50, 0.1, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
 
-  this->sprite[MOVING]->SetScaleX(0.6);
-  this->sprite[ATTACKING]->SetScaleX(2.4);
-  this->sprite[IDLE]->SetScaleX(0.3);
-
   this->associated.AddComponent(this->sprite[IDLE]);
-  this->associated.AddComponent(this->sprite[ATTACKING]);
+  this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
+  this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
+  this->associated.AddComponent(this->sprite[COMBO]);
+  this->associated.AddComponent(this->sprite[ULTIMATE]);
   this->associated.AddComponent(this->sprite[MOVING]);
+
+  this->associated.AddComponent(new Collider(this->associated));
 }
 
 Veteran::~Veteran() {
@@ -41,30 +47,40 @@ void Veteran::Update(float dt) {
 }
 
 void Veteran::ManageInput(float dt) {
-  if(InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-      this->currentState = ATTACKING;
+  if(InputManager::GetInstance().KeyPress(F_KEY)) {
+    this->currentState = BASIC_ATTACK_ONE;
   }
-  if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
+  else if(InputManager::GetInstance().KeyPress(G_KEY)) {
+    this->currentState = BASIC_ATTACK_TWO;
+  }
+  else if(InputManager::GetInstance().KeyPress(H_KEY)) {
+    this->currentState = COMBO;
+  }
+  else if(InputManager::GetInstance().KeyPress(J_KEY)) {
+    this->currentState = ULTIMATE;
+    Camera::Flicker(9.3, 0.3);
+  }
+  else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
-    this->associated.box.UpdatePos((speed*10) * dt);
+    Vec2 direction = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
     this->orientation = RIGHT;
   }
-  if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+  else if(InputManager::GetInstance().IsKeyDown(A_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(0);
-    this->associated.box.UpdatePos((speed*-20) * dt);
+    Vec2 direction = Vec2::GetSpeed(0);
+    this->associated.box.UpdatePos((direction * -this->speed) * dt);
     this->orientation = LEFT;
   }
   if(InputManager::GetInstance().IsKeyDown(S_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(90);
-    this->associated.box.UpdatePos((speed*20) * dt);
+    Vec2 direction = Vec2::GetSpeed(90);
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
   }
   if(InputManager::GetInstance().IsKeyDown(W_KEY)){
     this->currentState = MOVING;
-    this->speed = Vec2::GetSpeed(270);
-    this->associated.box.UpdatePos((speed*20) * dt);
+    Vec2 direction = Vec2::GetSpeed(270);
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
   }
 }
 
@@ -97,42 +113,53 @@ void Veteran::UpdateStateMachine() {
         this->ActivateSprite(IDLE);        
       }
     } break;
-    case Veteran::ATTACKING: {
-      if(not this->sprite[ATTACKING]->IsActive()) {
-        this->ActivateSprite(ATTACKING);
-        this->sound[ATTACKING]->Play(1);
+    case Veteran::BASIC_ATTACK_ONE: {
+      if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
+        this->ActivateSprite(BASIC_ATTACK_ONE);
+        this->sound[BASIC_ATTACK_ONE]->Play(1);
       }
-      if(this->sprite[ATTACKING]->IsFinished()){
+      if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
         this->currentState = IDLE;
-        this->sprite[ATTACKING]->SetFrame(0);
-        this->sprite[ATTACKING]->SetFinished(false);
+        this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
+        this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
       }
     } break;
-    
+    case Veteran::BASIC_ATTACK_TWO: {
+      if(not this->sprite[BASIC_ATTACK_TWO]->IsActive()) {
+        this->ActivateSprite(BASIC_ATTACK_TWO);
+        this->sound[BASIC_ATTACK_TWO]->Play(1);
+      }
+      if(this->sprite[BASIC_ATTACK_TWO]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[BASIC_ATTACK_TWO]->SetFrame(0);
+        this->sprite[BASIC_ATTACK_TWO]->SetFinished(false);
+      }
+    } break;
+    case Veteran::COMBO: {
+      if(not this->sprite[COMBO]->IsActive()) {
+        this->ActivateSprite(COMBO);
+        this->sound[COMBO]->Play(1);
+      }
+      if(this->sprite[COMBO]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[COMBO]->SetFrame(0);
+        this->sprite[COMBO]->SetFinished(false);
+      }
+    } break;
+    case Veteran::ULTIMATE: {
+      if(not this->sprite[ULTIMATE]->IsActive()) {
+        this->ActivateSprite(ULTIMATE);
+        this->sound[ULTIMATE]->Play(1);
+      }
+      if(this->sprite[ULTIMATE]->IsFinished()) {
+        this->currentState = IDLE;
+        this->sprite[ULTIMATE]->SetFrame(0);
+        this->sprite[ULTIMATE]->SetFinished(false);
+      }
+    } break;
     default:
       break;
   }
-}
-
-void Veteran::Render() {
-  Vec2 center(this->associated.box.GetCenter());
-  SDL_Point points[5];
-
-  Vec2 point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
-  points[0] = {(int)point.x, (int)point.y};
-  points[4] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
-  points[1] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
-  points[2] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
-  points[3] = {(int)point.x, (int)point.y};
-
-  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
 }
 
 bool Veteran::Is(std::string type) {

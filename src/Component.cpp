@@ -10,11 +10,19 @@ Component::~Component() {
 void Component::Start() {
 }
 
+Rect Component::GetBox() {
+  return this->associated.box;
+}
+
 void Component::NotifyCollision(GameObject &other) {
 }
 
 void Component::Activate() {
   this->active = true;
+}
+
+void Component::ToggleActive() {
+  this->active = !this->active;
 }
 
 void Component::Desactivate() {

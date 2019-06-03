@@ -13,8 +13,7 @@
 #include "GameData.h"
 #include "Veteran.h"
 #include "Nurse.h"
-
-#include<iostream>
+#include "Barrier.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
@@ -32,34 +31,43 @@ void StageState::LoadAssets() {
 	this->bg->box = Rect();
 
 	this->mapGameObj = new GameObject();
-	this->tileSet = new TileSet(*mapGameObj, 64, 64, "img/tileset.png");
-	TileMap *tileMap = new TileMap(*mapGameObj, "map/tileMap.txt", tileSet);
+	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
+	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
 
 	bg->AddComponent(new CameraFollower(*bg));
 
 	GameObject *veteranGO = new GameObject();
+	veteranGO->box.SetCenterPos(600, 300);
 	veteranGO->AddComponent(new Veteran(*veteranGO));
-	veteranGO->box.SetCenterPos(704, 640);
 	this->AddObject(veteranGO);
-
+  
 	GameObject *nurseGO = new GameObject();
 	nurseGO->AddComponent(new Nurse(*nurseGO));
-	nurseGO->box.SetCenterPos(900, 640);
+	nurseGO->box.SetCenterPos(900, 450);
 	this->AddObject(nurseGO);
 
-	GameObject *wall = new GameObject();
-	wall->box.SetCenterPos(300, 400);
-	wall->box.SetSize(1000, 40);
-	// wall->angleDeg = 30;
-	wall->AddComponent(new Collider(*wall));
-	
-	this->AddObject(wall);
+	// FIXME
+	GameObject *baseWall = new GameObject();
+	baseWall->AddComponent(new Barrier(*baseWall, Rect(0, 0, 12220, 555)));
+	this->AddObject(baseWall);
 
-	Camera::Follow(veteranGO);
+  GameObject *baseFloor = new GameObject();
+  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
+  this->AddObject(baseFloor);
 
-	// this->music.Play();
+  GameObject *initialWall = new GameObject();
+	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1120)));
+	this->AddObject(initialWall);
+
+  GameObject *finalWall = new GameObject();
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120, -400, 400, 1120)));
+  this->AddObject(finalWall);
+
+	// Camera::Follow(veteranGO);
+
+	this->music.Play();
 }
 
 void StageState::Update(float dt) {
@@ -84,7 +92,7 @@ void StageState::Render() {
 	this->bg->Render();
 	this->mapGameObj->GetComponent("TileMap")->Render();
 
-	this->RenderArray();	
+	this->RenderArray();
 }
 
 void StageState::Start() {
