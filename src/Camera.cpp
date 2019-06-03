@@ -24,7 +24,7 @@ void Camera::Unfollow() {
 
 void Camera::Update(float dt) {
   if (focus != nullptr) {
-    int screenWidth, screenHeight; // TODO: Maybe save on Game
+    int screenWidth, screenHeight;
     SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
     pos.x = focus->box.GetCenter().x;
   } else {

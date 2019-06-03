@@ -42,7 +42,7 @@ void StageState::LoadAssets() {
 	veteranGO->box.SetCenterPos(600, 300);
 	veteranGO->AddComponent(new Veteran(*veteranGO));
 	this->AddObject(veteranGO);
-  
+
 	GameObject *nurseGO = new GameObject();
 	nurseGO->AddComponent(new Nurse(*nurseGO));
 	nurseGO->box.SetCenterPos(900, 450);
@@ -124,7 +124,7 @@ void StageState::CheckGameEnd() {
 
 #include<iostream>
 
-void StageState::CollisionCheck() { // FIXME: Check isActive
+void StageState::CollisionCheck() {
 	for (unsigned i = 0; i < this->objectArray.size(); i++) {
 		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
 			if (objectArray[i]->IsActive() && objectArray[j]->IsActive()) {

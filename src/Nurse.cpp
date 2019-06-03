@@ -16,16 +16,16 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[MOVING]);
-  
+
   this->ActivateSprite(MOVING);
-  
+
   this->associated.AddComponent(new Collider(this->associated));
 }
 
 Nurse::~Nurse() {}
 void Nurse::Start() {}
 
-bool Nurse::TargetIsInRange() { // FIXME: This is not finished
+bool Nurse::TargetIsInRange() {
   float nurseAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
   float nurseAttackY = (this->sprite[BASIC_ATTACK_ONE]->GetBox().y + this->sprite[BASIC_ATTACK_ONE]->GetWidth());
   float nurseAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
@@ -58,13 +58,13 @@ void Nurse::Update(float dt) {
     this->associated.flip = SDL_FLIP_NONE;
 
   this->UpdateStateMachine();
-  
+
   switch (this->currentState) {
     case Nurse::MOVING: {
       if(not this->sprite[MOVING]->IsActive()) {
-        
+
         this->ActivateSprite(MOVING);
-        
+
         this->sound[MOVING]->Play(-1);
       }
 
@@ -82,7 +82,7 @@ void Nurse::Update(float dt) {
         this->currentState = MOVING;
       }
     } break;
-    
+
     default:
       break;
   }

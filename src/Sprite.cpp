@@ -77,13 +77,13 @@ int Sprite::GetHeight() {
 Vec2 Sprite::GetScale() {
   return this->scale;
 }
-  
+
 void Sprite::SetScaleX(float scale) {
   this->SetScaleX(scale, scale);
 }
 
 void Sprite::SetScaleX(float scaleX, float scaleY) {
-  // TODO: mova a box dele de forma a manter o centro no mesmo lugar de antes da mudança de escala
+  // TODO: keep sprite box on the same spot before scale changes
   this->scale = Vec2(scaleX, scaleY);
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
@@ -97,7 +97,7 @@ void Sprite::SetFrame(int frame) {
 void Sprite::SetFrameCount(int frameCount) {
   this->frameCount = frameCount;
   this->currentFrame = 0;
-  this->UpdateFrame(); // TODO: Check this
+  this->UpdateFrame();
 }
 
 void Sprite::SetFrameTime(float frameTime) {
@@ -109,10 +109,9 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
-  //TODO check this.
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
-  
+
   if (this->secondsToSelfDestruct > 0) {
     this->selfDestructCount.Update(dt);
     if (this->selfDestructCount.Get() > this->secondsToSelfDestruct)
@@ -126,15 +125,15 @@ void Sprite::Update(float dt) {
       this->currentFrame++;
     else if(this->repeat)
       this->currentFrame = 0;
-    
+
     this->UpdateFrame();
-  
+
     if(not this->repeat && this->currentFrame == this->frameCount-1){
       this->finished = true;
     }
   }
 }
-  
+
 
 void Sprite::UpdateFrame() {
   float frameWidth = this->width / this->frameCount;
