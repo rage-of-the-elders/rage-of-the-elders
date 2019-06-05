@@ -55,3 +55,19 @@ void Collider::SetScale(Vec2 scale) {
 void Collider::SetOffset(Vec2 offset) {
   this->offset = offset;
 }
+
+float Collider::GetWidth(){
+  return (this->associated.box.w * this->scale.x);
+}
+
+float Collider::GetHeigth(){
+  return (this->associated.box.h * this->scale.y);
+}
+
+float Collider::GetX(){
+  return (this->associated.box.x + (( this->associated.box.w - (this->associated.box.w * this->scale.x))/2)) + this->offset.x;
+}
+
+float Collider::GetY(){
+  return this->associated.box.y + (( this->associated.box.h - (this->associated.box.h * this->scale.y))/2) + this->offset.y;
+}

@@ -27,6 +27,7 @@ public:
   Fighter(GameObject &associated);
   ~Fighter();
   void Start();
+  Rect GetFoot();
   virtual void Update(float dt);
   void Render();
   bool Is(std::string type);

@@ -15,10 +15,10 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
 
   std::string character = "veteran";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.15, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 15, 0.1, 0, false);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.1, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.1, 0, false);
   this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
-  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 50, 0.1, 0, false);
+  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 4, 0.1, 0, true);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
@@ -30,7 +30,8 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[ULTIMATE]);
   this->associated.AddComponent(this->sprite[MOVING]);
 
-  this->associated.AddComponent(new Collider(this->associated));
+  this->associated.AddComponent(new Collider(this->associated, {0.7,0.8}));
+  // this->associated.AddComponent(new Collider(this->associated, {1,0.8}));
 }
 
 Veteran::~Veteran() {

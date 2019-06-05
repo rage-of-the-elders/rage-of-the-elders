@@ -3,7 +3,7 @@
 
 #define NURSE_HP 100
 #define NURSE_SPEED 10
-#define ATTACK_Y_RANGE 110
+#define ATTACK_Y_RANGE 15
 
 #include "Fighter.h"
 

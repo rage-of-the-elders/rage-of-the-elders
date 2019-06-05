@@ -25,6 +25,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
 
   this->associated.AddComponent(this->sound[MOVING]);
   this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
+
 }
 
 Fighter::~Fighter() {}
@@ -37,17 +38,17 @@ void Fighter::Render() {
   Vec2 center(this->associated.box.GetCenter());
   SDL_Point points[5];
 
-  Vec2 point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  Vec2 point = (Vec2(this->GetFoot().x, this->GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
   points[0] = {(int)point.x, (int)point.y};
   points[4] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->GetFoot().x + this->GetFoot().w, this->GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
   points[1] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->GetFoot().x + this->GetFoot().w, this->GetFoot().y + this->GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
   points[2] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->GetFoot().x, this->GetFoot().y + this->GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
   points[3] = {(int)point.x, (int)point.y};
 
   SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
@@ -64,7 +65,10 @@ void Fighter::NotifyCollision(GameObject &other) {
 
   if(other.Has("Barrier")) {
 
-    Rect fighterFoot = this->associated.box.GetFoot();
+    Collider *colliderBox = (Collider*) this->associated.GetComponent("Collider");
+
+
+    Rect fighterFoot = this->GetFoot();
 
     if(Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
       
@@ -83,14 +87,17 @@ void Fighter::NotifyCollision(GameObject &other) {
           objY = other.box.y;
 
           if( (fighterFoot.y + fighterFoot.h) > objY ) {
-            this->associated.box.y = other.box.y - this->associated.box.h;
+            this->associated.box.y = other.box.y - ((this->associated.box.h - colliderBox->GetHeigth()) /2) -
+            colliderBox->GetHeigth();
           }
         }
         else {
           objY = other.box.y + other.box.h;
 
           if( fighterFoot.y < objY ) {
-            this->associated.box.y = other.box.y + other.box.h - this->associated.box.h + fighterFoot.h;
+            this->associated.box.y = other.box.y + other.box.h -
+            ((this->associated.box.h - colliderBox->GetHeigth()) /2) -
+            colliderBox->GetHeigth() + fighterFoot.h;
           }
         }
       }
@@ -106,14 +113,14 @@ void Fighter::NotifyCollision(GameObject &other) {
           objX = other.box.x;
 
           if( (fighterFoot.x + fighterFoot.w) > objX ) {
-            this->associated.box.x = other.box.x - fighterFoot.w;
+            this->associated.box.x = other.box.x - colliderBox->GetWidth() - ((this->associated.box.w - colliderBox->GetWidth()) /2);
           }
         }
         else{
           objX = other.box.x + other.box.w;
 
           if( fighterFoot.x < objX ) {
-            this->associated.box.x = other.box.x + other.box.w;
+            this->associated.box.x = other.box.x + other.box.w - ((this->associated.box.w - colliderBox->GetWidth()) /2);
           }
         }
       }
@@ -131,4 +138,10 @@ void Fighter::ActivateSprite(FighterState state) {
       sprite[currentEnumState]->Desactivate();
     }
   }
+}
+
+Rect Fighter::GetFoot() {
+  // Rect *a = new Rect(this->x, this->y, this->w, 10);
+  Collider *colliderBox = (Collider*) this->associated.GetComponent("Collider");
+  return Rect(colliderBox->GetX(), ((colliderBox->GetY() + colliderBox->GetHeigth()) - 10), colliderBox->GetWidth(), 10);
 }
