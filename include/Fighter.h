@@ -14,10 +14,11 @@ class Fighter : public Component {
 protected:
   int hp;
   float speed;
-  enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE, IDLE, LAST };
+  enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE, IDLE, HURTING, DYING, LAST, INVALID };
   enum Orientation { LEFT, RIGHT };
   Orientation orientation;
   FighterState currentState;
+  FighterState storedState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
 
@@ -30,9 +31,13 @@ public:
   Rect GetFoot();
   virtual void Update(float dt);
   void Render();
+  void ApplyDamage(int damage);
+  bool IsHurting();
+  bool IsAttacking();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);
+  bool isTakingDamage;
 };
 
 #endif

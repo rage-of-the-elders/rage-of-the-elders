@@ -13,6 +13,8 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->currentState = IDLE;
   this->orientation = LEFT;
   this->active = true;
+  this->isTakingDamage = false;
+  this->storedState = INVALID;
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -141,7 +143,18 @@ void Fighter::ActivateSprite(FighterState state) {
 }
 
 Rect Fighter::GetFoot() {
-  // Rect *a = new Rect(this->x, this->y, this->w, 10);
   Collider *colliderBox = (Collider*) this->associated.GetComponent("Collider");
   return Rect(colliderBox->GetX(), ((colliderBox->GetY() + colliderBox->GetHeigth()) - 10), colliderBox->GetWidth(), 10);
+}
+
+bool Fighter::IsAttacking(){
+  return(Math::InRange(currentState, BASIC_ATTACK_ONE, ULTIMATE));
+}
+
+void Fighter::ApplyDamage(int damage){
+  this->hp -=damage;
+}
+
+bool Fighter::IsHurting(){
+  return(currentState == HURTING);
 }
