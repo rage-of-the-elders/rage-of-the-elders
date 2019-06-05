@@ -9,9 +9,9 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
   this->speed = NURSE_SPEED;
 
   std::string character = "nurse";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 26, 0.2, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 27, 0.1, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 26, 3, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.4, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 11, 0.09, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 11, 0.09, 0, true);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
@@ -27,7 +27,7 @@ void Nurse::Start() {}
 
 bool Nurse::TargetIsInRange() {
   float nurseAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
-  float nurseAttackY = (this->sprite[BASIC_ATTACK_ONE]->GetBox().y + this->sprite[BASIC_ATTACK_ONE]->GetWidth());
+  float nurseAttackY = (this->associated.box.y + this->associated.box.h);
   float nurseAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
   float nurseXRange = (nurseAttackWidth/2.0) + (this->target.w/2.0);
 
