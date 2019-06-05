@@ -10,12 +10,16 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
 
   std::string character = "nurse";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.4, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 11, 0.09, 0, false);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 11, 0.2, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 11, 0.09, 0, true);
+  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 11, 0.3, 0, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 21, 0.2, 0, false);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[MOVING]);
+  this->associated.AddComponent(this->sprite[HURTING]);
+  this->associated.AddComponent(this->sprite[DYING]);
 
   this->ActivateSprite(MOVING);
 
@@ -82,21 +86,55 @@ void Nurse::Update(float dt) {
         this->currentState = MOVING;
       }
     } break;
-
+    case Nurse::HURTING: {
+      if(not this->sprite[HURTING]->IsActive()) {
+        this->ActivateSprite(HURTING);
+        //Som
+      }
+      if(this->sprite[HURTING]->IsFinished()){
+        this->sprite[HURTING]->SetFrame(0);
+        this->sprite[HURTING]->SetFinished(false);
+        this->currentState = MOVING;
+        this->storedState = INVALID;
+      }
+    } break;
+    case Nurse::DYING: {
+        puts("CCCCCCCCCCCCCCCCCCCCCCCC");
+      if(not this->sprite[DYING]->IsActive()) {
+        this->ActivateSprite(DYING);
+        // this->sound[DYING]->Play(1);
+      }
+      if(this->sprite[DYING]->IsFinished()){
+        this->associated.RequestDelete();
+        // this->sprite[DYING]->SetFrame(0);
+        // this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
+        // this->currentState = MOVING;
+      }
+    } break;
     default:
       break;
   }
+
+  printf("%d\n", this->hp);
 }
 
 void Nurse::UpdateStateMachine() {
-  if (TargetIsInRange()) {
-    this->currentState = BASIC_ATTACK_ONE;
+  if(this->storedState == INVALID) {
+    if(this->IsDead()){
+      this->currentState = DYING;
     }
-  else {
-    if(this->sprite[MOVING]->IsActive())
-      if(this->sprite[MOVING]->IsFinished())
-        this->currentState = MOVING;
+    else if (TargetIsInRange()) {
+      this->currentState = BASIC_ATTACK_ONE;
+    }
+    else if(this->sprite[MOVING]->IsActive()) {
+        if(this->sprite[MOVING]->IsFinished())
+          this->currentState = MOVING;
+    }
   }
+  else {
+    this->currentState = storedState;
+  }
+
 }
 
 bool Nurse::Is(std::string type) {
@@ -105,4 +143,17 @@ bool Nurse::Is(std::string type) {
 
 void Nurse::NotifyCollision(GameObject &other) {
   Fighter::NotifyCollision(other);
+  if(other.Has("Veteran")) {
+    if(not this->IsHurting()) {
+      Veteran *veteran = (Veteran*) other.GetComponent("Veteran");
+      if(veteran->IsAttacking()){
+        this->storedState = HURTING;
+        this->ApplyDamage(100);
+      }
+    }
+  }
+}
+
+bool Nurse::IsDead(){ 
+  return(this->hp <= 0);
 }

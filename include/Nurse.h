@@ -17,6 +17,7 @@ public:
   ~Nurse();
   void Start();
   void Update(float dt);
+  bool IsDead();
   bool TargetIsInRange();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
