@@ -20,6 +20,8 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
   this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 4, 0.1, 0, true);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
+  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 15, 0.2, 0, true);
+  // this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
 

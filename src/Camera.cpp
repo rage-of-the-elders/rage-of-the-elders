@@ -4,7 +4,7 @@
 
 GameObject *Camera::focus = nullptr;
 Vec2 Camera::pos = Vec2();
-Vec2 Camera::speed = Vec2(1000, 100);
+Vec2 Camera::speed = Vec2(50, 50);
 bool Camera::isBlack = false;
 bool Camera::isFlickering = false;
 float Camera::flickerDuration = 0;
