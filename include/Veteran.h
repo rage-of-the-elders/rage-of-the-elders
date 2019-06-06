@@ -19,6 +19,7 @@ public:
   void Update(float dt);
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);
+  enum Orientation MyOrientation();
 };
 
 #endif

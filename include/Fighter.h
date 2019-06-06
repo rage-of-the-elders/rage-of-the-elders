@@ -38,6 +38,7 @@ public:
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);
   bool isTakingDamage;
+  bool CanAttack(enum Orientation orientation, Rect targetRect);
 };
 
 #endif

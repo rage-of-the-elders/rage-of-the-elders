@@ -51,15 +51,17 @@ bool Nurse::TargetIsInRange() {
 void Nurse::Update(float dt) {
   this->target = Veteran::player->GetBox();
 
-  if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
-    this->orientation = LEFT;
-  else
-    this->orientation = RIGHT;
+  if(this->currentState != DYING) {
+    if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
+      this->orientation = LEFT;
+    else
+      this->orientation = RIGHT;
 
-  if (this->orientation == LEFT)
-    this->associated.flip = SDL_FLIP_HORIZONTAL;
-  else
-    this->associated.flip = SDL_FLIP_NONE;
+    if (this->orientation == LEFT)
+      this->associated.flip = SDL_FLIP_HORIZONTAL;
+    else
+      this->associated.flip = SDL_FLIP_NONE;
+  }
 
   this->UpdateStateMachine();
 
@@ -99,9 +101,10 @@ void Nurse::Update(float dt) {
       }
     } break;
     case Nurse::DYING: {
-        puts("CCCCCCCCCCCCCCCCCCCCCCCC");
       if(not this->sprite[DYING]->IsActive()) {
+        this->associated.GetComponent("Collider")->Desactivate();
         this->ActivateSprite(DYING);
+        this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
         // this->sound[DYING]->Play(1);
       }
       if(this->sprite[DYING]->IsFinished()){
@@ -146,9 +149,11 @@ void Nurse::NotifyCollision(GameObject &other) {
   if(other.Has("Veteran")) {
     if(not this->IsHurting()) {
       Veteran *veteran = (Veteran*) other.GetComponent("Veteran");
-      if(veteran->IsAttacking()){
-        this->storedState = HURTING;
-        this->ApplyDamage(100);
+      if(veteran->IsAttacking() && not this->IsDead()) {
+        if(this->CanAttack(veteran->MyOrientation(), veteran->GetBox())) {
+          this->storedState = HURTING;
+          this->ApplyDamage(100);
+        }
       }
     }
   }

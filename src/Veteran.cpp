@@ -172,3 +172,7 @@ bool Veteran::Is(std::string type) {
 void Veteran::NotifyCollision(GameObject &other) {
   Fighter::NotifyCollision(other);
 }
+
+enum Fighter::Orientation Veteran::MyOrientation(){
+  return this->orientation;
+}

@@ -158,3 +158,11 @@ void Fighter::ApplyDamage(int damage){
 bool Fighter::IsHurting(){
   return(currentState == HURTING);
 }
+
+bool Fighter::CanAttack(enum Orientation targetOrientation, Rect targetRect) {
+  if((targetOrientation == Fighter::LEFT && (this->associated.box.x < targetRect.x)) ||
+    targetOrientation == Fighter::RIGHT && (this->associated.box.x > targetRect.x))
+    return true;
+  
+  return false;
+}
