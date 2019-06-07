@@ -152,7 +152,7 @@ void Nurse::NotifyCollision(GameObject &other) {
       if(veteran->IsAttacking() && not this->IsDead()) {
         if(this->CanAttack(veteran->MyOrientation(), veteran->GetBox())) {
           this->storedState = HURTING;
-          this->ApplyDamage(100);
+          this->ApplyDamage(50);
         }
       }
     }

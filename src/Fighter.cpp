@@ -148,7 +148,7 @@ Rect Fighter::GetFoot() {
 }
 
 bool Fighter::IsAttacking(){
-  return(Math::InRange(currentState, BASIC_ATTACK_ONE, ULTIMATE));
+  return(Math::InRange(currentState, BASIC_ATTACK_ONE, COMBO));
 }
 
 void Fighter::ApplyDamage(int damage){
@@ -161,7 +161,7 @@ bool Fighter::IsHurting(){
 
 bool Fighter::CanAttack(enum Orientation targetOrientation, Rect targetRect) {
   if((targetOrientation == Fighter::LEFT && (this->associated.box.x < targetRect.x)) ||
-    targetOrientation == Fighter::RIGHT && (this->associated.box.x > targetRect.x))
+    (targetOrientation == Fighter::RIGHT && (this->associated.box.x > targetRect.x)))
     return true;
   
   return false;
