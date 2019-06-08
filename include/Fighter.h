@@ -34,10 +34,12 @@ public:
   void ApplyDamage(int damage);
   bool IsHurting();
   bool IsAttacking();
+  bool IsDead();
   bool Is(std::string type);
+  virtual bool IsOpponent(GameObject &other) = 0;
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);
-  bool isTakingDamage;
+  enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
 };
 

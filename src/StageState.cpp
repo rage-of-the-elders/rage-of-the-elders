@@ -39,13 +39,13 @@ void StageState::LoadAssets() {
 	bg->AddComponent(new CameraFollower(*bg));
 
 	GameObject *veteranGO = new GameObject();
-	veteranGO->box.SetCenterPos(600, 300);
+	veteranGO->box.SetCenterPos(400, 300);
 	veteranGO->AddComponent(new Veteran(*veteranGO));
 	this->AddObject(veteranGO);
 
 	GameObject *nurseGO = new GameObject();
 	nurseGO->AddComponent(new Nurse(*nurseGO));
-	nurseGO->box.SetCenterPos(900, 450);
+	nurseGO->box.SetCenterPos(1200, 450);
 	this->AddObject(nurseGO);
 
 	// FIXME
@@ -67,7 +67,7 @@ void StageState::LoadAssets() {
 
 	// Camera::Follow(veteranGO);
 
-	this->music.Play();
+	// this->music.Play();
 }
 
 void StageState::Update(float dt) {

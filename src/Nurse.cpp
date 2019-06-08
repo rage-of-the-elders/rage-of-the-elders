@@ -29,7 +29,7 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
 Nurse::~Nurse() {}
 void Nurse::Start() {}
 
-bool Nurse::TargetIsInRange() {
+bool Nurse::TargetIsInRange() { // FIXME: Check collider, not target box
   float nurseAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
   float nurseAttackY = (this->associated.box.y + this->associated.box.h);
   float nurseAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
@@ -118,7 +118,7 @@ void Nurse::Update(float dt) {
       break;
   }
 
-  printf("%d\n", this->hp);
+  printf("nurse: %d\n", this->hp);
 }
 
 void Nurse::UpdateStateMachine() {
@@ -141,7 +141,7 @@ void Nurse::UpdateStateMachine() {
 }
 
 bool Nurse::Is(std::string type) {
-  return(type == "Nurse");
+  return (type == "Nurse" || Fighter::Is(type));
 }
 
 void Nurse::NotifyCollision(GameObject &other) {
@@ -150,7 +150,7 @@ void Nurse::NotifyCollision(GameObject &other) {
     if(not this->IsHurting()) {
       Veteran *veteran = (Veteran*) other.GetComponent("Veteran");
       if(veteran->IsAttacking() && not this->IsDead()) {
-        if(this->CanAttack(veteran->MyOrientation(), veteran->GetBox())) {
+        if(this->CanAttack(veteran->GetOrientation(), veteran->GetBox())) {
           this->storedState = HURTING;
           this->ApplyDamage(50);
         }
@@ -159,6 +159,6 @@ void Nurse::NotifyCollision(GameObject &other) {
   }
 }
 
-bool Nurse::IsDead(){ 
-  return(this->hp <= 0);
+bool Nurse::IsOpponent(GameObject &other) {
+  return (not other.Has("Nurse"));
 }

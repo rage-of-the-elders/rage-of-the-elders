@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "InputManager.h"
 #include "Collision.h"
+#include "Veteran.h"
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated) : Component(associated) {
@@ -13,7 +14,6 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->currentState = IDLE;
   this->orientation = LEFT;
   this->active = true;
-  this->isTakingDamage = false;
   this->storedState = INVALID;
 
   this->sprite = std::vector<Sprite*>(LAST);
@@ -64,12 +64,8 @@ bool Fighter::Is(std::string type) {
 }
 
 void Fighter::NotifyCollision(GameObject &other) {
-
   if(other.Has("Barrier")) {
-
     Collider *colliderBox = (Collider*) this->associated.GetComponent("Collider");
-
-
     Rect fighterFoot = this->GetFoot();
 
     if(Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
@@ -78,11 +74,8 @@ void Fighter::NotifyCollision(GameObject &other) {
       float collisionY = std::min( abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
 
       if( collisionX > collisionY) {
-        
         float objY;
-
         float distanceToBottom = fighterFoot.y - (other.box.y + other.box.h);
-
         float distanceToTop = (fighterFoot.y + fighterFoot.h) - other.box.y;
 
         if(abs(distanceToBottom) > abs(distanceToTop)) {
@@ -104,11 +97,8 @@ void Fighter::NotifyCollision(GameObject &other) {
         }
       }
       else {
-
         float objX;
-
         float distanceToRight = fighterFoot.x - (abs(other.box.x) + other.box.w);
-
         float distanceToLeft = (fighterFoot.x + fighterFoot.w) - abs(other.box.x);
 
         if(abs(distanceToRight) > abs(distanceToLeft)) {
@@ -124,6 +114,17 @@ void Fighter::NotifyCollision(GameObject &other) {
           if( fighterFoot.x < objX ) {
             this->associated.box.x = other.box.x + other.box.w - ((this->associated.box.w - colliderBox->GetWidth()) /2);
           }
+        }
+      }
+    }
+  }
+  else if(other.Has("Fighter") && this->IsOpponent(other)) {
+    if(not this->IsHurting()) {
+      Fighter *opponent = (Fighter *)other.GetComponent("Fighter");
+      if(opponent->IsAttacking() && not this->IsDead()) {
+        if(this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
+          this->storedState = HURTING;
+          this->ApplyDamage(10);
         }
       }
     }
@@ -159,10 +160,18 @@ bool Fighter::IsHurting(){
   return(currentState == HURTING);
 }
 
+bool Fighter::IsDead() { 
+  return(this->hp <= 0);
+}
+
 bool Fighter::CanAttack(enum Orientation targetOrientation, Rect targetRect) {
   if((targetOrientation == Fighter::LEFT && (this->associated.box.x < targetRect.x)) ||
     (targetOrientation == Fighter::RIGHT && (this->associated.box.x > targetRect.x)))
     return true;
   
   return false;
+}
+
+enum Fighter::Orientation Fighter::GetOrientation() {
+  return this->orientation;
 }

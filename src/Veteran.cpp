@@ -12,15 +12,16 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->hp = VETERAN_HP;
   this->speed = VETERAN_SPEED;
   this->player = this;
+  this->orientation = RIGHT;
 
   std::string character = "veteran";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.15, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.1, 0, false);
-  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.1, 0, false);
-  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
-  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 4, 0.1, 0, true);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
-  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 15, 0.2, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.04, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.04, 0, false);
+  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.04, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
+  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 4, 0.04, 0, true);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
+  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 15, 0.04, 0, true);
   // this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
@@ -33,7 +34,7 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[MOVING]);
 
   this->associated.AddComponent(new Collider(this->associated, {0.7,0.8}));
-  // this->associated.AddComponent(new Collider(this->associated, {1,0.8}));
+  // this->associated.AddComponent(new Collider(this->associated));
 }
 
 Veteran::~Veteran() {
@@ -163,16 +164,17 @@ void Veteran::UpdateStateMachine() {
     default:
       break;
   }
+  printf("veteran: %d\n", this->hp);
 }
 
 bool Veteran::Is(std::string type) {
-  return(type == "Veteran");
+  return (type == "Veteran" || Fighter::Is(type));
 }
 
 void Veteran::NotifyCollision(GameObject &other) {
   Fighter::NotifyCollision(other);
 }
 
-enum Fighter::Orientation Veteran::MyOrientation(){
-  return this->orientation;
+bool Veteran::IsOpponent(GameObject &other) {
+  return (not other.Has("Veteran"));
 }

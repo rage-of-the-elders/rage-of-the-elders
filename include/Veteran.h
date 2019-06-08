@@ -18,8 +18,8 @@ public:
   void Start();
   void Update(float dt);
   bool Is(std::string type);
+  bool IsOpponent(GameObject &other);
   void NotifyCollision(GameObject &other);
-  enum Orientation MyOrientation();
 };
 
 #endif
