@@ -146,17 +146,6 @@ bool Nurse::Is(std::string type) {
 
 void Nurse::NotifyCollision(GameObject &other) {
   Fighter::NotifyCollision(other);
-  if(other.Has("Veteran")) {
-    if(not this->IsHurting()) {
-      Veteran *veteran = (Veteran*) other.GetComponent("Veteran");
-      if(veteran->IsAttacking() && not this->IsDead()) {
-        if(this->CanAttack(veteran->GetOrientation(), veteran->GetBox())) {
-          this->storedState = HURTING;
-          this->ApplyDamage(50);
-        }
-      }
-    }
-  }
 }
 
 bool Nurse::IsOpponent(GameObject &other) {
