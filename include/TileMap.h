@@ -22,9 +22,11 @@ public:
   int& At (int x, int y, int z = 0);
   void RenderLayer (int layer, int cameraX = 0, int cameraY = 0);
   void Render ();
-  int GetTileWidth();
-  int GetTileHeight();
-  int GetTileDepth();
+  int MapEnd();
+  int GetMapWidth();
+  int GetMapHeight();
+  int GetMapDepth();
+  int GetTilePosition(int index);
   bool Is(std::string type);
   void Update(float dt);
 };

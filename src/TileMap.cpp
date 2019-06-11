@@ -1,4 +1,5 @@
 #define GAP 329
+#define EXTRA_TILES 2
 
 #include "TileMap.h"
 #include "Game.h"
@@ -54,11 +55,14 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
   for (int j = 0; j < this->mapHeight; j++)
     for (int i = 0; i < this->mapWidth; i++)
       this->tileSet->RenderTile(At(i, j, layer),
-                                ((i * this->tileSet->GetTileWidth())
-                                  - (i * GAP)
-                                  - cameraX
-                                  + this->tileSet->GetInitialTileWidth() - GAP),
+                                (GetTilePosition(i) - cameraX),
                                 (j * this->tileSet->GetTileHeight()));
+}
+
+int TileMap::GetTilePosition(int index) {
+  return (index * this->tileSet->GetTileWidth())
+          - (index * GAP)
+          + (this->tileSet->GetInitialTileWidth() - GAP);
 }
 
 void TileMap::Render() {
@@ -66,16 +70,20 @@ void TileMap::Render() {
     RenderLayer(layer, Camera::pos.x *(1+layer*1), Camera::pos.y *(1+layer*1));
 }
 
-int TileMap::GetTileWidth() {
+int TileMap::GetMapWidth() {
   return this->mapWidth;
 }
 
-int TileMap::GetTileHeight() {
+int TileMap::GetMapHeight() {
   return this->mapHeight;
 }
 
-int TileMap::GetTileDepth() {
+int TileMap::GetMapDepth() {
   return this->mapDepth;
+}
+
+int TileMap::MapEnd() {
+  return GetTilePosition(this->GetMapWidth() - EXTRA_TILES) + GAP;
 }
 
 bool TileMap::Is(std::string type) {

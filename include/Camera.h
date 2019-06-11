@@ -21,6 +21,7 @@ private:
 
   static void AddBlack();
   static void HandleFlicker(float dt);
+  static void AdjustFocus(int screenWidth);
 
 public:
   static Vec2 pos;

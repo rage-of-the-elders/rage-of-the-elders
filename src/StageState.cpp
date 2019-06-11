@@ -15,6 +15,8 @@
 #include "Nurse.h"
 #include "Barrier.h"
 
+// int StageState::stageLimit = 0;
+
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
   this->started = false;
@@ -33,6 +35,7 @@ void StageState::LoadAssets() {
 	this->mapGameObj = new GameObject();
 	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
 	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
+  this->stageLimit = tileMap->MapEnd();
 	mapGameObj->AddComponent(tileMap);
 	mapGameObj->box = Rect();
 
@@ -58,14 +61,14 @@ void StageState::LoadAssets() {
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();
-	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1120)));
+	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1420)));
 	this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();
-  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120, -400, 400, 1120)));
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(this->stageLimit, -400, 400, 1420)));
   this->AddObject(finalWall);
 
-	// Camera::Follow(veteranGO);
+	Camera::Follow(veteranGO);
 
 	this->music.Play();
 }

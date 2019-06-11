@@ -110,7 +110,7 @@ void Veteran::UpdateStateMachine() {
     } break;
     case Veteran::IDLE: {
       if(not this->sprite[IDLE]->IsActive()) {
-        this->ActivateSprite(IDLE);        
+        this->ActivateSprite(IDLE);
       }
     } break;
     case Veteran::BASIC_ATTACK_ONE: {

@@ -18,6 +18,8 @@ private:
   GameObject *bg;
   GameObject *mapGameObj;
 
+  int stageLimit;
+
 public:
   StageState();
   ~StageState();
