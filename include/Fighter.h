@@ -22,14 +22,15 @@ protected:
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
 
-  void UpdateStateMachine();
+  virtual void ManageInput(float dt) = 0;
+  virtual void UpdateStateMachine(float dt) = 0;
 public:
 
   Fighter(GameObject &associated);
   ~Fighter();
   void Start();
   Rect GetFoot();
-  virtual void Update(float dt);
+  void Update(float dt);
   void Render();
   void ApplyDamage(int damage);
   bool IsHurting();

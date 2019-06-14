@@ -10,13 +10,13 @@
 class Nurse : public Fighter {
 private:
   Rect target;
-  void UpdateStateMachine();
+  void ManageInput(float dt);
+  void UpdateStateMachine(float dt);
 
 public:
   Nurse(GameObject &associated);
   ~Nurse();
   void Start();
-  void Update(float dt);
   bool TargetIsInRange();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);

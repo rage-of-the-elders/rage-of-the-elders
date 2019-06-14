@@ -7,16 +7,15 @@
 #include "Fighter.h"
 
 class Veteran : public Fighter {
-  private:
+private:
   void ManageInput(float dt);
-  void UpdateStateMachine();
+  void UpdateStateMachine(float dt);
 
 public:
   static Veteran *player;
   Veteran(GameObject &associated);
   ~Veteran();
   void Start();
-  void Update(float dt);
   bool Is(std::string type);
   bool IsOpponent(GameObject &other);
   void NotifyCollision(GameObject &other);

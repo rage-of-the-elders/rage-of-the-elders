@@ -32,7 +32,16 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
 
 Fighter::~Fighter() {}
 void Fighter::Start() {}
-void Fighter::Update(float) {}
+
+void Fighter::Update(float dt) {
+  if(this->IsDead() || this->storedState == INVALID) {
+    ManageInput(dt);
+  } else {
+    this->currentState = storedState;
+  }
+
+  UpdateStateMachine(dt);
+}
 
 void Fighter::Render() {
   #ifdef DEBUG
@@ -64,7 +73,7 @@ bool Fighter::Is(std::string type) {
 }
 
 void Fighter::NotifyCollision(GameObject &other) {
-  if(other.Has("Barrier")) {
+  if(other.Has("Barrier")) { // TODO: mover pra função, tá horrível
     Collider *colliderBox = (Collider*) this->associated.GetComponent("Collider");
     Rect fighterFoot = this->GetFoot();
 
