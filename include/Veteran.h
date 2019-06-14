@@ -9,7 +9,8 @@
 class Veteran : public Fighter {
 private:
   void ManageInput(float dt);
-  void UpdateStateMachine(float dt);
+  void HandleMovement(float dt);
+  // void UpdateStateMachine(float dt);
 
 public:
   static Veteran *player;

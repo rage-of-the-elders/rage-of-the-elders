@@ -29,7 +29,7 @@ Nurse::Nurse(GameObject &associated) : Fighter(associated) {
 Nurse::~Nurse() {}
 void Nurse::Start() {}
 
-bool Nurse::TargetIsInRange() { // FIXME: Check collider, not target box
+bool Nurse::TargetIsInRange() { // FIXME: Check collider, not target's box
   float nurseAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
   float nurseAttackY = (this->associated.box.y + this->associated.box.h);
   float nurseAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
@@ -49,7 +49,20 @@ bool Nurse::TargetIsInRange() { // FIXME: Check collider, not target box
 }
 
 void Nurse::ManageInput(float) {
-  this->target = Veteran::player->GetBox();
+  this->target = Veteran::player->GetBox(); // TODO: Check if player is alive
+
+  if(this->IsDead()){
+    this->currentState = DYING;
+  }
+  else if (TargetIsInRange()) {
+    this->currentState = BASIC_ATTACK_ONE;
+  }
+  // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
+  //   if(this->sprite[MOVING]->IsFinished())
+  // }
+  else {
+    this->currentState = MOVING;
+  }
 
   if (this->currentState != DYING) {
     if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
@@ -62,77 +75,33 @@ void Nurse::ManageInput(float) {
     else
       this->associated.flip = SDL_FLIP_NONE;
   }
-
-  // if(this->storedState == INVALID) {
-    if(this->IsDead()){
-      this->currentState = DYING;
-    }
-    else if (TargetIsInRange()) {
-      this->currentState = BASIC_ATTACK_ONE;
-    }
-    else if(this->sprite[MOVING]->IsActive()) {
-        if(this->sprite[MOVING]->IsFinished())
-          this->currentState = MOVING;
-    }
-  // }
-
 }
 
-void Nurse::UpdateStateMachine(float dt) {
-  switch (this->currentState) {
-    case Nurse::MOVING: {
-      if(not this->sprite[MOVING]->IsActive()) {
-        this->ActivateSprite(MOVING);
-
-        // this->sound[MOVING]->Play(-1);
-      }
-
-      Vec2 direction = this->associated.box.GetCenter().GetSpeed(this->target.GetCenter());
-      this->associated.box.UpdatePos((direction * this->speed) * dt);
-    } break;
-    case Nurse::BASIC_ATTACK_ONE: {
-      if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
-        this->ActivateSprite(BASIC_ATTACK_ONE);
-        // this->sound[BASIC_ATTACK_ONE]->Play(1);
-      }
-      if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()){
-        this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
-        this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
-        this->currentState = IDLE;
-      }
-    } break;
-    case Nurse::HURTING: {
-      if(not this->sprite[HURTING]->IsActive()) {
-        this->ActivateSprite(HURTING);
-        //Som
-      }
-      if(this->sprite[HURTING]->IsFinished()){
-        this->sprite[HURTING]->SetFrame(0);
-        this->sprite[HURTING]->SetFinished(false);
-        this->currentState = MOVING;
-        this->storedState = INVALID;
-      }
-    } break;
-    case Nurse::DYING: {
-      if(not this->sprite[DYING]->IsActive()) {
-        this->associated.GetComponent("Collider")->Desactivate();
-        this->ActivateSprite(DYING);
-        this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
-        // this->sound[DYING]->Play(1);
-      }
-      if(this->sprite[DYING]->IsFinished()){
-        this->associated.RequestDelete();
-        // this->sprite[DYING]->SetFrame(0);
-        // this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
-        // this->currentState = MOVING;
-      }
-    } break;
-    default:
-      break;
+void Nurse::HandleMovement(float dt) {
+  if(not this->sprite[MOVING]->IsActive()) {
+    this->ActivateSprite(MOVING);
+    // this->sound[MOVING]->Play(-1);
   }
 
-  printf("nurse: %d\n", this->hp);
+  Vec2 direction = this->associated.box.GetCenter().GetSpeed(this->target.GetCenter());
+  this->associated.box.UpdatePos((direction * this->speed) * dt);
 }
+
+void Nurse::HandleDying(float) {
+  if(not this->sprite[DYING]->IsActive()) {
+    this->associated.GetComponent("Collider")->Desactivate();
+    this->ActivateSprite(DYING);
+    this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
+    // this->sound[DYING]->Play(1);
+  }
+  if(this->sprite[DYING]->IsFinished()){
+    this->associated.RequestDelete();
+  }
+}
+
+// void Nurse::UpdateStateMachine(float dt) {
+//   printf("nurse: %d\n", this->hp);
+// }
 
 bool Nurse::Is(std::string type) {
   return (type == "Nurse" || Fighter::Is(type));

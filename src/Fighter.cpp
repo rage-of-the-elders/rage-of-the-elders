@@ -33,6 +33,39 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
 Fighter::~Fighter() {}
 void Fighter::Start() {}
 
+void Fighter::UpdateStateMachine(float dt) {
+  switch (this->currentState) {
+    case MOVING: {
+      HandleMovement(dt);
+    } break;
+    case IDLE: {
+      if(not this->sprite[IDLE]->IsActive()) {
+        this->ActivateSprite(IDLE);        
+      }
+    } break;
+    case BASIC_ATTACK_ONE: {
+      HandleAttackOne(dt);
+    } break;
+    case BASIC_ATTACK_TWO: {
+      HandleAttackTwo(dt);
+    } break;
+    case COMBO: {
+      HandleCombo(dt);
+    } break;
+    case ULTIMATE: {
+      HandleUltimate(dt);
+    } break;
+    case HURTING: {
+      HandleHurting(dt);
+    } break;
+    case DYING: {
+      HandleDying(dt);
+    } break;
+    default:
+      break;
+  }
+}
+
 void Fighter::Update(float dt) {
   if(this->IsDead() || this->storedState == INVALID) {
     ManageInput(dt);
@@ -183,4 +216,79 @@ bool Fighter::CanAttack(enum Orientation targetOrientation, Rect targetRect) {
 
 enum Fighter::Orientation Fighter::GetOrientation() {
   return this->orientation;
+}
+
+void Fighter::HandleMovement(float) {}
+
+void Fighter::HandleAttackOne(float) {
+  if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
+    this->ActivateSprite(BASIC_ATTACK_ONE);
+    this->sound[BASIC_ATTACK_ONE]->Play(1);
+  }
+  if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
+    this->currentState = IDLE;
+    this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
+    this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
+  }
+}
+
+void Fighter::HandleAttackTwo(float) {
+  if(not this->sprite[BASIC_ATTACK_TWO]->IsActive()) {
+    this->ActivateSprite(BASIC_ATTACK_TWO);
+    this->sound[BASIC_ATTACK_TWO]->Play(1);
+  }
+  if(this->sprite[BASIC_ATTACK_TWO]->IsFinished()) {
+    this->currentState = IDLE;
+    this->sprite[BASIC_ATTACK_TWO]->SetFrame(0);
+    this->sprite[BASIC_ATTACK_TWO]->SetFinished(false);
+  }
+}
+
+void Fighter::HandleCombo(float) {
+  if(not this->sprite[COMBO]->IsActive()) {
+    this->ActivateSprite(COMBO);
+    this->sound[COMBO]->Play(1);
+  }
+  if(this->sprite[COMBO]->IsFinished()) {
+    this->currentState = IDLE;
+    this->sprite[COMBO]->SetFrame(0);
+    this->sprite[COMBO]->SetFinished(false);
+  }
+}
+
+void Fighter::HandleUltimate(float) {
+  if(not this->sprite[ULTIMATE]->IsActive()) {
+    this->ActivateSprite(ULTIMATE);
+    this->sound[ULTIMATE]->Play(1);
+  }
+  if(this->sprite[ULTIMATE]->IsFinished()) {
+    this->currentState = IDLE;
+    this->sprite[ULTIMATE]->SetFrame(0);
+    this->sprite[ULTIMATE]->SetFinished(false);
+  }
+}
+
+void Fighter::HandleHurting(float) {
+  if(not this->sprite[HURTING]->IsActive()) {
+    this->ActivateSprite(HURTING);
+    //Som
+  }
+  if(this->sprite[HURTING]->IsFinished()){
+    this->sprite[HURTING]->SetFrame(0);
+    this->sprite[HURTING]->SetFinished(false);
+    this->currentState = MOVING;
+    this->storedState = INVALID;
+  }
+}
+
+void Fighter::HandleDying(float) {
+  if(not this->sprite[DYING]->IsActive()) {
+    this->associated.GetComponent("Collider")->Desactivate();
+    this->ActivateSprite(DYING);
+    // this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
+    // this->sound[DYING]->Play(1);
+  }
+  if(this->sprite[DYING]->IsFinished()){
+    this->associated.RequestDelete();
+  }
 }

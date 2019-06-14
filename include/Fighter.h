@@ -23,7 +23,15 @@ protected:
   std::vector<Sound*> sound;
 
   virtual void ManageInput(float dt) = 0;
-  virtual void UpdateStateMachine(float dt) = 0;
+  virtual void UpdateStateMachine(float dt);
+  virtual void HandleMovement(float dt);
+  virtual void HandleAttackOne(float dt);
+  virtual void HandleAttackTwo(float dt);
+  virtual void HandleCombo(float dt);
+  virtual void HandleUltimate(float dt);
+  virtual void HandleHurting(float dt);
+  virtual void HandleDying(float dt);
+
 public:
 
   Fighter(GameObject &associated);

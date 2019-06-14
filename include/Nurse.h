@@ -11,7 +11,8 @@ class Nurse : public Fighter {
 private:
   Rect target;
   void ManageInput(float dt);
-  void UpdateStateMachine(float dt);
+  void HandleMovement(float dt);
+  void HandleDying(float dt);
 
 public:
   Nurse(GameObject &associated);
