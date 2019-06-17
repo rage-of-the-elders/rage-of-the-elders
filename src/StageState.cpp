@@ -14,6 +14,7 @@
 #include "Veteran.h"
 #include "Nurse.h"
 #include "Janitor.h"
+#include "Security.h"
 #include "Barrier.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
@@ -44,15 +45,20 @@ void StageState::LoadAssets() {
 	veteranGO->AddComponent(new Veteran(*veteranGO));
 	this->AddObject(veteranGO);
 
-	GameObject *nurseGO = new GameObject();
-	nurseGO->AddComponent(new Nurse(*nurseGO));
-	nurseGO->box.SetCenterPos(1200, 450);
-	this->AddObject(nurseGO);
+	// GameObject *nurseGO = new GameObject();
+	// nurseGO->AddComponent(new Nurse(*nurseGO));
+	// nurseGO->box.SetCenterPos(1200, 450);
+	// this->AddObject(nurseGO);
 
-	GameObject *janitorGO = new GameObject();
-	janitorGO->AddComponent(new Janitor(*janitorGO));
-	janitorGO->box.SetCenterPos(1200, 450);
-	this->AddObject(janitorGO);
+	// GameObject *janitorGO = new GameObject();
+	// janitorGO->AddComponent(new Janitor(*janitorGO));
+	// janitorGO->box.SetCenterPos(1200, 450);
+	// this->AddObject(janitorGO);
+
+	GameObject *securityGO = new GameObject();
+	securityGO->AddComponent(new Security(*securityGO));
+	securityGO->box.SetCenterPos(1200, 450);
+	this->AddObject(securityGO);
 
 	// FIXME
 	GameObject *baseWall = new GameObject();
