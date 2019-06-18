@@ -117,9 +117,9 @@ void Game::Run() {
   }
 
   if (not this->stateStack.empty()) {
-    this->CalculateDeltaTime(); // TODO: Where to put this?
 
     while (!this->GetCurrentState().QuitRequested() && !this->stateStack.empty()) {
+    this->CalculateDeltaTime(); // TODO: Where to put this?
       if (this->GetCurrentState().PopRequested()) {
         this->stateStack.pop();
         Resources::Clear();
@@ -137,7 +137,7 @@ void Game::Run() {
         }
       }
 
-      InputManager::GetInstance().Update();
+      InputManager::GetInstance().Update(this->GetDeltaTime());
       this->GetCurrentState().Update(this->GetDeltaTime());
       this->GetCurrentState().Render();
       Camera::RenderBlack();

@@ -2,7 +2,7 @@
 #define ENEMY_H
 
 #define ENEMY_HP 100
-#define ENEMY_SPEED 10
+#define ENEMY_SPEED 100
 #define ATTACK_Y_RANGE 15
 
 #include "Fighter.h"
