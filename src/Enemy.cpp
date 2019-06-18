@@ -13,9 +13,9 @@ Enemy::~Enemy() {}
 void Enemy::Start() {}
 
 bool Enemy::TargetIsInRange() { // FIXME: Check collider, not target's box
-  float enemyAttackX = this->sprite[BASIC_ATTACK_ONE]->GetBox().GetCenter().x;
-  float enemyAttackY = (this->associated.box.y + this->associated.box.h);
-  float enemyAttackWidth = this->sprite[BASIC_ATTACK_ONE]->GetWidth();
+  float enemyAttackX = this->GetColliderBox().GetCenter().x;
+  float enemyAttackY = (this->GetColliderBox().y + this->GetColliderBox().h);
+  float enemyAttackWidth = this->GetColliderBox().w;
   float enemyXRange = (enemyAttackWidth/2.0) + (this->target.w/2.0);
 
   float targetDistanceX = abs(target.GetCenter().x - enemyAttackX);
@@ -32,7 +32,7 @@ bool Enemy::TargetIsInRange() { // FIXME: Check collider, not target's box
 }
 
 void Enemy::ManageInput(float) {
-  this->target = Veteran::player->GetBox(); // TODO: Check if player is alive
+  this->target = Veteran::player->GetColliderBox(); // TODO: Check if player is alive
 
   if(this->IsDead()){
     this->currentState = DYING;
@@ -74,7 +74,7 @@ void Enemy::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);
-    this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
+    this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * this->sprite[MOVING]->GetWidth();
     // this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){

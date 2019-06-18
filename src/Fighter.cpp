@@ -221,15 +221,15 @@ enum Fighter::Orientation Fighter::GetOrientation() {
 void Fighter::HandleMovement(float) {}
 
 void Fighter::HandleAttackOne(float) {
-  if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
-    this->ActivateSprite(BASIC_ATTACK_ONE);
-    this->sound[BASIC_ATTACK_ONE]->Play(1);
-  }
-  if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
-    this->currentState = IDLE;
-    this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
-    this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
-  }
+    if(not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
+      this->ActivateSprite(BASIC_ATTACK_ONE);
+      this->sound[BASIC_ATTACK_ONE]->Play(1);
+    }
+    if(this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
+      this->currentState = IDLE;
+      this->sprite[BASIC_ATTACK_ONE]->SetFrame(0);
+      this->sprite[BASIC_ATTACK_ONE]->SetFinished(false);
+    }
 }
 
 void Fighter::HandleAttackTwo(float) {
@@ -245,14 +245,14 @@ void Fighter::HandleAttackTwo(float) {
 }
 
 void Fighter::HandleCombo(float) {
-  if(not this->sprite[COMBO]->IsActive()) {
-    this->ActivateSprite(COMBO);
-    this->sound[COMBO]->Play(1);
-  }
-  if(this->sprite[COMBO]->IsFinished()) {
-    this->currentState = IDLE;
-    this->sprite[COMBO]->SetFrame(0);
-    this->sprite[COMBO]->SetFinished(false);
+    if(not this->sprite[COMBO]->IsActive()) {
+      this->ActivateSprite(COMBO);
+      this->sound[COMBO]->Play(1);
+    }
+    if(this->sprite[COMBO]->IsFinished()) {
+      this->currentState = IDLE;
+      this->sprite[COMBO]->SetFrame(0);
+      this->sprite[COMBO]->SetFinished(false);
   }
 }
 
@@ -291,4 +291,12 @@ void Fighter::HandleDying(float) {
   if(this->sprite[DYING]->IsFinished()){
     this->associated.RequestDelete();
   }
+}
+
+Rect Fighter::GetColliderBox() {
+  Collider *fighterColliderBox = (Collider *) this->associated.GetComponent("Collider");
+  return Rect(fighterColliderBox->GetX(),
+              fighterColliderBox->GetY(),
+              fighterColliderBox->GetWidth(),
+              fighterColliderBox->GetHeigth());
 }

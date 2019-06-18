@@ -50,6 +50,7 @@ public:
   void ActivateSprite(FighterState state);
   enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
+  Rect GetColliderBox();
 };
 
 #endif
