@@ -23,7 +23,7 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 10, 0.04, 0, false);
   this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
-  // FIXME: Add dying sprite 
+  // FIXME: Add dying sprite
   // this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
@@ -48,18 +48,20 @@ void Veteran::ManageInput(float dt) {
   if (this->IsDead()) {
     this->currentState = DYING;
   } else {
-    if(InputManager::GetInstance().KeyPress(F_KEY)) {
+    if((InputManager::GetInstance().GetLastsPressKeys() == "FG") && (not this->IsAttacking())) {
+      this->currentState = COMBO;
+
+      InputManager::GetInstance().SetLastsPressKeys("");
+    }
+    else if(InputManager::GetInstance().KeyPress(F_KEY) && (not this->IsAttacking())) {
       this->currentState = BASIC_ATTACK_ONE;
     }
-    else if(InputManager::GetInstance().KeyPress(G_KEY)) {
+    else if(InputManager::GetInstance().KeyPress(G_KEY) && (not this->IsAttacking())) {
       this->currentState = BASIC_ATTACK_TWO;
     }
-    else if(InputManager::GetInstance().KeyPress(H_KEY)) {
-      this->currentState = COMBO;
-    }
-    else if(InputManager::GetInstance().KeyPress(J_KEY)) {
+    else if(InputManager::GetInstance().KeyPress(J_KEY) && (not this->IsAttacking())) {
       this->currentState = ULTIMATE;
-      Camera::Flicker(9.3, 0.3);
+      Camera::Flicker(5, 0.3);
     }
     else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
       this->currentState = MOVING;

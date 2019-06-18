@@ -13,6 +13,7 @@ class Security : public Enemy {
 public:
   Security(GameObject &associated);
   ~Security();
+  void Update(float dt);
   // void Start();
   // bool TargetIsInRange();
   // bool Is(std::string type);

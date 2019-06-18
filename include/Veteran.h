@@ -2,7 +2,7 @@
 #define VETERAN_H
 
 #define VETERAN_HP 100
-#define VETERAN_SPEED 50
+#define VETERAN_SPEED 200
 
 #include "Fighter.h"
 

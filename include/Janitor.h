@@ -13,7 +13,7 @@ class Janitor : public Enemy {
 public:
   Janitor(GameObject &associated);
   ~Janitor();
-  // void Start();
+  void Update(float dt);
   // bool TargetIsInRange();
   // bool Is(std::string type);
   // void NotifyCollision(GameObject &other);
