@@ -26,7 +26,8 @@ public:
   int GetMapWidth();
   int GetMapHeight();
   int GetMapDepth();
-  int GetTilePosition(int index);
+  int GetTileStart(int index);
+  int GetTileEnd(int index);
   bool Is(std::string type);
   void Update(float dt);
 };

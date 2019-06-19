@@ -14,14 +14,16 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->player = this;
 
   std::string character = "veteran";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.15, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 15, 0.1, 0, false);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png",30 , 0.15, 0, true);
+  this->sprite[MOVING]->SetScaleX(1.265714286);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.1, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.1, 0, false);
   this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.1, 0, false);
-  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 50, 0.1, 0, false);
+  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 10, 0.1, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.2, 0, true);
 
   this->ActivateSprite(IDLE);
+
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);

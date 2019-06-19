@@ -32,12 +32,12 @@ void StageState::LoadAssets() {
 	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
 	this->bg->box = Rect();
 
-	this->mapGameObj = new GameObject();
+	GameObject *tileMapGO = new GameObject();
 	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
-	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
+	this->tileMap = new TileMap(*tileMapGO, "map/stage1v2.txt", tileSet);
   this->stageLimit = tileMap->MapEnd();
-	mapGameObj->AddComponent(tileMap);
-	mapGameObj->box = Rect();
+	tileMapGO->AddComponent(tileMap);
+	tileMapGO->box = Rect();
 
 	bg->AddComponent(new CameraFollower(*bg));
 
@@ -52,9 +52,13 @@ void StageState::LoadAssets() {
 	this->AddObject(nurseGO);
 
 	// FIXME
-	GameObject *baseWall = new GameObject();
-	baseWall->AddComponent(new Barrier(*baseWall, Rect(0, 0, 12220, 555)));
-	this->AddObject(baseWall);
+	GameObject *hallWall = new GameObject();
+	hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
+	this->AddObject(hallWall);
+
+  GameObject *roomWall = new GameObject();
+	roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
+	this->AddObject(roomWall);
 
   GameObject *baseFloor = new GameObject();
   baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
@@ -83,7 +87,7 @@ void StageState::Update(float dt) {
 
 	Camera::Update(dt);
 	this->bg->Update(dt);
-	this->mapGameObj->Update(dt);
+	this->tileMap->Update(dt);
 
 	this->UpdateArray(dt);
 	this->CollisionCheck();
@@ -93,7 +97,7 @@ void StageState::Update(float dt) {
 
 void StageState::Render() {
 	this->bg->Render();
-	this->mapGameObj->GetComponent("TileMap")->Render();
+	this->tileMap->Render();
 
 	this->RenderArray();
 }

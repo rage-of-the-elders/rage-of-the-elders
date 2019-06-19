@@ -55,14 +55,17 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
   for (int j = 0; j < this->mapHeight; j++)
     for (int i = 0; i < this->mapWidth; i++)
       this->tileSet->RenderTile(At(i, j, layer),
-                                (GetTilePosition(i) - cameraX),
+                                (GetTileStart(i) - cameraX),
                                 (j * this->tileSet->GetTileHeight()));
 }
 
-int TileMap::GetTilePosition(int index) {
-  return (index * this->tileSet->GetTileWidth())
-          - (index * GAP)
-          + (this->tileSet->GetInitialTileWidth() - GAP);
+int TileMap::GetTileStart(int index) {
+  return index * (this->tileSet->GetTileWidth() - GAP)
+         + (this->tileSet->GetInitialTileWidth() - GAP);
+}
+
+int TileMap::GetTileEnd(int index) {
+  return GetTileStart(index) + GAP;
 }
 
 void TileMap::Render() {
@@ -83,7 +86,7 @@ int TileMap::GetMapDepth() {
 }
 
 int TileMap::MapEnd() {
-  return GetTilePosition(this->GetMapWidth() - EXTRA_TILES) + GAP;
+  return GetTileEnd(this->GetMapWidth() - EXTRA_TILES);
 }
 
 bool TileMap::Is(std::string type) {

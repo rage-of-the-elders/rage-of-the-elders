@@ -7,6 +7,7 @@
 #include "Sound.h"
 #include "Music.h"
 #include "TileSet.h"
+#include "TileMap.h"
 
 #include <vector>
 #include <memory>
@@ -14,9 +15,9 @@
 class StageState : public State {
 private:
   Music music;
-  TileSet *tileSet;
   GameObject *bg;
-  GameObject *mapGameObj;
+  TileSet *tileSet;
+  TileMap *tileMap;
 
   int stageLimit;
 
