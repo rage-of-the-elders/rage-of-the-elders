@@ -15,6 +15,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->orientation = LEFT;
   this->active = true;
   this->storedState = INVALID;
+  this->ultimateDuration = Timer();
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -23,7 +24,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound[BASIC_ATTACK_ONE] = new Sound(this->associated, "audio/boom.wav");
   this->sound[BASIC_ATTACK_TWO] = new Sound(this->associated, "audio/boom.wav");
   this->sound[COMBO] = new Sound(this->associated, "audio/boom.wav");
-  this->sound[ULTIMATE] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[ULTIMATE_BEGIN] = new Sound(this->associated, "audio/boom.wav");
 
   this->associated.AddComponent(this->sound[MOVING]);
   this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
@@ -52,8 +53,14 @@ void Fighter::UpdateStateMachine(float dt) {
     case COMBO: {
       HandleCombo(dt);
     } break;
-    case ULTIMATE: {
-      HandleUltimate(dt);
+    case ULTIMATE_BEGIN: {
+      HandleUltimateBegin(dt);
+    } break;
+    case ULTIMATE_MIDLE: {
+      HandleUltimateMidle(dt);
+    } break;
+    case ULTIMATE_FINAL: {
+      HandleUltimateFinal(dt);
     } break;
     case HURTING: {
       HandleHurting(dt);
@@ -256,15 +263,43 @@ void Fighter::HandleCombo(float) {
   }
 }
 
-void Fighter::HandleUltimate(float) {
-  if(not this->sprite[ULTIMATE]->IsActive()) {
-    this->ActivateSprite(ULTIMATE);
-    this->sound[ULTIMATE]->Play(1);
+void Fighter::HandleUltimateBegin(float) {
+  if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
+    this->ActivateSprite(ULTIMATE_BEGIN);
+    this->sound[ULTIMATE_BEGIN]->Play(1);
   }
-  if(this->sprite[ULTIMATE]->IsFinished()) {
+  if(this->sprite[ULTIMATE_BEGIN]->IsFinished()) {
+    this->currentState = ULTIMATE_MIDLE;
+    this->sprite[ULTIMATE_BEGIN]->SetFrame(0);
+    this->sprite[ULTIMATE_BEGIN]->SetFinished(false);
+  }
+}
+
+void Fighter::HandleUltimateMidle(float dt) {
+  if(not this->sprite[ULTIMATE_MIDLE]->IsActive()) {
+    this->ActivateSprite(ULTIMATE_MIDLE);
+    this->sound[ULTIMATE_BEGIN]->Play(1);
+  }
+  this->ultimateDuration.Update(dt);
+  // if(this->sprite[ULTIMATE_MIDLE]->IsFinished()) {
+  //   this->currentState = ULTIMATE_FINAL;
+  //   this->sprite[ULTIMATE_MIDLE]->SetFrame(0);
+  //   this->sprite[ULTIMATE_MIDLE]->SetFinished(false);
+  // }
+  if(this->ultimateDuration.Get() > 4) {
+    this->currentState = ULTIMATE_FINAL;
+  }
+}
+
+void Fighter::HandleUltimateFinal(float) {
+  if(not this->sprite[ULTIMATE_FINAL]->IsActive()) {
+    this->ActivateSprite(ULTIMATE_FINAL);
+    this->sound[ULTIMATE_BEGIN]->Play(1);
+  }
+  if(this->sprite[ULTIMATE_FINAL]->IsFinished()) {
     this->currentState = IDLE;
-    this->sprite[ULTIMATE]->SetFrame(0);
-    this->sprite[ULTIMATE]->SetFinished(false);
+    this->sprite[ULTIMATE_FINAL]->SetFrame(0);
+    this->sprite[ULTIMATE_FINAL]->SetFinished(false);
   }
 }
 

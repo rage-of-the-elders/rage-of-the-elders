@@ -103,7 +103,6 @@ void InputManager::MakeCombos(int buttonId) {
     break;
   }
 
-  std::cout << this->lastsPressKeys << std::endl;
 }
 
 bool InputManager::KeyPress(int key) {

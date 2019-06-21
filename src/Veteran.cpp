@@ -19,7 +19,9 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.04, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.04, 0, false);
   this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
-  this->sprite[ULTIMATE] = new Sprite(this->associated, "img/" + character + "/ultimate.png", 4, 0.04, 0, true);
+  this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 3, 0.04, 0, false);
+  this->sprite[ULTIMATE_MIDLE] = new Sprite(this->associated, "img/" + character + "/ultimate_midle.png", 10, 0.04, 0, true);
+  this->sprite[ULTIMATE_FINAL] = new Sprite(this->associated, "img/" + character + "/ultimate_final.png", 3, 0.04, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 10, 0.04, 0, false);
   this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
@@ -32,7 +34,9 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
   this->associated.AddComponent(this->sprite[COMBO]);
-  this->associated.AddComponent(this->sprite[ULTIMATE]);
+  this->associated.AddComponent(this->sprite[ULTIMATE_BEGIN]);
+  this->associated.AddComponent(this->sprite[ULTIMATE_MIDLE]);
+  this->associated.AddComponent(this->sprite[ULTIMATE_FINAL]);
   this->associated.AddComponent(this->sprite[MOVING]);
   this->associated.AddComponent(this->sprite[HURTING]);
   this->associated.AddComponent(this->sprite[DYING]);
@@ -60,7 +64,7 @@ void Veteran::ManageInput(float dt) {
       this->currentState = BASIC_ATTACK_TWO;
     }
     else if(InputManager::GetInstance().KeyPress(J_KEY) && (not this->IsAttacking())) {
-      this->currentState = ULTIMATE;
+      this->currentState = ULTIMATE_BEGIN;
       Camera::Flicker(5, 0.3);
     }
     else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
