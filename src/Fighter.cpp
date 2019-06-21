@@ -16,6 +16,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->active = true;
   this->storedState = INVALID;
   this->ultimateDuration = Timer();
+  this->damage[BASIC_ATTACK_ONE] = 10;
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -173,7 +174,7 @@ void Fighter::NotifyCollision(GameObject &other) {
       if(opponent->IsAttacking() && not this->IsDead()) {
         if(this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
           this->storedState = HURTING;
-          this->ApplyDamage(10);
+          this->ApplyDamage(opponent->GetDamage());
         }
       }
     }
@@ -190,6 +191,10 @@ void Fighter::ActivateSprite(FighterState state) {
       sprite[currentEnumState]->Desactivate();
     }
   }
+}
+
+int Fighter::GetDamage() {
+  return this->damage[this->currentState];
 }
 
 Rect Fighter::GetFoot() {
@@ -267,6 +272,7 @@ void Fighter::HandleUltimateBegin(float) {
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
     this->ActivateSprite(ULTIMATE_BEGIN);
     this->sound[ULTIMATE_BEGIN]->Play(1);
+    this->ultimateDuration.Restart();
   }
   if(this->sprite[ULTIMATE_BEGIN]->IsFinished()) {
     this->currentState = ULTIMATE_MIDLE;
@@ -288,6 +294,7 @@ void Fighter::HandleUltimateMidle(float dt) {
   // }
   if(this->ultimateDuration.Get() > 4) {
     this->currentState = ULTIMATE_FINAL;
+    this->ultimateDuration.Restart();
   }
 }
 

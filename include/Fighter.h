@@ -16,6 +16,7 @@ protected:
   float speed;
   enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE_BEGIN, ULTIMATE_MIDLE, ULTIMATE_FINAL, IDLE, HURTING, DYING, LAST, INVALID };
   enum Orientation { LEFT, RIGHT };
+  int damage[LAST];
   Orientation orientation;
   FighterState currentState;
   FighterState storedState;
@@ -54,6 +55,7 @@ public:
   enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
   Rect GetColliderBox();
+  int GetDamage();
 };
 
 #endif
