@@ -26,6 +26,19 @@ Janitor::~Janitor() {
 
 }
 
+void Janitor::HandleDying(float) {
+  if(not this->sprite[DYING]->IsActive()) {
+    this->associated.GetComponent("Collider")->Desactivate();
+    this->ActivateSprite(DYING);
+    this->associated.box.x += (this->orientation == RIGHT ? 60 : -320);
+    this->associated.box.y += (this->orientation == RIGHT ? 30 : 30);
+    // this->sound[DYING]->Play(1);
+  }
+  if(this->sprite[DYING]->IsFinished()){
+    this->associated.RequestDelete();
+  }
+}
+
 void Janitor::Update(float dt) {
   Enemy::Update(dt);
   Collider *a = (Collider*) this->associated.GetComponent("Collider");

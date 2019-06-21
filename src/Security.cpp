@@ -8,7 +8,7 @@ Security::Security(GameObject &associated) : Enemy(associated) {
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 11, 0.04, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 11, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 25, 0.04, 0, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 21, 0.04, 0, false);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
@@ -25,6 +25,19 @@ Security::Security(GameObject &associated) : Enemy(associated) {
 Security::~Security() {
 
 }
+
+void Security::HandleDying(float) {
+  if(not this->sprite[DYING]->IsActive()) {
+    this->associated.GetComponent("Collider")->Desactivate();
+    this->ActivateSprite(DYING);
+    this->associated.box.x += (this->orientation == RIGHT ? -200 : 80);
+    // this->sound[DYING]->Play(1);
+  }
+  if(this->sprite[DYING]->IsFinished()){
+    this->associated.RequestDelete();
+  }
+}
+
 
 void Security::Update(float dt) {
   Enemy::Update(dt);

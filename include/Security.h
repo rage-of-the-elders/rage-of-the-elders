@@ -4,11 +4,11 @@
 #include "Enemy.h"
 
 class Security : public Enemy {
-// private:
+private:
 //   Rect target;
 //   void ManageInput(float dt);
 //   void HandleMovement(float dt);
-//   void HandleDying(float dt);
+  void HandleDying(float dt);
 
 public:
   Security(GameObject &associated);
