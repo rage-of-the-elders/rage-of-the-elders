@@ -16,7 +16,8 @@ class Fighter : public Component {
 protected:
   int hp;
   float speed;
-  enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE_BEGIN, ULTIMATE_MIDLE, ULTIMATE_FINAL, IDLE, HURTING, DYING, LAST, INVALID };
+  enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE_BEGIN,
+                      ULTIMATE_MIDLE, ULTIMATE_FINAL, IDLE, HURTING, DYING, LAST, INVALID };
   enum Orientation { LEFT, RIGHT };
   int damage[LAST];
   int comboCount;

@@ -2,11 +2,13 @@
 #include "Collider.h"
 #include "Veteran.h"
 
-#include <iostream>
+#include <iostream> 
 
 Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->hp = ENEMY_HP;
   this->speed = ENEMY_SPEED;
+  this->attackCooldown = Timer();
+  this->attackCooldown.Set(ATTACK_COOLDOWN);
 }
 
 Enemy::~Enemy() {}
@@ -24,16 +26,22 @@ bool Enemy::TargetIsInRange() {
   return((enemyXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
-void Enemy::ManageInput(float) {
+void Enemy::ManageInput(float dt) {
 
   if(Veteran::player != nullptr) {
-    this->target = Veteran::player->GetColliderBox(); // TODO: Check if player is alive
+    this->target = Veteran::player->GetColliderBox();
     
     if(this->IsDead()){
       this->currentState = DYING;
     }
+    else if(this->attackCooldown.Get() < ATTACK_COOLDOWN && not this->IsAttacking()) {
+      std::cout << currentState << std::endl;
+      if(sprite[currentState]->IsFinished())
+        this->currentState = IDLE;
+    }
     else if (TargetIsInRange()) {
       this->currentState = BASIC_ATTACK_ONE;
+      this->attackCooldown.Restart();
     }
     // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
     //   if(this->sprite[MOVING]->IsFinished())
@@ -57,6 +65,11 @@ void Enemy::ManageInput(float) {
   else {
     this->currentState = IDLE;
   }
+}
+
+void Enemy::Update(float dt) {
+  Fighter::Update(dt);
+  this->attackCooldown.Update(dt);
 }
 
 void Enemy::HandleMovement(float dt) {
