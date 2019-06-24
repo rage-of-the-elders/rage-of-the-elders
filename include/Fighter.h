@@ -10,6 +10,7 @@
 #define FIGHTER_HP 100
 #define FIGHTER_SPEED 20
 #define ATTACK_Y_RANGE 30
+#define SHOOT_COOLDOWN 0.5
 
 
 class Fighter : public Component {
@@ -28,6 +29,7 @@ protected:
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
   Timer ultimateDuration;
+  Timer shootCooldown;
 
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);
@@ -62,6 +64,7 @@ public:
   Rect GetColliderBox();
   int GetDamage();
   bool TargetIsInYRange(Rect targetBox);
+  void Shoot();
 };
 
 #endif

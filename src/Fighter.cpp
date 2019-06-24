@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Collision.h"
 #include "Veteran.h"
+#include "Bullet.h"
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated) : Component(associated) {
@@ -19,6 +20,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->damage[BASIC_ATTACK_ONE] = 10;
   this->comboCount = 0;
   this->points = 0;
+  this->shootCooldown = Timer();
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -83,6 +85,7 @@ void Fighter::Update(float dt) {
     this->currentState = storedState;
   }
 
+  this->shootCooldown.Update(dt);
   UpdateStateMachine(dt);
 }
 
@@ -191,6 +194,11 @@ void Fighter::NotifyCollision(GameObject &other) {
         }
       }
     }
+  }
+  else if(other.Has("Bullet")) {
+    Bullet *bullet = (Bullet *) other.GetComponent("Bullet");
+    this->ApplyDamage(bullet->GetDamage());
+    this->storedState = HURTING;
   }
 }
 
@@ -307,6 +315,8 @@ void Fighter::HandleUltimateMidle(float dt) {
     this->ActivateSprite(ULTIMATE_MIDLE);
     this->sound[ULTIMATE_BEGIN]->Play(1);
   }
+
+  this->Shoot();
   this->ultimateDuration.Update(dt);
   // if(this->sprite[ULTIMATE_MIDLE]->IsFinished()) {
   //   this->currentState = ULTIMATE_FINAL;
@@ -363,4 +373,23 @@ Rect Fighter::GetColliderBox() {
               fighterColliderBox->GetY(),
               fighterColliderBox->GetWidth(),
               fighterColliderBox->GetHeigth());
+}
+
+void Fighter::Shoot() {
+  if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
+    float bulletSpeed = 400;
+    float damage = 10;
+    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
+    int frameCount = 9;
+    float frameTime = 0.09;
+
+    GameObject *bullet = new GameObject();
+    Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + 130), (this->associated.box.GetCenter().y - 60));
+    bullet->box.SetCenterPos(gunShootPosition);
+    bullet->AddComponent(new Bullet(*bullet, 0, bulletSpeed, damage,
+                                    maxDistance, "img/veteran/shoot.png",
+                                    frameCount, frameTime, true));
+    Game::GetInstance().GetCurrentState().AddObject(bullet);
+    this->shootCooldown.Restart();
+  }
 }

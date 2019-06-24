@@ -7,7 +7,7 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.AddComponent(new Collider(associated));
   this->associated.angleDeg = angle;
-  this->speed = Vec2::GetSpeed(angle) * speed;
+  this->speed = Vec2::GetSpeed(0) * speed;
   this->damage = damage;
   this->distanceLeft = maxDistance;
   this->targetsPlayer = targetsPlayer;
@@ -36,11 +36,11 @@ int Bullet::GetDamage() {
 
 void Bullet::NotifyCollision(GameObject &other) {
   if (this->targetsPlayer) {
-    if (other.GetComponent("PenguinBody") != nullptr || other.GetComponent("PenguinCannon") != nullptr) {
+    if (other.GetComponent("Enemy") != nullptr) {
       this->associated.RequestDelete();
     }
   } else {
-    if (other.GetComponent("Alien") != nullptr || other.GetComponent("Minion") != nullptr) {
+    if (other.GetComponent("Enemy") != nullptr) {
       this->associated.RequestDelete();
     }
   }
