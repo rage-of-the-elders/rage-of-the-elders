@@ -12,7 +12,7 @@ Enemy::Enemy(GameObject &associated) : Fighter(associated) {
 Enemy::~Enemy() {}
 void Enemy::Start() {}
 
-bool Enemy::TargetIsInRange() { // FIXME: Check collider, not target's box
+bool Enemy::TargetIsInRange() {
   float enemyAttackX = this->GetColliderBox().GetCenter().x;
   float enemyAttackY = (this->GetColliderBox().y + this->GetColliderBox().h);
   float enemyAttackWidth = this->GetColliderBox().w;
@@ -21,42 +21,41 @@ bool Enemy::TargetIsInRange() { // FIXME: Check collider, not target's box
   float targetDistanceX = abs(target.GetCenter().x - enemyAttackX);
   float targetDistanceY = abs((target.y + target.h) - enemyAttackY);
 
-  // std::cout << "enemyAttackX: " << enemyAttackX << std::endl;
-  // std::cout << "enemyAttackWidth: " << enemyAttackWidth << std::endl;
-  // std::cout << "enemyXRange: " << enemyXRange << std::endl;
-  // std::cout << "targetDistanceX: " << targetDistanceX << std::endl;
-  // std::cout << "targetDistanceY: " << targetDistanceY << std::endl;
-  // std::cout << "targetX: " << target.x << std::endl;
-
   return((enemyXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
 void Enemy::ManageInput(float) {
-  this->target = Veteran::player->GetColliderBox(); // TODO: Check if player is alive
 
-  if(this->IsDead()){
-    this->currentState = DYING;
+  if(Veteran::player != nullptr) {
+    this->target = Veteran::player->GetColliderBox(); // TODO: Check if player is alive
+    
+    if(this->IsDead()){
+      this->currentState = DYING;
+    }
+    else if (TargetIsInRange()) {
+      this->currentState = BASIC_ATTACK_ONE;
+    }
+    // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
+    //   if(this->sprite[MOVING]->IsFinished())
+    // }
+    else {
+      this->currentState = MOVING;
+    }
+
+    if (this->currentState != DYING) {
+      if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
+        this->orientation = LEFT;
+      else
+        this->orientation = RIGHT;
+
+      if (this->orientation == LEFT)
+        this->associated.flip = SDL_FLIP_HORIZONTAL;
+      else
+        this->associated.flip = SDL_FLIP_NONE;
+    }
   }
-  else if (TargetIsInRange()) {
-    this->currentState = BASIC_ATTACK_ONE;
-  }
-  // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
-  //   if(this->sprite[MOVING]->IsFinished())
-  // }
   else {
-    this->currentState = MOVING;
-  }
-
-  if (this->currentState != DYING) {
-    if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
-      this->orientation = LEFT;
-    else
-      this->orientation = RIGHT;
-
-    if (this->orientation == LEFT)
-      this->associated.flip = SDL_FLIP_HORIZONTAL;
-    else
-      this->associated.flip = SDL_FLIP_NONE;
+    this->currentState = IDLE;
   }
 }
 
