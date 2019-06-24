@@ -64,7 +64,7 @@ public:
   Rect GetColliderBox();
   int GetDamage();
   bool TargetIsInYRange(Rect targetBox);
-  void Shoot();
+  void Shoot(std::string file, int frameCount);
 };
 
 #endif
