@@ -35,7 +35,6 @@ void Enemy::ManageInput(float dt) {
       this->currentState = DYING;
     }
     else if(this->attackCooldown.Get() < ATTACK_COOLDOWN && not this->IsAttacking()) {
-      std::cout << currentState << std::endl;
       if(sprite[currentState]->IsFinished())
         this->currentState = IDLE;
     }
