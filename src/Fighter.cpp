@@ -173,23 +173,33 @@ void Fighter::NotifyCollision(GameObject &other) {
   else if(other.Has("Fighter") && this->IsOpponent(other)) {
     if(not this->IsHurting()) {
       Fighter *opponent = (Fighter *)other.GetComponent("Fighter");
-      if(opponent->IsAttacking() && not this->IsDead()) {
-        if(this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
-          this->storedState = HURTING;
-          this->ApplyDamage(opponent->GetDamage());
-          if(other.Has("Veteran")) {
-            opponent->comboCount ++;
-            opponent->points++;
-            if(opponent->comboCount > 3) {
-              opponent->points += (opponent->comboCount * 0.2);
+      if(this->TargetIsInYRange(opponent->GetColliderBox())) {
+        if(opponent->IsAttacking() && not this->IsDead()) {
+          if(this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
+            this->storedState = HURTING;
+            this->ApplyDamage(opponent->GetDamage());
+            if(other.Has("Veteran")) {
+              opponent->comboCount ++;
+              opponent->points++;
+              if(opponent->comboCount > 3) {
+                opponent->points += (opponent->comboCount * 0.2);
+              }
             }
+            else if(other.Has("Enemy"))
+              opponent->comboCount = 0;
           }
-          else if(other.Has("Enemy"))
-            opponent->comboCount = 0;
         }
       }
     }
   }
+}
+
+bool Fighter::TargetIsInYRange(Rect targetBox) {
+  float fighterAttackY = (this->GetColliderBox().y + this->GetColliderBox().h);
+
+  float targetDistanceY = abs((targetBox.y + targetBox.h) - fighterAttackY);
+
+  return((ATTACK_Y_RANGE > targetDistanceY));
 }
 
 void Fighter::ActivateSprite(FighterState state) {
@@ -343,6 +353,7 @@ void Fighter::HandleDying(float) {
   }
   if(this->sprite[DYING]->IsFinished()){
     this->associated.RequestDelete();
+    Veteran::player = nullptr;
   }
 }
 

@@ -9,6 +9,8 @@
 
 #define FIGHTER_HP 100
 #define FIGHTER_SPEED 20
+#define ATTACK_Y_RANGE 30
+
 
 class Fighter : public Component {
 protected:
@@ -58,6 +60,7 @@ public:
   bool CanAttack(enum Orientation orientation, Rect targetRect);
   Rect GetColliderBox();
   int GetDamage();
+  bool TargetIsInYRange(Rect targetBox);
 };
 
 #endif
