@@ -17,6 +17,8 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->storedState = INVALID;
   this->ultimateDuration = Timer();
   this->damage[BASIC_ATTACK_ONE] = 10;
+  this->comboCount = 0;
+  this->points = 0;
 
   this->sprite = std::vector<Sprite*>(LAST);
   this->sound = std::vector<Sound*>(LAST);
@@ -175,6 +177,15 @@ void Fighter::NotifyCollision(GameObject &other) {
         if(this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
           this->storedState = HURTING;
           this->ApplyDamage(opponent->GetDamage());
+          if(other.Has("Veteran")) {
+            opponent->comboCount ++;
+            opponent->points++;
+            if(opponent->comboCount > 3) {
+              opponent->points += (opponent->comboCount * 0.2);
+            }
+          }
+          else if(other.Has("Enemy"))
+            opponent->comboCount = 0;
         }
       }
     }
