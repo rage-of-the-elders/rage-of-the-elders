@@ -46,7 +46,9 @@ public:
   void Update(float dt);
   void CollisionCheck();
   void LoadBackground();
-  void LockCamera(int playerPosition, int gatePosition);
+  void LockCamera(int gatePosition);
+  void SpawnEnemies(int gatePosition);
+  void Spawn(int xPosition, int yPosition, int type, int invertSide = 0);
 };
 
 #endif

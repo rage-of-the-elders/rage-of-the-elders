@@ -61,10 +61,10 @@ void StageState::LoadPlayers() {
 }
 
 void StageState::LoadEnemies() {
-  GameObject *nurseGO = new GameObject();
-  nurseGO->AddComponent(new Nurse(*nurseGO));
-  nurseGO->box.SetCenterPos(900, 450);
-  this->AddObject(nurseGO);
+  // GameObject *nurseGO = new GameObject();
+  // nurseGO->AddComponent(new Nurse(*nurseGO));
+  // nurseGO->box.SetCenterPos(900, 450);
+  // this->AddObject(nurseGO);
 }
 
 void StageState::BuildBarriers() {
@@ -120,25 +120,64 @@ void StageState::HandleHorde() {
 
   if(this->gateMap->GetCurrentGate() > 0) {
     // TODO: Change "Veteran" class to "Player"
-    this->LockCamera(
-      Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2),
-      this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate())
-    );
+    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
+    int playerPosition = Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
+
+    if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
+      this->LockCamera(gatePosition);
+      this->SpawnEnemies(gatePosition);
+    }
   }
 }
 
-void StageState::LockCamera(int playerPosition, int gatePosition) {
-  if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
+void StageState::LockCamera(int gatePosition) {
     Camera::initiaCameraLimit = gatePosition;
     Camera::finalCameraLimit = gatePosition + Game::screenWidth;
     this->gateMap->NextGate();
-  }
 }
 
 void StageState::UnlockCamera() {
   Camera::initiaCameraLimit = 0;
   Camera::finalCameraLimit = this->stageLimit;
 }
+
+void StageState::SpawnEnemies(int gatePosition) {
+  Spawn(gatePosition, 450, 1);
+  Spawn(gatePosition, 450, 1, 1);
+}
+
+/*
+  The enemies come from the left side of the screen by default. If you want it
+  to come from the other side, set the "invertSide" attribute to a non-zero value
+*/
+void StageState::Spawn(int xPosition, int yPosition, int type, int invertSide) {
+  GameObject *enemyGO = new GameObject();
+
+  // Turn into a Enum
+  switch (type) {
+    case 1:
+      enemyGO->AddComponent(new Nurse(*enemyGO));
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    default:
+      printf("WARNING: No enemy type given!\n");
+      delete enemyGO;
+      return;
+  }
+
+  Vec2 enemySize = enemyGO->box.GetSize();
+  if(invertSide)
+    enemyGO->box.SetPos(xPosition + Game::screenWidth, yPosition);
+  else
+    enemyGO->box.SetPos(xPosition - enemySize.x, yPosition);
+
+  this->AddObject(enemyGO);
+}
+
+
 
 void StageState::Render() {
 	this->bg->Render();
