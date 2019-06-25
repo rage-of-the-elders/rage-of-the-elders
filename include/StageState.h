@@ -31,11 +31,14 @@ public:
   void Pause();
   void Resume();
   void LoadAssets();
+  void LoadPlayers();
+  void LoadEnemies();
   void CheckGameEnd();
   void BuildBarriers();
   void DeletionCheck();
   void Update(float dt);
   void CollisionCheck();
+  void LoadBackground();
 };
 
 #endif

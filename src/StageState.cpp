@@ -26,35 +26,44 @@ StageState::~StageState() {
 }
 
 void StageState::LoadAssets() {
-	this->bg = new GameObject();
+  this->LoadBackground();
+  this->LoadPlayers();
+  this->LoadEnemies();
+	this->BuildBarriers();
+	this->music.Play();
+}
+
+void StageState::LoadBackground() {
+  this->bg = new GameObject();
 	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
 	this->bg->box = Rect();
 
 	GameObject *tileMapGO = new GameObject();
 	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
 	this->tileMap = new TileMap(*tileMapGO, "map/stage1v2.txt", tileSet);
-  this->stageLimit = tileMap->MapEnd();
 	tileMapGO->AddComponent(tileMap);
 	tileMapGO->box = Rect();
 
-	bg->AddComponent(new CameraFollower(*bg));
+  bg->AddComponent(new CameraFollower(*bg));
 
-	GameObject *veteranGO = new GameObject();
-	veteranGO->box.SetCenterPos(600, 300);
-	veteranGO->AddComponent(new Veteran(*veteranGO));
-	this->AddObject(veteranGO);
-
-	GameObject *nurseGO = new GameObject();
-	nurseGO->AddComponent(new Nurse(*nurseGO));
-	nurseGO->box.SetCenterPos(900, 450);
-	this->AddObject(nurseGO);
-
-	this->BuildBarriers();
-
+  this->stageLimit = tileMap->MapEnd();
   Camera::finalCameraLimit = this->stageLimit;
-	Camera::Follow(veteranGO);
+}
 
-	this->music.Play();
+void StageState::LoadPlayers() {
+  GameObject *veteranGO = new GameObject();
+  veteranGO->box.SetCenterPos(600, 300);
+  veteranGO->AddComponent(new Veteran(*veteranGO));
+  this->AddObject(veteranGO);
+
+	Camera::Follow(veteranGO);
+}
+
+void StageState::LoadEnemies() {
+  GameObject *nurseGO = new GameObject();
+  nurseGO->AddComponent(new Nurse(*nurseGO));
+  nurseGO->box.SetCenterPos(900, 450);
+  this->AddObject(nurseGO);
 }
 
 void StageState::BuildBarriers() {
