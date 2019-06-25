@@ -10,6 +10,7 @@
 #include "GameData.h"
 #include "Collider.h"
 #include "Collision.h"
+#include "MathHelper.h"
 #include "TitleState.h"
 #include "StageState.h"
 #include "InputManager.h"
@@ -61,10 +62,7 @@ void StageState::LoadPlayers() {
 }
 
 void StageState::LoadEnemies() {
-  // GameObject *nurseGO = new GameObject();
-  // nurseGO->AddComponent(new Nurse(*nurseGO));
-  // nurseGO->box.SetCenterPos(900, 450);
-  // this->AddObject(nurseGO);
+  this->Spawn(900, 1, 0);
 }
 
 void StageState::BuildBarriers() {
@@ -90,7 +88,7 @@ void StageState::BuildBarriers() {
 }
 
 void StageState::LoadGates() {
-  this->gateMap = new GateMap("map/gatesStage1.txt");
+  this->gateMap = new GateMap("map/hordesStage1.txt");
 }
 
 void StageState::Update(float dt) {
@@ -141,16 +139,14 @@ void StageState::UnlockCamera() {
   Camera::finalCameraLimit = this->stageLimit;
 }
 
-void StageState::SpawnEnemies(int gatePosition) {
-  Spawn(gatePosition, 450, 1);
-  Spawn(gatePosition, 450, 1, 1);
-}
-
 /*
-  The enemies come from the left side of the screen by default. If you want it
-  to come from the other side, set the "invertSide" attribute to a non-zero value
+  If you want the enemy to come from the left side of the screen, set the value
+  of "invertSide" as zero. Otherwise, set the attribute to a non-zero value.
+
+  yLimit defines the limit where a enemy can be rendered. Default is 500px
+  (Usualy, this is near the base of the wall)
 */
-void StageState::Spawn(int xPosition, int yPosition, int type, int invertSide) {
+void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
   GameObject *enemyGO = new GameObject();
 
   switch (type) {
@@ -169,15 +165,26 @@ void StageState::Spawn(int xPosition, int yPosition, int type, int invertSide) {
 
   Vec2 enemySize = enemyGO->box.GetSize();
 
+  int yPosition = CalculateEnemyY(enemySize, yLimit);
+
   if(invertSide)
-    enemyGO->box.SetPos(xPosition + Game::screenWidth, yPosition);
+    enemyGO->box.SetPos(gate + Game::screenWidth, std::min(yPosition, Game::screenHeight));
   else
-    enemyGO->box.SetPos(xPosition - enemySize.x, yPosition);
+    enemyGO->box.SetPos(gate - enemySize.x, std::min(yPosition, Game::screenHeight));
 
   this->AddObject(enemyGO);
 }
 
+void StageState::SpawnEnemies(int gatePosition) {
+  Spawn(gatePosition, 1, 0);
+  Spawn(gatePosition, 1, 1);
+}
 
+int StageState::CalculateEnemyY(Vec2 enemySize, int yLimit) {
+  return ((Game::screenHeight - yLimit) * Math::GetRand(0, 1))
+          - enemySize.y
+          + yLimit;
+}
 
 void StageState::Render() {
 	this->bg->Render();

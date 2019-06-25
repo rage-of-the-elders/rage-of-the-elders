@@ -30,9 +30,11 @@ public:
   bool PlayerWon();
   bool PlayerLose();
 
-  void Render();
+  int CalculateEnemyY(Vec2 enemySize, int yLimit);
+
   void Start();
   void Pause();
+  void Render();
   void Resume();
   void LoadGates();
   void LoadAssets();
@@ -48,7 +50,16 @@ public:
   void LoadBackground();
   void LockCamera(int gatePosition);
   void SpawnEnemies(int gatePosition);
-  void Spawn(int xPosition, int yPosition, int type, int invertSide = 0);
+
+  /*
+    If you want the enemy to come from the left side of the screen, set the value
+    of "invertSide" as zero. Otherwise, set the attribute to a non-zero value.
+
+    yLimit defines the limit where a enemy can be rendered. Default is 500px
+    (Usualy, this is near the base of the wall)
+  */
+
+  void Spawn(int xPosition, int type, int invertSide, int yLimit = 500);
 };
 
 #endif
