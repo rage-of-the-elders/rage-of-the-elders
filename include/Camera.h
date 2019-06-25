@@ -24,7 +24,7 @@ private:
   static void AdjustFocus(int screenWidth);
 
 public:
-  static Vec2 pos;
+  static Vec2 position;
   static Vec2 speed;
 
   static void Follow(GameObject *newFocus);

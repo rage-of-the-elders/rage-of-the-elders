@@ -3,7 +3,7 @@
 #include "Game.h"
 
 GameObject *Camera::focus = nullptr;
-Vec2 Camera::pos = Vec2();
+Vec2 Camera::position = Vec2();
 Vec2 Camera::speed = Vec2(100, 100);
 bool Camera::isBlack = false;
 bool Camera::isFlickering = false;
@@ -29,12 +29,10 @@ void Camera::Update(float dt) {
     Camera::AdjustFocus(screenWidth);
   } else {
 		if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY)) {
-			pos.x -= speed.x*dt;
+			position.x -= speed.x*dt;
     }
 		if(InputManager::GetInstance().IsKeyDown(RIGHT_ARROW_KEY))
-			pos.x += speed.x*dt;
-
-    // FIXME
+			position.x += speed.x*dt;
   }
 
   if (pos.x <= 0)
@@ -46,7 +44,7 @@ void Camera::Update(float dt) {
 }
 
 void Camera::AdjustFocus(int screenWidth) {
-  pos.x = focus->box.GetCenter().x - (screenWidth / 2);
+  position.x = focus->box.GetCenter().x - (screenWidth / 2);
 }
 
 GameObject *Camera::GetFocus() {

@@ -33,26 +33,26 @@ void Fighter::Update(float) {}
 
 void Fighter::Render() {
   #ifdef DEBUG
-  
+
   Vec2 center(this->associated.box.GetCenter());
   SDL_Point points[5];
 
-  Vec2 point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  Vec2 point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::position;
   points[0] = {(int)point.x, (int)point.y};
   points[4] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y) - center).Rotate(associated.angleDeg) + center - Camera::position;
   points[1] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->associated.box.GetFoot().x + this->associated.box.GetFoot().w, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::position;
   points[2] = {(int)point.x, (int)point.y};
 
-  point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::pos;
+  point = (Vec2(this->associated.box.GetFoot().x, this->associated.box.GetFoot().y + this->associated.box.GetFoot().h) - center).Rotate(associated.angleDeg) + center - Camera::position;
   points[3] = {(int)point.x, (int)point.y};
 
   SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
-  
+
   #endif
 }
 
@@ -67,12 +67,12 @@ void Fighter::NotifyCollision(GameObject &other) {
     Rect fighterFoot = this->associated.box.GetFoot();
 
     if(Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
-      
+
       float collisionX = std::min( abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
       float collisionY = std::min( abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
 
       if( collisionX > collisionY) {
-        
+
         float objY;
 
         float distanceToBottom = fighterFoot.y - (other.box.y + other.box.h);

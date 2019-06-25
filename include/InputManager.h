@@ -49,7 +49,7 @@ public:
   bool IsMouseDown(int button);
   int GetMouseX();
   int GetMouseY();
-  Vec2 GetMousePos();
+  Vec2 GetMousePosition();
   bool QuitRequested();
 };
 

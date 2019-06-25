@@ -70,7 +70,7 @@ int TileMap::GetTileEnd(int index) {
 
 void TileMap::Render() {
   for (int layer = 0; layer < this->mapDepth; layer++)
-    RenderLayer(layer, Camera::pos.x *(1+layer*1), Camera::pos.y *(1+layer*1));
+    RenderLayer(layer, Camera::position.x *(1+layer*1), Camera::position.y *(1+layer*1));
 }
 
 int TileMap::GetMapWidth() {
