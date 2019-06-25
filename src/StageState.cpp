@@ -27,6 +27,7 @@ StageState::~StageState() {
 
 void StageState::LoadAssets() {
   this->LoadBackground();
+  this->LoadGates();
   this->LoadPlayers();
   this->LoadEnemies();
 	this->BuildBarriers();
@@ -40,7 +41,7 @@ void StageState::LoadBackground() {
 
 	GameObject *tileMapGO = new GameObject();
 	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
-	this->tileMap = new TileMap(*tileMapGO, "map/stage1v2.txt", tileSet);
+	this->tileMap = new TileMap(*tileMapGO, "map/tilesStage1.txt", tileSet);
 	tileMapGO->AddComponent(tileMap);
 	tileMapGO->box = Rect();
 
@@ -88,6 +89,10 @@ void StageState::BuildBarriers() {
   this->AddObject(finalWall);
 }
 
+void StageState::LoadGates() {
+  this->gateMap = new GateMap("map/gatesStage1.txt");
+}
+
 void StageState::Update(float dt) {
 	this->quitRequested = InputManager::GetInstance().QuitRequested();
 
@@ -96,8 +101,13 @@ void StageState::Update(float dt) {
 		Game::GetInstance().Push(new TitleState());
 	}
 
+  if (InputManager::GetInstance().KeyPress(P_KEY)) {
+    Camera::initiaCameraLimit = 0;
+    Camera::finalCameraLimit = this->stageLimit;
+  }
+
   // Camera locking example
-  this->LockCamera(14);
+  this->LockCamera();
 
 	Camera::Update(dt);
 	this->bg->Update(dt);
@@ -109,22 +119,28 @@ void StageState::Update(float dt) {
 	this->CheckGameEnd();
 }
 
-void StageState::LockCamera(int tile) {
-  // TODO: Remove code duplication
-  int screenWidth, screenHeight;
-  SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
+void StageState::LockCamera() {
+  if(this->gateMap->GetCurrentGate() > 0) {
+    // TODO: Remove code duplication
+    int screenWidth, screenHeight;
+    SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
 
-  // TODO: Change "Veteran" class to "Player"
-  int playerPosition = Veteran::player->GetBox().GetCenter().x - (screenWidth / 2);
-  int tilePosition = this->tileMap->GetTileEnd(tile);
+    // TODO: Change "Veteran" class to "Player"
+    int playerPosition = Veteran::player->GetBox().GetCenter().x - (screenWidth / 2);
 
-  if(playerPosition >= tilePosition && playerPosition <= (tilePosition + screenWidth)) {
-    Camera::initiaCameraLimit = tilePosition;
-    Camera::finalCameraLimit = tilePosition + 1280;
-  } else {
-    Camera::initiaCameraLimit = 0;
-    Camera::finalCameraLimit = stageLimit;
+    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
+
+    if(playerPosition >= gatePosition && playerPosition <= (gatePosition + screenWidth)) {
+      Camera::initiaCameraLimit = gatePosition;
+      Camera::finalCameraLimit = gatePosition + 1280;
+      this->gateMap->NextGate();
+    }
   }
+}
+
+void StageState::UnlockCamera() {
+  Camera::initiaCameraLimit = 0;
+  Camera::finalCameraLimit = this->stageLimit;
 }
 
 void StageState::Render() {

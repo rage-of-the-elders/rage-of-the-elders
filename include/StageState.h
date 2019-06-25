@@ -8,6 +8,7 @@
 #include "Music.h"
 #include "TileSet.h"
 #include "TileMap.h"
+#include "GateMap.h"
 
 #include <vector>
 #include <memory>
@@ -18,28 +19,33 @@ private:
   GameObject *bg;
   TileSet *tileSet;
   TileMap *tileMap;
+  GateMap *gateMap;
 
   int stageLimit;
 
 public:
   StageState();
   ~StageState();
+
   bool PlayerWon();
   bool PlayerLose();
+
   void Render();
   void Start();
   void Pause();
   void Resume();
+  void LoadGates();
+  void LockCamera();
   void LoadAssets();
   void LoadPlayers();
   void LoadEnemies();
+  void UnlockCamera();
   void CheckGameEnd();
   void BuildBarriers();
   void DeletionCheck();
   void Update(float dt);
   void CollisionCheck();
   void LoadBackground();
-  void LockCamera(int tile);
 };
 
 #endif
