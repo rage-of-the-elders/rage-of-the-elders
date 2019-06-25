@@ -20,6 +20,9 @@ private:
   void CalculateDeltaTime();
 
 public:
+  static int screenWidth;
+  static int screenHeight;
+
   Game(std::string title, int width, int height);
   ~Game();
   SDL_Renderer* GetRenderer();

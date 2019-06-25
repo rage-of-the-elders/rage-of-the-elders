@@ -21,8 +21,8 @@ private:
 
   static void AddBlack();
   static void HandleFlicker(float dt);
-  static void AdjustFocus(int screenWidth);
-  static void DefineLimits(int screenWidth);
+  static void AdjustFocus();
+  static void DefineLimits();
 
 public:
   static Vec2 speed;

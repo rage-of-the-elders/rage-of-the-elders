@@ -1,19 +1,19 @@
-#include "StageState.h"
 #include "Vec2.h"
+#include "Game.h"
+#include "Nurse.h"
+#include "Camera.h"
+#include "Barrier.h"
+#include "Veteran.h"
 #include "TileMap.h"
 #include "TileSet.h"
-#include "InputManager.h"
-#include "Camera.h"
-#include "CameraFollower.h"
-#include "Collision.h"
-#include "Collider.h"
-#include "Game.h"
-#include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
-#include "Veteran.h"
-#include "Nurse.h"
-#include "Barrier.h"
+#include "Collider.h"
+#include "Collision.h"
+#include "TitleState.h"
+#include "StageState.h"
+#include "InputManager.h"
+#include "CameraFollower.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
@@ -101,13 +101,7 @@ void StageState::Update(float dt) {
 		Game::GetInstance().Push(new TitleState());
 	}
 
-  if (InputManager::GetInstance().KeyPress(P_KEY)) {
-    Camera::initiaCameraLimit = 0;
-    Camera::finalCameraLimit = this->stageLimit;
-  }
-
-  // Camera locking example
-  this->LockCamera();
+  this->HandleHorde();
 
 	Camera::Update(dt);
 	this->bg->Update(dt);
@@ -119,22 +113,25 @@ void StageState::Update(float dt) {
 	this->CheckGameEnd();
 }
 
-void StageState::LockCamera() {
+void StageState::HandleHorde() {
+  if (InputManager::GetInstance().KeyPress(P_KEY)) {
+    this->UnlockCamera();
+  }
+
   if(this->gateMap->GetCurrentGate() > 0) {
-    // TODO: Remove code duplication
-    int screenWidth, screenHeight;
-    SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
-
     // TODO: Change "Veteran" class to "Player"
-    int playerPosition = Veteran::player->GetBox().GetCenter().x - (screenWidth / 2);
+    this->LockCamera(
+      Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2),
+      this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate())
+    );
+  }
+}
 
-    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
-
-    if(playerPosition >= gatePosition && playerPosition <= (gatePosition + screenWidth)) {
-      Camera::initiaCameraLimit = gatePosition;
-      Camera::finalCameraLimit = gatePosition + 1280;
-      this->gateMap->NextGate();
-    }
+void StageState::LockCamera(int playerPosition, int gatePosition) {
+  if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
+    Camera::initiaCameraLimit = gatePosition;
+    Camera::finalCameraLimit = gatePosition + Game::screenWidth;
+    this->gateMap->NextGate();
   }
 }
 

@@ -35,10 +35,10 @@ public:
   void Pause();
   void Resume();
   void LoadGates();
-  void LockCamera();
   void LoadAssets();
   void LoadPlayers();
   void LoadEnemies();
+  void HandleHorde();
   void UnlockCamera();
   void CheckGameEnd();
   void BuildBarriers();
@@ -46,6 +46,7 @@ public:
   void Update(float dt);
   void CollisionCheck();
   void LoadBackground();
+  void LockCamera(int playerPosition, int gatePosition);
 };
 
 #endif

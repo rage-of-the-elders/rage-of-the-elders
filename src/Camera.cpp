@@ -33,11 +33,8 @@ void Camera::Unfollow() {
 }
 
 void Camera::Update(float dt) {
-  int screenWidth, screenHeight;
-  SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
-
   if (focus != nullptr) {
-    Camera::AdjustFocus(screenWidth);
+    Camera::AdjustFocus();
   } else {
 		if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY))
 			position.x -= speed.x*dt;
@@ -45,21 +42,21 @@ void Camera::Update(float dt) {
 			position.x += speed.x*dt;
   }
 
-  Camera::DefineLimits(screenWidth);
+  Camera::DefineLimits();
   Camera::HandleFlicker(dt);
 }
 
-void Camera::DefineLimits(int screenWidth) {
+void Camera::DefineLimits() {
   if(position.x <= Camera::initiaCameraLimit)
     position.x = Camera::initiaCameraLimit;
-  if(Camera::finalCameraLimit <= screenWidth)
-    Camera::finalCameraLimit = screenWidth;
-  if (position.x >= Camera::finalCameraLimit - screenWidth)
-    position.x = Camera::finalCameraLimit - screenWidth;
+  if(Camera::finalCameraLimit <= Game::screenWidth)
+    Camera::finalCameraLimit = Game::screenWidth;
+  if (position.x >= Camera::finalCameraLimit - Game::screenWidth)
+    position.x = Camera::finalCameraLimit - Game::screenWidth;
 }
 
-void Camera::AdjustFocus(int screenWidth) {
-  position.x = focus->box.GetCenter().x - (screenWidth / 2);
+void Camera::AdjustFocus() {
+  position.x = focus->box.GetCenter().x - (Game::screenWidth / 2);
 }
 
 GameObject *Camera::GetFocus() {
