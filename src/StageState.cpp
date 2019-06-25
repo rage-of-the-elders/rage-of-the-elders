@@ -96,6 +96,9 @@ void StageState::Update(float dt) {
 		Game::GetInstance().Push(new TitleState());
 	}
 
+  // Camera locking example
+  this->LockCamera(14);
+
 	Camera::Update(dt);
 	this->bg->Update(dt);
 	this->tileMap->Update(dt);
@@ -104,6 +107,24 @@ void StageState::Update(float dt) {
 	this->CollisionCheck();
 	this->DeletionCheck();
 	this->CheckGameEnd();
+}
+
+void StageState::LockCamera(int tile) {
+  // TODO: Remove code duplication
+  int screenWidth, screenHeight;
+  SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
+
+  // TODO: Change "Veteran" class to "Player"
+  int playerPosition = Veteran::player->GetBox().GetCenter().x - (screenWidth / 2);
+  int tilePosition = this->tileMap->GetTileEnd(tile);
+
+  if(playerPosition >= tilePosition && playerPosition <= (tilePosition + screenWidth)) {
+    Camera::initiaCameraLimit = tilePosition;
+    Camera::finalCameraLimit = tilePosition + 1280;
+  } else {
+    Camera::initiaCameraLimit = 0;
+    Camera::finalCameraLimit = stageLimit;
+  }
 }
 
 void StageState::Render() {

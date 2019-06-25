@@ -39,6 +39,7 @@ public:
   void Update(float dt);
   void CollisionCheck();
   void LoadBackground();
+  void LockCamera(int tile);
 };
 
 #endif
