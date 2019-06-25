@@ -5,6 +5,8 @@
 GameObject *Camera::focus = nullptr;
 Vec2 Camera::position = Vec2();
 Vec2 Camera::speed = Vec2(100, 100);
+int Camera::initiaCameraLimit = 0;
+int Camera::finalCameraLimit = 0;
 bool Camera::isBlack = false;
 bool Camera::isFlickering = false;
 float Camera::flickerDuration = 0;
@@ -36,16 +38,16 @@ void Camera::Update(float dt) {
 			position.x += speed.x*dt;
   }
 
-
-  // FIXME
-  Camera::DefineLimits(0, 12120, screenWidth);
+  Camera::DefineLimits(screenWidth, Camera::initiaCameraLimit, Camera::finalCameraLimit);
   Camera::HandleFlicker(dt);
 }
 
 
-void Camera::DefineLimits(int initiaLimit, int finalLimit, int screenWidth) {
-  if (position.x <= initiaLimit)
+void Camera::DefineLimits(int screenWidth, int initiaLimit, int finalLimit) {
+  if(position.x <= initiaLimit)
     position.x = initiaLimit;
+  if(finalLimit <= screenWidth)
+    finalLimit = screenWidth;
   if (position.x >= finalLimit - screenWidth)
     position.x = finalLimit - screenWidth;
 }

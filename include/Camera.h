@@ -22,11 +22,14 @@ private:
   static void AddBlack();
   static void HandleFlicker(float dt);
   static void AdjustFocus(int screenWidth);
-  static void DefineLimits(int initiaLimit, int finalLimit, int screenWidth);
+  static void DefineLimits(int screenWidth, int initiaLimit, int finalLimit = 0);
 
 public:
-  static Vec2 position;
   static Vec2 speed;
+  static Vec2 position;
+  static int finalCameraLimit;
+  static int initiaCameraLimit;
+
 
   static void Follow(GameObject *newFocus);
   static void Unfollow();
