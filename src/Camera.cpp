@@ -2,18 +2,26 @@
 #include "Camera.h"
 #include "InputManager.h"
 
-GameObject *Camera::focus = nullptr;
-Vec2 Camera::position = Vec2();
-Vec2 Camera::speed = Vec2(100, 100);
-int Camera::initiaCameraLimit = 0;
+// Static fields
 int Camera::finalCameraLimit = 0;
+int Camera::initiaCameraLimit = 0;
+
 bool Camera::isBlack = false;
 bool Camera::isFlickering = false;
+
 float Camera::flickerDuration = 0;
 float Camera::flickerFrequency = 0;
+
+Vec2 Camera::position = Vec2();
+Vec2 Camera::speed = Vec2(100, 100);
+
+GameObject *Camera::focus = nullptr;
+
 Timer Camera::flickerTimer = Timer();
 Timer Camera::flickerFrequencyTimer = Timer();
+
 Sprite *Camera::black = nullptr;
+
 CameraFollower *Camera::blackFollower = nullptr;
 
 void Camera::Follow(GameObject *newFocus) {
@@ -31,25 +39,23 @@ void Camera::Update(float dt) {
   if (focus != nullptr) {
     Camera::AdjustFocus(screenWidth);
   } else {
-		if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY)) {
+		if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY))
 			position.x -= speed.x*dt;
-    }
 		if(InputManager::GetInstance().IsKeyDown(RIGHT_ARROW_KEY))
 			position.x += speed.x*dt;
   }
 
-  Camera::DefineLimits(screenWidth, Camera::initiaCameraLimit, Camera::finalCameraLimit);
+  Camera::DefineLimits(screenWidth);
   Camera::HandleFlicker(dt);
 }
 
-
-void Camera::DefineLimits(int screenWidth, int initiaLimit, int finalLimit) {
-  if(position.x <= initiaLimit)
-    position.x = initiaLimit;
-  if(finalLimit <= screenWidth)
-    finalLimit = screenWidth;
-  if (position.x >= finalLimit - screenWidth)
-    position.x = finalLimit - screenWidth;
+void Camera::DefineLimits(int screenWidth) {
+  if(position.x <= Camera::initiaCameraLimit)
+    position.x = Camera::initiaCameraLimit;
+  if(Camera::finalCameraLimit <= screenWidth)
+    Camera::finalCameraLimit = screenWidth;
+  if (position.x >= Camera::finalCameraLimit - screenWidth)
+    position.x = Camera::finalCameraLimit - screenWidth;
 }
 
 void Camera::AdjustFocus(int screenWidth) {

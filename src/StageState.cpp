@@ -15,8 +15,6 @@
 #include "Nurse.h"
 #include "Barrier.h"
 
-// int StageState::stageLimit = 0;
-
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
   this->started = false;
@@ -51,30 +49,34 @@ void StageState::LoadAssets() {
 	nurseGO->box.SetCenterPos(900, 450);
 	this->AddObject(nurseGO);
 
-	// FIXME
-	GameObject *hallWall = new GameObject();
-	hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
-	this->AddObject(hallWall);
+	this->BuildBarriers();
+
+  Camera::finalCameraLimit = this->stageLimit;
+	Camera::Follow(veteranGO);
+
+	this->music.Play();
+}
+
+void StageState::BuildBarriers() {
+  GameObject *hallWall = new GameObject();
+  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
+  this->AddObject(hallWall);
 
   GameObject *roomWall = new GameObject();
-	roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
-	this->AddObject(roomWall);
+  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
+  this->AddObject(roomWall);
 
   GameObject *baseFloor = new GameObject();
   baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();
-	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, 0, 335, 1420)));
-	this->AddObject(initialWall);
+  initialWall->AddComponent(new Barrier(*initialWall, Rect(0, 0, 335, 1420)));
+  this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();
   finalWall->AddComponent(new Barrier(*finalWall, Rect(this->stageLimit, -400, 400, 1420)));
   this->AddObject(finalWall);
-
-	Camera::Follow(veteranGO);
-
-	this->music.Play();
 }
 
 void StageState::Update(float dt) {

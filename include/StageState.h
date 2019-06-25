@@ -24,17 +24,18 @@ private:
 public:
   StageState();
   ~StageState();
-  void LoadAssets();
-  void Update(float dt);
+  bool PlayerWon();
+  bool PlayerLose();
   void Render();
   void Start();
   void Pause();
   void Resume();
-  void CollisionCheck();
-  void DeletionCheck();
-  bool PlayerWon();
-  bool PlayerLose();
+  void LoadAssets();
   void CheckGameEnd();
+  void BuildBarriers();
+  void DeletionCheck();
+  void Update(float dt);
+  void CollisionCheck();
 };
 
 #endif
