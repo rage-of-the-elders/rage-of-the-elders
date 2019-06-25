@@ -65,7 +65,7 @@ void StageState::LoadAssets() {
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();
-	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1420)));
+	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, 0, 335, 1420)));
 	this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();

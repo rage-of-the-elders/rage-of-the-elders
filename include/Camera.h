@@ -22,6 +22,7 @@ private:
   static void AddBlack();
   static void HandleFlicker(float dt);
   static void AdjustFocus(int screenWidth);
+  static void DefineLimits(int initiaLimit, int finalLimit, int screenWidth);
 
 public:
   static Vec2 position;
@@ -30,9 +31,10 @@ public:
   static void Follow(GameObject *newFocus);
   static void Unfollow();
   static void Update(float dt);
-  static GameObject *GetFocus();
   static void RenderBlack();
   static void Flicker(float duration, float frequency = 0.5);
+
+  static GameObject *GetFocus();
 };
 
 #endif

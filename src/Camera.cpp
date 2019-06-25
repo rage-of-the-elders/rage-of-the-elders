@@ -1,6 +1,6 @@
+#include "Game.h"
 #include "Camera.h"
 #include "InputManager.h"
-#include "Game.h"
 
 GameObject *Camera::focus = nullptr;
 Vec2 Camera::position = Vec2();
@@ -23,9 +23,10 @@ void Camera::Unfollow() {
 }
 
 void Camera::Update(float dt) {
+  int screenWidth, screenHeight;
+  SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
+
   if (focus != nullptr) {
-    int screenWidth, screenHeight;
-    SDL_GetRendererOutputSize(Game::GetInstance().GetRenderer(), &screenWidth, &screenHeight);
     Camera::AdjustFocus(screenWidth);
   } else {
 		if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY)) {
@@ -35,12 +36,18 @@ void Camera::Update(float dt) {
 			position.x += speed.x*dt;
   }
 
-  if (pos.x <= 0)
-  pos.x = 0;
-  if (pos.x >= 12120 - 1280)
-  pos.x = 12120 - 1280;
 
-  HandleFlicker(dt);
+  // FIXME
+  Camera::DefineLimits(0, 12120, screenWidth);
+  Camera::HandleFlicker(dt);
+}
+
+
+void Camera::DefineLimits(int initiaLimit, int finalLimit, int screenWidth) {
+  if (position.x <= initiaLimit)
+    position.x = initiaLimit;
+  if (position.x >= finalLimit - screenWidth)
+    position.x = finalLimit - screenWidth;
 }
 
 void Camera::AdjustFocus(int screenWidth) {
@@ -68,7 +75,6 @@ void Camera::RenderBlack() {
   }
 }
 
-// TODO: Add FlickerWhile()
 void Camera::Flicker(float duration, float frequency) {
   if (not isFlickering) {
     flickerTimer = Timer();
