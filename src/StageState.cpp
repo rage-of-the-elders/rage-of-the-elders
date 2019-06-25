@@ -153,7 +153,6 @@ void StageState::SpawnEnemies(int gatePosition) {
 void StageState::Spawn(int xPosition, int yPosition, int type, int invertSide) {
   GameObject *enemyGO = new GameObject();
 
-  // Turn into a Enum
   switch (type) {
     case 1:
       enemyGO->AddComponent(new Nurse(*enemyGO));
@@ -169,6 +168,7 @@ void StageState::Spawn(int xPosition, int yPosition, int type, int invertSide) {
   }
 
   Vec2 enemySize = enemyGO->box.GetSize();
+
   if(invertSide)
     enemyGO->box.SetPos(xPosition + Game::screenWidth, yPosition);
   else
