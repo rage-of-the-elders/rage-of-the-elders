@@ -112,7 +112,9 @@ void Veteran::HandleMovement(float) {
     this->ActivateSprite(MOVING);
 
     this->sound[MOVING]->Activate();
-    this->sound[MOVING]->Play(-1);
+    // TODO: Add PlayIfNotPlaying()
+    // if (not this->sound[MOVING]->IsPlaying())
+      this->sound[MOVING]->Play(-1);
 
   }
   if(not (InputManager::GetInstance().IsKeyDown(D_KEY) ||
@@ -120,7 +122,6 @@ void Veteran::HandleMovement(float) {
           InputManager::GetInstance().IsKeyDown(S_KEY) ||
           InputManager::GetInstance().IsKeyDown(W_KEY))) {
     this->currentState = IDLE;
-    this->sound[MOVING]->Desactivate();
     this->sound[MOVING]->Stop();
   }
 }
