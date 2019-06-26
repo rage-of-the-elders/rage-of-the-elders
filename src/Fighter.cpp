@@ -197,8 +197,14 @@ void Fighter::NotifyCollision(GameObject &other) {
   }
   else if (other.Has("Bullet")) {
     Bullet *bullet = (Bullet *)other.GetComponent("Bullet");
-    this->ApplyDamage(bullet->GetDamage());
-    this->storedState = HURTING;
+    if(this->IsAttacking() && Math::Equals(bullet->GetAngleDeg(), (this->orientation == RIGHT ? 180.0 : 0.0))) {
+      bullet->SetDirection(-1, (this->orientation == RIGHT ? 0.0 : 180.0));
+    }
+    else if(not this->IsAttacking()){
+      this->ApplyDamage(bullet->GetDamage());
+      this->storedState = HURTING;
+      bullet->RemoveBullet();
+    }
   }
 }
 
