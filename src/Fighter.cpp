@@ -220,6 +220,10 @@ void Fighter::NotifyCollision(GameObject &other) {
     }
     else if(not this->IsAttacking()){
       this->ApplyDamage(bullet->GetDamage());
+      GameObject *exposionGo = new GameObject();
+      exposionGo->box = bullet->GetBox();
+      exposionGo->AddComponent(new Sprite(*exposionGo, "img/explosion.png", 7, 0.07, 0.6, false));
+      Game::GetInstance().GetCurrentState().AddObject(exposionGo);
       this->storedState = HURTING;
       bullet->RemoveBullet();
     }
