@@ -24,3 +24,9 @@ Nurse::Nurse(GameObject &associated) : Enemy(associated) {
 Nurse::~Nurse() {
 
 }
+
+void Nurse::Update(float dt) {
+  Enemy::Update(dt);
+  Collider *a = (Collider*) this->associated.GetComponent("Collider");
+  a->SetOffset({(this->orientation ? RIGHT -60 : 60), 0});
+}
