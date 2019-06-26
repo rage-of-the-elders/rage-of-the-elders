@@ -12,7 +12,6 @@ private:
   static GameObject *focus;
   static Sprite *black;
   static bool isBlack;
-  static bool isFlickering;
   static float flickerDuration;
   static float flickerFrequency;
   static Timer flickerTimer;
@@ -27,6 +26,7 @@ private:
 public:
   static Vec2 speed;
   static Vec2 position;
+  static bool isFlickering;
   static int finalCameraLimit;
   static int initiaCameraLimit;
 
@@ -36,6 +36,7 @@ public:
   static void Update(float dt);
   static void RenderBlack();
   static void Flicker(float duration, float frequency = 0.5);
+  static void StopFlicker();
 
   static GameObject *GetFocus();
 };

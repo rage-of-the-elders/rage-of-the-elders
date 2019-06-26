@@ -101,8 +101,14 @@ void Camera::HandleFlicker(float dt) {
         flickerFrequencyTimer = Timer();
       }
     } else {
-      black->Desactivate();
-      isFlickering = false;
+      // black->Desactivate();
+      // isFlickering = false;
+      StopFlicker();
     }
   }
+}
+
+void Camera::StopFlicker() {
+  black->Desactivate();
+  isFlickering = false;
 }
