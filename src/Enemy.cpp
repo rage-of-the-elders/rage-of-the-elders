@@ -27,7 +27,6 @@ bool Enemy::TargetIsInRange() {
 }
 
 void Enemy::ManageInput(float dt) {
-
   if(Veteran::player != nullptr) {
     this->target = Veteran::player->GetColliderBox();
     

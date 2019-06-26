@@ -356,8 +356,7 @@ void Fighter::HandleHurting(float) {
   }
 }
 
-void Fighter::HandleDying(float)
-{
+void Fighter::HandleDying(float) {
   if (not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);

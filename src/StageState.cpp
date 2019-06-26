@@ -116,11 +116,13 @@ void StageState::HandleHorde() {
   if(this->gateMap->GetCurrentGate() > 0) {
     // TODO: Change "Veteran" class to "Player"
     int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
-    int playerPosition = Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
+    if (Veteran::player != nullptr) {
+      int playerPosition = Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
 
-    if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
-      this->LockCamera(gatePosition);
-      this->SpawnEnemies(gatePosition);
+      if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
+        this->LockCamera(gatePosition);
+        this->SpawnEnemies(gatePosition);
+      }
     }
   }
 }
@@ -176,7 +178,8 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
 
 void StageState::SpawnEnemies(int gatePosition) {
   Spawn(gatePosition, 1, 0);
-  Spawn(gatePosition, 1, 1);
+  Spawn(gatePosition, 2, 1);
+  Spawn(gatePosition, 3, 1);
 }
 
 int StageState::CalculateEnemyY(Vec2 enemySize, int yLimit) {

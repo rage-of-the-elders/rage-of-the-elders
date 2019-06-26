@@ -47,7 +47,9 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->associated.AddComponent(new Collider(this->associated, {0.7,0.8}));
 }
 
-Veteran::~Veteran() {}
+Veteran::~Veteran() {
+  Veteran::player = nullptr;
+}
 
 void Veteran::Start() {}
 
