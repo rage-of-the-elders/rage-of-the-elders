@@ -13,6 +13,7 @@ class Nurse : public Enemy {
 public:
   Nurse(GameObject &associated);
   ~Nurse();
+  void Update(float dt);
   // void Start();
   // bool TargetIsInRange();
   // bool Is(std::string type);
