@@ -8,6 +8,8 @@
 #include "Camera.h"
 
 Game *Game::instance = nullptr;
+int Game::screenWidth = 1280;
+int Game::screenHeight = 720;
 
 Game::Game(std::string title, int width, int height) {
   if (instance != nullptr) {
@@ -117,9 +119,9 @@ void Game::Run() {
   }
 
   if (not this->stateStack.empty()) {
-    this->CalculateDeltaTime(); // TODO: Where to put this?
 
     while (!this->GetCurrentState().QuitRequested() && !this->stateStack.empty()) {
+    this->CalculateDeltaTime(); // TODO: Where to put this?
       if (this->GetCurrentState().PopRequested()) {
         this->stateStack.pop();
         Resources::Clear();
@@ -137,7 +139,7 @@ void Game::Run() {
         }
       }
 
-      InputManager::GetInstance().Update();
+      InputManager::GetInstance().Update(this->GetDeltaTime());
       this->GetCurrentState().Update(this->GetDeltaTime());
       this->GetCurrentState().Render();
       Camera::RenderBlack();
@@ -157,7 +159,7 @@ SDL_Renderer* Game::GetRenderer() {
 
 Game &Game::GetInstance() {
   if (instance == nullptr)
-    instance = new Game("Rage of the Elders", 1280, 720);
+    instance = new Game("Rage of the Elders", Game::screenWidth, Game::screenHeight);
 
   return *instance;
 }

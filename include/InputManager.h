@@ -17,10 +17,12 @@
 #define G_KEY SDLK_g
 #define H_KEY SDLK_h
 #define J_KEY SDLK_j
+#define P_KEY SDLK_p
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
 #include "Vec2.h"
+#include "Timer.h"
 
 #include <unordered_map>
 
@@ -34,23 +36,28 @@ private:
   std::unordered_map<int, int> keyUpdate;
   bool quitRequested;
   int updateCounter;
+  std::string lastsPressKeys;
+  Timer comboTimer;
 
   InputManager();
   ~InputManager();
 
 public:
   static InputManager &GetInstance();
-  void Update();
+  void Update(float dt);
+  void MakeCombos(int buttonId);
+  void SetLastsPressKeys(std::string lastsPressKeys);
   bool KeyPress(int key);
   bool KeyRelease(int key);
   bool IsKeyDown(int key);
   bool MousePress(int button);
   bool MouseRelease(int button);
   bool IsMouseDown(int button);
+  bool QuitRequested();
   int GetMouseX();
   int GetMouseY();
-  Vec2 GetMousePos();
-  bool QuitRequested();
+  std::string GetLastsPressKeys();
+  Vec2 GetMousePosition();
 };
 
 #endif

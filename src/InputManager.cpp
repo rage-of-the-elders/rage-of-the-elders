@@ -5,6 +5,7 @@
 #include "Camera.h"
 
 #include <cstring>
+#include <iostream>
 
 InputManager::InputManager() {
   memset(this->mouseState, false, sizeof this->mouseState);
@@ -13,6 +14,8 @@ InputManager::InputManager() {
   this->quitRequested = false;
   this->mouseX = 0;
   this->mouseY = 0;
+  this->lastsPressKeys = "";
+  this->comboTimer = Timer();
 }
 
 InputManager::~InputManager() {
@@ -23,14 +26,16 @@ InputManager &InputManager::GetInstance() {
   return inputManager;
 }
 
-void InputManager::Update() {
+void InputManager::Update(float dt) {
   SDL_Event event;
   this->updateCounter++;
   this->quitRequested = false;
+  this->comboTimer.Update(dt);
+
 
   SDL_GetMouseState(&this->mouseX, &this->mouseY);
-  this->mouseX += Camera::pos.x;
-  this->mouseY += Camera::pos.y;
+  this->mouseX += Camera::position.x;
+  this->mouseY += Camera::position.y;
 
   while (SDL_PollEvent(&event)) {
     int keyId, buttonId;
@@ -51,6 +56,7 @@ void InputManager::Update() {
           keyId = event.key.keysym.sym;
           this->keyState[keyId] = true;
           this->keyUpdate[keyId] = this->updateCounter;
+          MakeCombos(keyId);
           break;
         case SDL_KEYUP:
           keyId = event.key.keysym.sym;
@@ -65,6 +71,38 @@ void InputManager::Update() {
       }
     }
 	}
+}
+
+void InputManager::SetLastsPressKeys(std::string lastsPressKeys) {
+  this->lastsPressKeys = lastsPressKeys;
+}
+
+void InputManager::MakeCombos(int buttonId) {
+  if(this->comboTimer.Get() > 0.4 ) {
+      this->lastsPressKeys = "";
+      this->comboTimer.Restart();
+  }
+
+  switch (buttonId)
+  {
+  case 102:
+    this->lastsPressKeys += "F";
+    break;
+  case 103:
+    this->lastsPressKeys += "G";    
+    break;
+  case 104:
+    this->lastsPressKeys += "H";  
+    break;
+  case 106:
+    this->lastsPressKeys += "J";  
+    break;
+
+  default:
+    this->lastsPressKeys += "0";
+    break;
+  }
+
 }
 
 bool InputManager::KeyPress(int key) {
@@ -99,10 +137,14 @@ int InputManager::GetMouseY() {
   return this->mouseY;
 }
 
-Vec2 InputManager::GetMousePos() {
+Vec2 InputManager::GetMousePosition() {
   return Vec2(this->mouseX, this->mouseY);
 }
 
 bool InputManager::QuitRequested() {
   return this->quitRequested;
+}
+
+std::string InputManager::GetLastsPressKeys() {
+  return this->lastsPressKeys;
 }

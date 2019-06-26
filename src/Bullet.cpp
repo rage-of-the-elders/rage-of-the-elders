@@ -7,7 +7,7 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.AddComponent(new Collider(associated));
   this->associated.angleDeg = angle;
-  this->speed = Vec2::GetSpeed(angle) * speed;
+  this->speed = Vec2::GetSpeed(0) * speed;
   this->damage = damage;
   this->distanceLeft = maxDistance;
   this->targetsPlayer = targetsPlayer;
@@ -15,15 +15,30 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
 
 void Bullet::Update(float dt) {
   if (this->distanceLeft > 0) {
-    this->associated.box.UpdatePos(speed * dt);
-    this->distanceLeft -= Vec2().GetDistance(speed * dt);
+    this->associated.box.UpdatePos(this->speed * dt);
+    this->distanceLeft -= Vec2().GetDistance(this->speed * dt);
   } else {
     this->associated.RequestDelete();
   }
+
+  
 }
 
 void Bullet::Render() {
 
+}
+
+void Bullet::RemoveBullet() {
+  this->associated.RequestDelete();
+}
+
+void Bullet::SetDirection(float speed, float angleDeg) {
+  this->associated.angleDeg = angleDeg;
+  this->speed = (this->speed * speed);
+}
+
+float Bullet::GetAngleDeg() {
+  return this->associated.angleDeg;
 }
 
 bool Bullet::Is(std::string type) {
@@ -35,15 +50,15 @@ int Bullet::GetDamage() {
 }
 
 void Bullet::NotifyCollision(GameObject &other) {
-  if (this->targetsPlayer) {
-    if (other.GetComponent("PenguinBody") != nullptr || other.GetComponent("PenguinCannon") != nullptr) {
-      this->associated.RequestDelete();
-    }
-  } else {
-    if (other.GetComponent("Alien") != nullptr || other.GetComponent("Minion") != nullptr) {
-      this->associated.RequestDelete();
-    }
-  }
+  // if (this->targetsPlayer) {
+  //   if (other.GetComponent("Enemy") != nullptr) {
+  //     this->associated.RequestDelete();
+  //   }
+  // } else {
+  //   if (other.GetComponent("Enemy") != nullptr) {
+  //     this->associated.RequestDelete();
+  //   }
+  // }
 }
 
 bool Bullet::TargetsPlayer() {

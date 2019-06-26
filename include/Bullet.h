@@ -19,6 +19,9 @@ public:
   int GetDamage();
   void NotifyCollision(GameObject &other);
   bool TargetsPlayer();
+  void SetDirection(float speed, float angleDeg);
+  float GetAngleDeg();
+  void RemoveBullet();
 };
 
 #endif

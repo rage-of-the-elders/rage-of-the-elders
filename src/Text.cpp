@@ -40,8 +40,8 @@ void Text::Render() {
                                  0,
                                  (int)this->associated.box.w,
                                  (int)this->associated.box.h};
-    SDL_Rect dstRect = SDL_Rect{(int)(this->associated.box.x - Camera::pos.x),
-                                (int)(this->associated.box.y - Camera::pos.y),
+    SDL_Rect dstRect = SDL_Rect{(int)(this->associated.box.x - Camera::position.x),
+                                (int)(this->associated.box.y - Camera::position.y),
                                 (int)this->associated.box.w,
                                 (int)this->associated.box.h};
 
