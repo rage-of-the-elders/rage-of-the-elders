@@ -387,7 +387,7 @@ void Fighter::Shoot(std::string file, int frameCount) {
   if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
     float bulletSpeed = 400;
     float damage = 10;
-    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
+    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 1000000);
     float frameTime = 0.09;
 
     GameObject *bullet = new GameObject();

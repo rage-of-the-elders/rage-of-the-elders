@@ -20,8 +20,6 @@ void Bullet::Update(float dt) {
   } else {
     this->associated.RequestDelete();
   }
-
-  
 }
 
 void Bullet::Render() {
@@ -35,6 +33,7 @@ void Bullet::RemoveBullet() {
 void Bullet::SetDirection(float speed, float angleDeg) {
   this->associated.angleDeg = angleDeg;
   this->speed = (this->speed * speed);
+  this->speed = (this->speed * 1.1); 
 }
 
 float Bullet::GetAngleDeg() {
