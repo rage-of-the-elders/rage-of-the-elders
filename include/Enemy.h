@@ -10,6 +10,7 @@
 class Enemy : public Fighter {
 private:
   Rect target;
+  Rect tagetPlayer;
   void ManageInput(float dt);
   void HandleMovement(float dt);
   void HandleDying(float dt);

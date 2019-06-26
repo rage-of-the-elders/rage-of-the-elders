@@ -29,6 +29,7 @@ bool Enemy::TargetIsInRange() {
 void Enemy::ManageInput(float dt) {
   if(Veteran::player != nullptr) {
     this->target = Veteran::player->GetColliderBox();
+    this->tagetPlayer = Veteran::player->GetFoot();
     
     if(this->IsDead()){
       this->currentState = DYING;
@@ -76,7 +77,7 @@ void Enemy::HandleMovement(float dt) {
     // this->sound[MOVING]->Play(-1);
   }
 
-  Vec2 direction = this->associated.box.GetCenter().GetSpeed(this->target.GetCenter());
+  Vec2 direction = this->GetFoot().GetCenter().GetSpeed(this->tagetPlayer.GetCenter());
   this->associated.box.UpdatePos((direction * this->speed) * dt);
 }
 
