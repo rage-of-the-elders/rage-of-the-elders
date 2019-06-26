@@ -124,7 +124,7 @@ void Fighter::NotifyCollision(GameObject &other) {
 
     if (Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
 
-      float collisionX = std::min(abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
+      float collisionX = std::min( abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
       float collisionY = std::min(abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
 
       if (collisionX > collisionY) {

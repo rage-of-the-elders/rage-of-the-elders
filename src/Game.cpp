@@ -8,6 +8,8 @@
 #include "Camera.h"
 
 Game *Game::instance = nullptr;
+int Game::screenWidth = 1280;
+int Game::screenHeight = 720;
 
 Game::Game(std::string title, int width, int height) {
   if (instance != nullptr) {
@@ -157,7 +159,7 @@ SDL_Renderer* Game::GetRenderer() {
 
 Game &Game::GetInstance() {
   if (instance == nullptr)
-    instance = new Game("Rage of the Elders", 1280, 720);
+    instance = new Game("Rage of the Elders", Game::screenWidth, Game::screenHeight);
 
   return *instance;
 }

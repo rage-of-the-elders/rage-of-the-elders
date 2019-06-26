@@ -21,17 +21,23 @@ private:
 
   static void AddBlack();
   static void HandleFlicker(float dt);
+  static void AdjustFocus();
+  static void DefineLimits();
 
 public:
-  static Vec2 pos;
   static Vec2 speed;
+  static Vec2 position;
+  static int finalCameraLimit;
+  static int initiaCameraLimit;
+
 
   static void Follow(GameObject *newFocus);
   static void Unfollow();
   static void Update(float dt);
-  static GameObject *GetFocus();
   static void RenderBlack();
   static void Flicker(float duration, float frequency = 0.5);
+
+  static GameObject *GetFocus();
 };
 
 #endif

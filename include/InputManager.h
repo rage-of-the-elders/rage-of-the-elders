@@ -17,6 +17,7 @@
 #define G_KEY SDLK_g
 #define H_KEY SDLK_h
 #define J_KEY SDLK_j
+#define P_KEY SDLK_p
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
@@ -55,9 +56,8 @@ public:
   bool QuitRequested();
   int GetMouseX();
   int GetMouseY();
-  Vec2 GetMousePos();
   std::string GetLastsPressKeys();
-
+  Vec2 GetMousePosition();
 };
 
 #endif

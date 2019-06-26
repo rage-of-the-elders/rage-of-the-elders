@@ -1,21 +1,22 @@
-#include "StageState.h"
 #include "Vec2.h"
+#include "Game.h"
+#include "Nurse.h"
+#include "Camera.h"
+#include "Barrier.h"
+#include "Veteran.h"
 #include "TileMap.h"
 #include "TileSet.h"
-#include "InputManager.h"
-#include "Camera.h"
-#include "CameraFollower.h"
-#include "Collision.h"
-#include "Collider.h"
-#include "Game.h"
-#include "TitleState.h"
 #include "EndState.h"
 #include "GameData.h"
-#include "Veteran.h"
-#include "Nurse.h"
 #include "Janitor.h"
 #include "Security.h"
-#include "Barrier.h"
+#include "Collider.h"
+#include "Collision.h"
+#include "MathHelper.h"
+#include "TitleState.h"
+#include "StageState.h"
+#include "InputManager.h"
+#include "CameraFollower.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
@@ -28,58 +29,63 @@ StageState::~StageState() {
 }
 
 void StageState::LoadAssets() {
-	this->bg = new GameObject();
+  this->LoadBackground();
+  this->LoadGates();
+  this->LoadPlayers();
+	this->BuildBarriers();
+	this->music.Play();
+}
+
+void StageState::LoadBackground() {
+  this->bg = new GameObject();
 	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
 	this->bg->box = Rect();
 
-	this->mapGameObj = new GameObject();
+	GameObject *tileMapGO = new GameObject();
 	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
-	TileMap *tileMap = new TileMap(*mapGameObj, "map/stage1.txt", tileSet);
-	mapGameObj->AddComponent(tileMap);
-	mapGameObj->box = Rect();
+	this->tileMap = new TileMap(*tileMapGO, "map/tilesStage1.txt", tileSet);
+	tileMapGO->AddComponent(tileMap);
+	tileMapGO->box = Rect();
 
-	bg->AddComponent(new CameraFollower(*bg));
+  bg->AddComponent(new CameraFollower(*bg));
 
-	GameObject *veteranGO = new GameObject();
-	veteranGO->box.SetCenterPos(400, 300);
-	veteranGO->AddComponent(new Veteran(*veteranGO));
-	this->AddObject(veteranGO);
+  this->stageLimit = tileMap->MapEnd();
+  Camera::finalCameraLimit = this->stageLimit;
+}
 
-	// GameObject *nurseGO = new GameObject();
-	// nurseGO->AddComponent(new Nurse(*nurseGO));
-	// nurseGO->box.SetCenterPos(1200, 450);
-	// this->AddObject(nurseGO);
+void StageState::LoadPlayers() {
+  GameObject *veteranGO = new GameObject();
+  veteranGO->box.SetCenterPos(600, 300);
+  veteranGO->AddComponent(new Veteran(*veteranGO));
+  this->AddObject(veteranGO);
 
-	// GameObject *janitorGO = new GameObject();
-	// janitorGO->AddComponent(new Janitor(*janitorGO));
-	// janitorGO->box.SetCenterPos(1200, 450);
-	// this->AddObject(janitorGO);
+	Camera::Follow(veteranGO);
+}
 
-	GameObject *securityGO = new GameObject();
-	securityGO->AddComponent(new Security(*securityGO));
-	securityGO->box.SetCenterPos(1200, 450);
-	this->AddObject(securityGO);
+void StageState::BuildBarriers() {
+  GameObject *hallWall = new GameObject();
+  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
+  this->AddObject(hallWall);
 
-	// FIXME
-	GameObject *baseWall = new GameObject();
-	baseWall->AddComponent(new Barrier(*baseWall, Rect(0, 0, 12220, 555)));
-	this->AddObject(baseWall);
+  GameObject *roomWall = new GameObject();
+  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
+  this->AddObject(roomWall);
 
   GameObject *baseFloor = new GameObject();
   baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();
-	initialWall->AddComponent(new Barrier(*initialWall, Rect(0, -400, 335, 1120)));
-	this->AddObject(initialWall);
+  initialWall->AddComponent(new Barrier(*initialWall, Rect(0, 0, 335, 1420)));
+  this->AddObject(initialWall);
 
   GameObject *finalWall = new GameObject();
-  finalWall->AddComponent(new Barrier(*finalWall, Rect(12120, -400, 400, 1120)));
+  finalWall->AddComponent(new Barrier(*finalWall, Rect(this->stageLimit, -400, 400, 1420)));
   this->AddObject(finalWall);
+}
 
-	// Camera::Follow(veteranGO);
-
-	// this->music.Play();
+void StageState::LoadGates() {
+  this->gateMap = new GateMap("map/hordesStage1.txt");
 }
 
 void StageState::Update(float dt) {
@@ -90,9 +96,11 @@ void StageState::Update(float dt) {
 		Game::GetInstance().Push(new TitleState());
 	}
 
+  this->HandleHorde();
+
 	Camera::Update(dt);
 	this->bg->Update(dt);
-	this->mapGameObj->Update(dt);
+	this->tileMap->Update(dt);
 
 	this->UpdateArray(dt);
 	this->CollisionCheck();
@@ -100,9 +108,86 @@ void StageState::Update(float dt) {
 	this->CheckGameEnd();
 }
 
+void StageState::HandleHorde() {
+  if (InputManager::GetInstance().KeyPress(P_KEY)) {
+    this->UnlockCamera();
+  }
+
+  if(this->gateMap->GetCurrentGate() > 0) {
+    // TODO: Change "Veteran" class to "Player"
+    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
+    int playerPosition = Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
+
+    if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
+      this->LockCamera(gatePosition);
+      this->SpawnEnemies(gatePosition);
+    }
+  }
+}
+
+void StageState::LockCamera(int gatePosition) {
+    Camera::initiaCameraLimit = gatePosition;
+    Camera::finalCameraLimit = gatePosition + Game::screenWidth;
+    this->gateMap->NextGate();
+}
+
+void StageState::UnlockCamera() {
+  Camera::initiaCameraLimit = 0;
+  Camera::finalCameraLimit = this->stageLimit;
+}
+
+/*
+  If you want the enemy to come from the left side of the screen, set the value
+  of "invertSide" as zero. Otherwise, set the attribute to a non-zero value.
+
+  yLimit defines the limit where a enemy can be rendered. Default is 500px
+  (Usualy, this is near the base of the wall)
+*/
+void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
+  GameObject *enemyGO = new GameObject();
+
+  switch (type) {
+    case 1:
+      enemyGO->AddComponent(new Nurse(*enemyGO));
+      break;
+    case 2:
+      enemyGO->AddComponent(new Janitor(*enemyGO));
+      break;
+    case 3:
+      enemyGO->AddComponent(new Security(*enemyGO));
+      break;
+    default:
+      printf("WARNING: No enemy type given!\n");
+      delete enemyGO;
+      return;
+  }
+
+  Vec2 enemySize = enemyGO->box.GetSize();
+
+  int yPosition = CalculateEnemyY(enemySize, yLimit);
+
+  if(invertSide)
+    enemyGO->box.SetPos(gate + Game::screenWidth, std::min(yPosition, Game::screenHeight));
+  else
+    enemyGO->box.SetPos(gate - enemySize.x, std::min(yPosition, Game::screenHeight));
+
+  this->AddObject(enemyGO);
+}
+
+void StageState::SpawnEnemies(int gatePosition) {
+  Spawn(gatePosition, 1, 0);
+  Spawn(gatePosition, 1, 1);
+}
+
+int StageState::CalculateEnemyY(Vec2 enemySize, int yLimit) {
+  return ((Game::screenHeight - yLimit) * Math::GetRand(0, 1))
+          - enemySize.y
+          + yLimit;
+}
+
 void StageState::Render() {
 	this->bg->Render();
-	this->mapGameObj->GetComponent("TileMap")->Render();
+	this->tileMap->Render();
 
 	this->RenderArray();
 }

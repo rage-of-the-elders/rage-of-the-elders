@@ -34,8 +34,8 @@ void InputManager::Update(float dt) {
 
 
   SDL_GetMouseState(&this->mouseX, &this->mouseY);
-  this->mouseX += Camera::pos.x;
-  this->mouseY += Camera::pos.y;
+  this->mouseX += Camera::position.x;
+  this->mouseY += Camera::position.y;
 
   while (SDL_PollEvent(&event)) {
     int keyId, buttonId;
@@ -137,7 +137,7 @@ int InputManager::GetMouseY() {
   return this->mouseY;
 }
 
-Vec2 InputManager::GetMousePos() {
+Vec2 InputManager::GetMousePosition() {
   return Vec2(this->mouseX, this->mouseY);
 }
 

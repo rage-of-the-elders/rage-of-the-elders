@@ -49,7 +49,7 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 }
 
 void Sprite::Render() {
-  Render(associated.box.x - Camera::pos.x, associated.box.y - Camera::pos.y);
+  Render(associated.box.x - Camera::position.x, associated.box.y - Camera::position.y);
 }
 
 void Sprite::Render(int x, int y) {

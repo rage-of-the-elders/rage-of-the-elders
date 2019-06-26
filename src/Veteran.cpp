@@ -32,6 +32,7 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
 
   this->ActivateSprite(IDLE);
 
+
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
