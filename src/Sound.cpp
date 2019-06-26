@@ -29,7 +29,7 @@ void Sound::Play(int times) {
 }
 
 void Sound::Stop() {
-  //CHECK that part after
+  // TODO: Check that part after
   // if (not IsPlaying()) {
     Mix_HaltChannel(this->channel);
   // }
