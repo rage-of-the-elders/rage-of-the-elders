@@ -59,6 +59,26 @@ void StageState::LoadPlayers() {
   veteranGO->AddComponent(new Veteran(*veteranGO));
   this->AddObject(veteranGO);
 
+  GameObject *nurseGO = new GameObject();
+  nurseGO->box.SetCenterPos(800, 500);
+  nurseGO->AddComponent(new Nurse(*nurseGO));
+  this->AddObject(nurseGO);
+  nurseGO->RequestDelete();
+
+  GameObject *janitorGO = new GameObject();
+  janitorGO->box.SetCenterPos(800, 500);
+  janitorGO->AddComponent(new Janitor(*janitorGO));
+  this->AddObject(janitorGO);
+  janitorGO->RequestDelete();
+
+
+  GameObject *securityGO = new GameObject();
+  securityGO->box.SetCenterPos(800, 500);
+  securityGO->AddComponent(new Security(*securityGO));
+  this->AddObject(securityGO);
+  securityGO->RequestDelete();
+
+
 	Camera::Follow(veteranGO);
 }
 
