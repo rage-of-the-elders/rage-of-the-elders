@@ -46,8 +46,9 @@ void State::UpdateArray(float dt) {
 }
 
 void State::RenderArray() {
-  for (unsigned i = 0; i < this->objectArray.size(); i++)
-    this->objectArray[i]->Render();
+  GameObject::NewRender(objectArray);
+  // for (unsigned i = 0; i < this->objectArray.size(); i++)
+  //   this->objectArray[i]->Render();
 }
 
 void State::LoadAssets() {}
