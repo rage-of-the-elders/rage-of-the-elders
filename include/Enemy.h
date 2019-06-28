@@ -8,7 +8,7 @@
 #include "Fighter.h"
 
 class Enemy : public Fighter {
-private:
+protected:
   Rect target;
   Rect tagetPlayer;
   void ManageInput(float dt);
