@@ -18,11 +18,11 @@ TitleState::TitleState() {
 TitleState::~TitleState() {}
 
 void TitleState::LoadAssets() {
-  GameObject *text = new GameObject();
-  text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 65, Text::BLENDED,
-                              "PRESS SPACE TO CONTINUE", WHITE, 2));
-  text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
-  this->AddObject(text);
+  // GameObject *text = new GameObject();
+  // text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 65, Text::BLENDED,
+  //                             "PRESS SPACE TO CONTINUE", WHITE, 2));
+  // text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
+  // this->AddObject(text);
 }
 
 void TitleState::Update(float dt) {
