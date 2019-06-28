@@ -9,6 +9,7 @@ Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->speed = ENEMY_SPEED;
   this->attackCooldown = Timer();
   this->attackCooldown.Set(ATTACK_COOLDOWN);
+  this->enemyAttackCooldown = ATTACK_COOLDOWN;
 }
 
 Enemy::~Enemy() {}
@@ -34,7 +35,7 @@ void Enemy::ManageInput(float dt) {
     if(this->IsDead()){
       this->currentState = DYING;
     }
-    else if(this->attackCooldown.Get() < ATTACK_COOLDOWN && not this->IsAttacking()) {
+    else if(this->attackCooldown.Get() < enemyAttackCooldown && not this->IsAttacking()) {
       if(sprite[currentState]->IsFinished())
         this->currentState = IDLE;
     }

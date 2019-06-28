@@ -3,7 +3,7 @@
 
 #define ENEMY_HP 100
 #define ENEMY_SPEED 100
-#define ATTACK_COOLDOWN 1
+#define ATTACK_COOLDOWN 10
 
 #include "Fighter.h"
 
@@ -15,6 +15,7 @@ protected:
   void HandleMovement(float dt);
   void HandleDying(float dt);
   Timer attackCooldown;
+  float enemyAttackCooldown;
 
 public:
   Enemy(GameObject &associated);

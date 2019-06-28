@@ -3,7 +3,8 @@
 
 Nurse::Nurse(GameObject &associated) : Enemy(associated) { 
   this->speed = 70;
-  this->attackCooldown.Set(0.6);
+  this->enemyAttackCooldown = NURSE_ATTACK_COOLDOWN;
+  this->attackCooldown.Set(this->enemyAttackCooldown);
 
   std::string character = "nurse";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);

@@ -1,6 +1,8 @@
 #ifndef NURSE_H
 #define NURSE_H
 
+#define NURSE_ATTACK_COOLDOWN 5
+
 #include "Enemy.h"
 
 class Nurse : public Enemy {
