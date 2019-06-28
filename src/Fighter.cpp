@@ -223,9 +223,9 @@ void Fighter::NotifyCollision(GameObject &other) {
       GameObject *explosionGo = new GameObject();
       explosionGo->box = bullet->GetBox();
       explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, 0.6, false));
-      Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
-      explosionSound->Play();
       Game::GetInstance().GetCurrentState().AddObject(explosionGo);
+      Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
+      explosionSound->Play(1);
       this->storedState = HURTING;
       bullet->RemoveBullet();
     }
