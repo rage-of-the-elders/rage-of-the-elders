@@ -1,7 +1,11 @@
 #include "Nurse.h"
 #include "Collider.h"
 
-Nurse::Nurse(GameObject &associated) : Enemy(associated) {
+Nurse::Nurse(GameObject &associated) : Enemy(associated) { 
+  this->speed = 70;
+  this->enemyAttackCooldown = NURSE_ATTACK_COOLDOWN;
+  this->attackCooldown.Set(this->enemyAttackCooldown);
+
   std::string character = "nurse";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 11, 0.04, 0, false);

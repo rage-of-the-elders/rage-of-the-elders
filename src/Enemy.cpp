@@ -9,6 +9,7 @@ Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->speed = ENEMY_SPEED;
   this->attackCooldown = Timer();
   this->attackCooldown.Set(ATTACK_COOLDOWN);
+  this->enemyAttackCooldown = ATTACK_COOLDOWN;
 }
 
 Enemy::~Enemy() {}
@@ -29,11 +30,12 @@ bool Enemy::TargetIsInRange() {
 void Enemy::ManageInput(float dt) {
   if(Veteran::player != nullptr) {
     this->target = Veteran::player->GetColliderBox();
+    this->tagetPlayer = Veteran::player->GetFoot();
     
     if(this->IsDead()){
       this->currentState = DYING;
     }
-    else if(this->attackCooldown.Get() < ATTACK_COOLDOWN && not this->IsAttacking()) {
+    else if(this->attackCooldown.Get() < enemyAttackCooldown && not this->IsAttacking()) {
       if(sprite[currentState]->IsFinished())
         this->currentState = IDLE;
     }
@@ -76,7 +78,7 @@ void Enemy::HandleMovement(float dt) {
     // this->sound[MOVING]->Play(-1);
   }
 
-  Vec2 direction = this->associated.box.GetCenter().GetSpeed(this->target.GetCenter());
+  Vec2 direction = this->GetFoot().GetCenter().GetSpeed(this->tagetPlayer.GetCenter());
   this->associated.box.UpdatePos((direction * this->speed) * dt);
 }
 

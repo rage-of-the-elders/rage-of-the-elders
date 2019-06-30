@@ -26,13 +26,20 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound = std::vector<Sound *>(LAST);
 
   this->sound[MOVING] = new Sound(this->associated, "audio/walking.ogg");
-  this->sound[BASIC_ATTACK_ONE] = new Sound(this->associated, "audio/boom.wav");
-  this->sound[BASIC_ATTACK_TWO] = new Sound(this->associated, "audio/boom.wav");
-  this->sound[COMBO] = new Sound(this->associated, "audio/boom.wav");
-  this->sound[ULTIMATE_BEGIN] = new Sound(this->associated, "audio/boom.wav");
+  this->sound[BASIC_ATTACK_ONE] = new Sound(this->associated, "audio/punch.ogg");
+  this->sound[BASIC_ATTACK_TWO] = new Sound(this->associated, "audio/walking_stick_hit.ogg");
+  this->sound[COMBO] = new Sound(this->associated, "audio/punch.ogg");
+  this->sound[ULTIMATE_FINAL] = new Sound(this->associated, "audio/machine_gun.ogg");
+  this->sound[ULTIMATE_MIDLE] = new Sound(this->associated, "audio/machine_gun_shot.ogg");
+  this->sound[HIT] = new Sound(this->associated, "audio/hit.ogg");
 
   this->associated.AddComponent(this->sound[MOVING]);
   this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
+  this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
+  this->associated.AddComponent(this->sound[COMBO]);
+  this->associated.AddComponent(this->sound[ULTIMATE_FINAL]);
+  this->associated.AddComponent(this->sound[ULTIMATE_MIDLE]);
+  this->associated.AddComponent(this->sound[HIT]);
 }
 
 Fighter::~Fighter() {}
@@ -75,6 +82,16 @@ void Fighter::UpdateStateMachine(float dt) {
   default:
     break;
   }
+
+  if (this->currentState != ULTIMATE_MIDLE) {
+    // if (this->sound[ULTIMATE_MIDLE]->IsPlaying())
+      // this->sound[ULTIMATE_MIDLE]->Stop();
+
+    if (this->currentState != ULTIMATE_BEGIN) {
+      Camera::StopFlicker();
+    }
+  }
+
 }
 
 void Fighter::Update(float dt) {
@@ -181,6 +198,7 @@ void Fighter::NotifyCollision(GameObject &other) {
           if (this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
+            this->sound[HIT]->Play(1);
             if (other.Has("Veteran")) {
               opponent->comboCount++;
               opponent->points++;
@@ -202,6 +220,12 @@ void Fighter::NotifyCollision(GameObject &other) {
     }
     else if(not this->IsAttacking()){
       this->ApplyDamage(bullet->GetDamage());
+      GameObject *explosionGo = new GameObject();
+      explosionGo->box = bullet->GetBox();
+      explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, 0.6, false));
+      Game::GetInstance().GetCurrentState().AddObject(explosionGo);
+      Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
+      explosionSound->Play(1);
       this->storedState = HURTING;
       bullet->RemoveBullet();
     }
@@ -270,9 +294,11 @@ enum Fighter::Orientation Fighter::GetOrientation() {
 void Fighter::HandleMovement(float) {}
 
 void Fighter::HandleAttackOne(float) {
+  if (not this->sound[BASIC_ATTACK_ONE]->IsPlaying()) {
+    this->sound[BASIC_ATTACK_ONE]->Play(1);
+  }
   if (not this->sprite[BASIC_ATTACK_ONE]->IsActive()) {
     this->ActivateSprite(BASIC_ATTACK_ONE);
-    this->sound[BASIC_ATTACK_ONE]->Play(1);
   }
   if (this->sprite[BASIC_ATTACK_ONE]->IsFinished()) {
     this->currentState = IDLE;
@@ -308,7 +334,7 @@ void Fighter::HandleCombo(float) {
 void Fighter::HandleUltimateBegin(float) {
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
     this->ActivateSprite(ULTIMATE_BEGIN);
-    this->sound[ULTIMATE_BEGIN]->Play(1);
+    // this->sound[ULTIMATE_BEGIN]->Play(1);
     this->ultimateDuration.Restart();
   }
   if(this->sprite[ULTIMATE_BEGIN]->IsFinished()) {
@@ -319,9 +345,13 @@ void Fighter::HandleUltimateBegin(float) {
 }
 
 void Fighter::HandleUltimateMidle(float dt) {
+  // this->sound[ULTIMATE_BEGIN]->Stop();
+
+  if(not this->sound[ULTIMATE_MIDLE]->IsPlaying())
+    this->sound[ULTIMATE_MIDLE]->Play(1);
+
   if(not this->sprite[ULTIMATE_MIDLE]->IsActive()) {
     this->ActivateSprite(ULTIMATE_MIDLE);
-    this->sound[ULTIMATE_BEGIN]->Play(1);
   }
 
   this->Shoot("img/veteran/shoot.png", 9);
@@ -338,9 +368,12 @@ void Fighter::HandleUltimateMidle(float dt) {
 }
 
 void Fighter::HandleUltimateFinal(float) {
+  if (not this->sound[ULTIMATE_MIDLE]->IsPlaying())
+    this->sound[ULTIMATE_FINAL]->Play(1);
+
   if(not this->sprite[ULTIMATE_FINAL]->IsActive()) {
     this->ActivateSprite(ULTIMATE_FINAL);
-    this->sound[ULTIMATE_BEGIN]->Play(1);
+    // this->sound[ULTIMATE_MIDLE]->Stop();
   }
   if(this->sprite[ULTIMATE_FINAL]->IsFinished()) {
     this->currentState = IDLE;

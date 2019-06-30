@@ -33,6 +33,7 @@ public:
   bool IsActive();
   bool Has(std::string type);
   void Activate();
+  static void NewRender(std::vector <std::shared_ptr<GameObject>> objectArray);
   void Desactivate();
   void RequestDelete();
   void Update(float dt);
@@ -40,6 +41,7 @@ public:
   void RemoveComponent(Component *cpt);
   void NotifyCollision(GameObject &other);
   Component *GetComponent(std::string type);
+  std::vector<std::shared_ptr<Component>> GetComponents();
   void ReplaceComponent(Component *cpt, Component *replaceCpt);
 };
 

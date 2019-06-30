@@ -1,6 +1,8 @@
 #ifndef SECURITY_H
 #define SECURITY_H
 
+#define SECURITY_ATTACK_COOLDOWN 2
+
 #include "Enemy.h"
 
 class Security : public Enemy {

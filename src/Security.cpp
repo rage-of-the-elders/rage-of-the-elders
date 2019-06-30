@@ -2,6 +2,9 @@
 #include "Collider.h"
 
 Security::Security(GameObject &associated) : Enemy(associated) {
+  this->speed = 115;
+  this->enemyAttackCooldown = SECURITY_ATTACK_COOLDOWN;
+  this->attackCooldown.Set(this->enemyAttackCooldown);
 
   std::string character = "security";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);

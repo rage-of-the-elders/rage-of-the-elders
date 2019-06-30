@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
+#include <algorithm>
 
 GameObject::GameObject() {
   this->isDead = false;
@@ -20,9 +21,44 @@ void GameObject::Update(float dt) {
 }
 
 void GameObject::Render() {
+
   for (auto &component : components)
-    if(component->IsActive())    
+    if(component->IsActive())
       component->Render();
+
+  // for (auto &component : components)
+  //   allTheGameComponents.push_back(component);
+    // if(component->IsActive())   
+}
+
+bool ordenateByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) { 
+    return ((c1.get()->GetBox().y) < (c2.get()->GetBox().y)); 
+}
+
+void GameObject::NewRender(std::vector <std::shared_ptr<GameObject>> objectArray) {
+  
+  std::vector<std::shared_ptr<Component>> allTheGameComponents = std::vector<std::shared_ptr<Component>>();
+
+  for (unsigned i = 0; i < objectArray.size(); i++)
+    for(auto &component : objectArray[i]->GetComponents())
+      allTheGameComponents.push_back(component);
+  
+  // for(auto &component : allTheGameComponents) {
+  std::sort(allTheGameComponents.begin(), allTheGameComponents.end(), ordenateByY);
+  // }
+
+
+  for (unsigned i = 0; i < allTheGameComponents.size(); i++)
+    if(allTheGameComponents[i]->IsActive())
+      allTheGameComponents[i]->Render();
+}
+
+std::vector<std::shared_ptr<Component>> GameObject::GetComponents() {
+  std::vector<std::shared_ptr<Component>> allTheGoComponents = std::vector<std::shared_ptr<Component>>();
+  for (unsigned i = 0; i < this->components.size(); i++)
+    allTheGoComponents.push_back(this->components[i]);
+
+  return allTheGoComponents;
 }
 
 bool GameObject::IsDead() {
