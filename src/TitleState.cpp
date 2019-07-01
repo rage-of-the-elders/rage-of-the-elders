@@ -7,8 +7,9 @@
 #include "CameraFollower.h"
 
 TitleState::TitleState() {
+  this->currentOption = 0;
   GameObject *bg = new GameObject();
-  bg->AddComponent(new Sprite(*bg, "img/title.jpg"));
+  bg->AddComponent(new Sprite(*bg, "img/title.png"));
   bg->AddComponent(new CameraFollower(*bg));
   this->AddObject(bg);
 
@@ -18,22 +19,71 @@ TitleState::TitleState() {
 TitleState::~TitleState() {}
 
 void TitleState::LoadAssets() {
-  // GameObject *text = new GameObject();
-  // text->AddComponent(new Text(*text, "assets/font/Call me maybe.ttf", 65, Text::BLENDED,
-  //                             "PRESS SPACE TO CONTINUE", WHITE, 2));
-  // text->AddComponent(new CameraFollower(*text, Vec2(512, 525) - (text->box.GetSize() / 2.0)));
-  // this->AddObject(text);
+  GameObject *text = new GameObject();
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE, 0.5));
+  text = new GameObject();
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "DIFFICULTY", WHITE, 0.5));
+  text = new GameObject();
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE, 0.5));
+
+  GameObject *sound = new GameObject();
+  // TODO: add sounds
 }
 
 void TitleState::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
 
-  if (InputManager::GetInstance().KeyPress(ESCAPE_KEY))
-    this->quitRequested = true;
+  if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) && this->currentOption > 0) {
+    // this->buttonSounds[CHANGE]->Play();
+    this->currentOption--;
+  }
 
-  if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-    this->popRequested = true;
-    Game::GetInstance().Push(new StageState());
+  if (InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) && this->currentOption < this->options.size() -1) {
+    // this->buttonSounds[CHANGE]->Play();
+    this->currentOption++;
+  }
+
+  for(auto &option : this->options) {
+    option->SetColor(NOT_SELECTED_OPTION);
+  }
+  this->options[currentOption]->SetColor(SELECTED_OPTION);
+  this->options[currentOption]->SetPos(640, OPTIONS_Y);
+
+  // positioning options before current option
+  for(int i = 0; i < currentOption; i++){
+  	Text* nextOption = options[i + 1];
+
+    int newX = nextOption->GetBox().x - options[i]->GetBox().w - 20;
+    options[i]->SetPos(newX, OPTIONS_Y, false, true);
+    options[i]->SetColor(NOT_SELECTED_OPTION);
+  }
+
+  // positioning options after current option
+  for(unsigned int i = currentOption + 1; i < options.size(); i++){
+  	Text* previousOption = options[i - 1];
+
+    int newX = previousOption->GetBox().x + previousOption->GetBox().w + 20;
+    options[i]->SetPos(newX, OPTIONS_Y, false, true);
+  	options[i]->SetColor(NOT_SELECTED_OPTION);
+  }
+
+
+  if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {
+    switch (this->currentOption) {
+      case PLAY:
+        this->popRequested = true;
+        Game::GetInstance().Push(new StageState());
+        break;
+
+      case DIFFICULTY:
+        break;
+
+      case EXIT:
+        this->quitRequested = true;
+        break;
+      default:
+        break;
+    }
   }
 
   this->UpdateArray(dt);
@@ -41,6 +91,10 @@ void TitleState::Update(float dt) {
 
 void TitleState::Render() {
   this->RenderArray();
+
+  for (auto option : this->options) {
+    option->Render();
+  }
 }
 void TitleState::Start() {
   this->StartArray();

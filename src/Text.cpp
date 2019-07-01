@@ -88,9 +88,14 @@ void Text::SetFontSize(int fontSize) {
   this->RemakeTexture();
 }
 
+void Text::SetPos(int x, int y, bool centerX, bool centerY) {
+  this->associated.box.SetPos((x - (centerX ? associated.box.w * 0.5 : 0)),
+                              (y - (centerY ? associated.box.h * 0.5 : 0)));
+}
+
+
 void Text::RemakeTexture() {
   if (this->texture != nullptr) {
-    puts("wtf");
     SDL_DestroyTexture(this->texture);
   }
 

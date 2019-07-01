@@ -7,6 +7,7 @@
 #define WHITE {255, 255, 255, 255}
 #define BLACK {0, 0, 0, 255}
 #define DARK_BLUE {3, 50, 77, 255}
+#define LIGHT_GREEN {220, 245, 73, 255}
 
 #include "SDL_include.h"
 #include "Component.h"
@@ -29,22 +30,23 @@ public:
   void SetStyle(TextStyle style);
   void SetFontFile(std::string fontFile);
   void SetFontSize(int fontSize);
+  void SetPos(int x, int y, bool centerX = true, bool centerY = true);
   static std::shared_ptr<TTF_Font> LoadFont(std::string fontFile, int size);
   void LoadFont();
 
-private:
-  std::shared_ptr<TTF_Font> font;
-  SDL_Texture* texture;
-  std::string text;
-  TextStyle style;
-  std::string fontFile;
-  int fontSize;
-  SDL_Color color;
-  float flickerTime;
-  Timer flickerTimer;
-  bool flicker;
+  private:
+    std::shared_ptr<TTF_Font> font;
+    SDL_Texture *texture;
+    std::string text;
+    TextStyle style;
+    std::string fontFile;
+    int fontSize;
+    SDL_Color color;
+    float flickerTime;
+    Timer flickerTimer;
+    bool flicker;
 
-  void RemakeTexture();
+    void RemakeTexture();
 };
 
 #endif
