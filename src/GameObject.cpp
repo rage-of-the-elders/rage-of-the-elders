@@ -31,7 +31,7 @@ void GameObject::Render() {
     // if(component->IsActive())   
 }
 
-bool ordenateByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) { 
+bool SortByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) { 
     return ((c1.get()->GetBox().y) < (c2.get()->GetBox().y)); 
 }
 
@@ -39,12 +39,13 @@ void GameObject::NewRender(std::vector <std::shared_ptr<GameObject>> objectArray
   
   std::vector<std::shared_ptr<Component>> allTheGameComponents = std::vector<std::shared_ptr<Component>>();
 
-  for (unsigned i = 0; i < objectArray.size(); i++)
-    for(auto &component : objectArray[i]->GetComponents())
-      allTheGameComponents.push_back(component);
-  
+  for (unsigned i = 0; i < objectArray.size(); i++) {
+    if(objectArray[i]->IsActive())
+      for(auto &component : objectArray[i]->GetComponents())
+        allTheGameComponents.push_back(component);
+  }
   // for(auto &component : allTheGameComponents) {
-  std::sort(allTheGameComponents.begin(), allTheGameComponents.end(), ordenateByY);
+  std::sort(allTheGameComponents.begin(), allTheGameComponents.end(), SortByY);
   // }
 
 
@@ -112,6 +113,10 @@ void GameObject::Desactivate() {
 
 bool GameObject::IsActive() {
   return this->active;
+}
+
+void GameObject::ToggleActive() {
+  this->active = !this->active;
 }
 
 bool GameObject::Has(std::string type) {

@@ -6,12 +6,11 @@
 #include "StageState.h"
 #include "CameraFollower.h"
 
-TitleState::TitleState() {
+TitleState::TitleState(bool startOption) {
   this->currentOption = 0;
-  GameObject *bg = new GameObject();
-  bg->AddComponent(new Sprite(*bg, "img/title.png"));
-  bg->AddComponent(new CameraFollower(*bg));
-  this->AddObject(bg);
+  this->startPressed = startOption;
+  this->flickerTimer = Timer();
+  this->showText = false;
 
   this->LoadAssets();
 }
@@ -19,12 +18,28 @@ TitleState::TitleState() {
 TitleState::~TitleState() {}
 
 void TitleState::LoadAssets() {
+  bgBright = new GameObject();
+  bgBright->AddComponent(new Sprite(*bgBright, "img/title-bright.png"));
+  bgBright->AddComponent(new CameraFollower(*bgBright));
+  this->AddObject(bgBright);
+
+  bgDark = new GameObject();
+  bgDark->AddComponent(new Sprite(*bgDark, "img/title.png"));
+  bgDark->AddComponent(new CameraFollower(*bgDark));
+  this->AddObject(bgDark);
+
+  if (not this->startPressed)
+    bgDark->Desactivate();
+
   GameObject *text = new GameObject();
-  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE, 0.5));
+  this->startOption = new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PRESS START", WHITE, 0.5);
+  this->startOption->SetPos(640, OPTIONS_Y);
   text = new GameObject();
-  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "DIFFICULTY", WHITE, 0.5));
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE));
   text = new GameObject();
-  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE, 0.5));
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "DIFFICULTY", WHITE));
+  text = new GameObject();
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE));
 
   currentOption = 1;
   this->options[currentOption]->SetPos(640, OPTIONS_Y);
@@ -56,43 +71,71 @@ void TitleState::LoadAssets() {
 void TitleState::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
 
-  bool pressedLeft = InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) || InputManager::GetInstance().KeyPress(A_KEY);
-  bool pressedRight = InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) || InputManager::GetInstance().KeyPress(D_KEY);
+    if(this->startPressed) {
+      if(InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
+        this->buttonSounds[SELECTED]->Play(1);
+        this->startPressed = false;
+        this->bgDark->Desactivate();
+        this->bgBright->Activate();
+      }
 
-  if (pressedLeft && this->currentOption > 0) {
-    this->buttonSounds[CHANGE]->Play(1);
-    this->currentOption--;
-  }
+      bool pressedLeft = InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) || InputManager::GetInstance().KeyPress(A_KEY);
+      bool pressedRight = InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) || InputManager::GetInstance().KeyPress(D_KEY);
 
-  if (pressedRight && this->currentOption < this->options.size() - 1) {
-    this->buttonSounds[CHANGE]->Play(1);
-    this->currentOption++;
-  }
+      if (pressedLeft && this->currentOption > 0) {
+        this->buttonSounds[CHANGE]->Play(1);
+        this->currentOption--;
+      }
 
-  for(auto &option : this->options) {
-    option->SetColor(NOT_SELECTED_OPTION);
-  }
-  this->options[currentOption]->SetColor(SELECTED_OPTION);
+      if (pressedRight && this->currentOption < this->options.size() - 1) {
+        this->buttonSounds[CHANGE]->Play(1);
+        this->currentOption++;
+      }
 
-
-  if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {
-    this->buttonSounds[SELECTED]->Play(1);
-    switch (this->currentOption) {
-      case PLAY:
-        this->popRequested = true;
-        Game::GetInstance().Push(new StageState());
-        break;
-
-      case DIFFICULTY:
-        break;
-
-      case EXIT:
-        this->quitRequested = true;
-        break;
-      default:
-        break;
+      for(auto &option : this->options) {
+        option->SetColor(NOT_SELECTED_OPTION);
+      }
+      this->options[currentOption]->SetColor(SELECTED_OPTION);
+    } else {
+      flickerTimer.Update(dt);
+      if (flickerTimer.Get() > TEXT_FLICKER_TIME) {
+        this->showText = not this->showText;
+        flickerTimer.Restart();
+      }
     }
-  }
+
+    if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {  
+      this->buttonSounds[SELECTED]->Play(1);
+
+      if (not startPressed) {
+        this->currentOption = PLAY;
+        this->startPressed = true;
+        this->bgBright->Desactivate();
+        this->bgDark->Activate();
+        // bg = new GameObject();
+        // bg->AddComponent(new Sprite(*bg, "img/title.png"));
+        // bg->AddComponent(new CameraFollower(*bg));
+        // this->AddObject(bg);
+        // this->bg->RemoveComponent("Sprite");
+        // this->bg->AddComponent(new Sprite(*bg, "img/title.png"));
+      } else {
+        switch (this->currentOption) {
+          case PLAY:
+            this->popRequested = true;
+            Game::GetInstance().Push(new StageState());
+            break;
+
+          case DIFFICULTY:
+            break;
+
+          case EXIT:
+            this->quitRequested = true;
+            break;
+          default:
+            break;
+        }
+      }
+    }
 
   this->UpdateArray(dt);
 }
@@ -100,8 +143,14 @@ void TitleState::Update(float dt) {
 void TitleState::Render() {
   this->RenderArray();
 
-  for (auto option : this->options) {
-    option->Render();
+  if (startPressed) {
+    for (auto option : this->options) {
+      option->Render();
+    }
+  } else {
+    if (this->showText) {
+      this->startOption->Render();
+    }
   }
 }
 void TitleState::Start() {
