@@ -9,9 +9,9 @@
 #define CHANGE 1
 
 #define OPTIONS_Y 480
-#define OPTIONS_FONT "assets/font/Call me maybe.ttf"
-#define OPTIONS_FONT_SIZE 55
-#define SELECTED_OPTION LIGHT_GREEN
+#define OPTIONS_FONT "assets/font/Berlin Sans FB Demi Negrito.ttf"
+#define OPTIONS_FONT_SIZE 50
+#define SELECTED_OPTION YELLOW
 #define NOT_SELECTED_OPTION WHITE
 
 #include <vector>

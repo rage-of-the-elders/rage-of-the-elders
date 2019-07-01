@@ -7,7 +7,7 @@
 #define WHITE {255, 255, 255, 255}
 #define BLACK {0, 0, 0, 255}
 #define DARK_BLUE {3, 50, 77, 255}
-#define LIGHT_GREEN {220, 245, 73, 255}
+#define YELLOW {220, 245, 73, 255}
 
 #include "SDL_include.h"
 #include "Component.h"

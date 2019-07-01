@@ -26,27 +26,7 @@ void TitleState::LoadAssets() {
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE, 0.5));
 
-  GameObject *sound = new GameObject();
-  // TODO: add sounds
-}
-
-void TitleState::Update(float dt) {
-  this->quitRequested = InputManager::GetInstance().QuitRequested();
-
-  if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) && this->currentOption > 0) {
-    // this->buttonSounds[CHANGE]->Play();
-    this->currentOption--;
-  }
-
-  if (InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) && this->currentOption < this->options.size() -1) {
-    // this->buttonSounds[CHANGE]->Play();
-    this->currentOption++;
-  }
-
-  for(auto &option : this->options) {
-    option->SetColor(NOT_SELECTED_OPTION);
-  }
-  this->options[currentOption]->SetColor(SELECTED_OPTION);
+  currentOption = 1;
   this->options[currentOption]->SetPos(640, OPTIONS_Y);
 
   // positioning options before current option
@@ -66,9 +46,37 @@ void TitleState::Update(float dt) {
     options[i]->SetPos(newX, OPTIONS_Y, false, true);
   	options[i]->SetColor(NOT_SELECTED_OPTION);
   }
+  currentOption = 0;
+
+  GameObject *sound = new GameObject();
+  this->buttonSounds.push_back(new Sound(*text, "audio/select.ogg"));
+  this->buttonSounds.push_back(new Sound(*text, "audio/cursor.ogg"));
+}
+
+void TitleState::Update(float dt) {
+  this->quitRequested = InputManager::GetInstance().QuitRequested();
+
+  bool pressedLeft = InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) || InputManager::GetInstance().KeyPress(A_KEY);
+  bool pressedRight = InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) || InputManager::GetInstance().KeyPress(D_KEY);
+
+  if (pressedLeft && this->currentOption > 0) {
+    this->buttonSounds[CHANGE]->Play(1);
+    this->currentOption--;
+  }
+
+  if (pressedRight && this->currentOption < this->options.size() - 1) {
+    this->buttonSounds[CHANGE]->Play(1);
+    this->currentOption++;
+  }
+
+  for(auto &option : this->options) {
+    option->SetColor(NOT_SELECTED_OPTION);
+  }
+  this->options[currentOption]->SetColor(SELECTED_OPTION);
 
 
   if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {
+    this->buttonSounds[SELECTED]->Play(1);
     switch (this->currentOption) {
       case PLAY:
         this->popRequested = true;
