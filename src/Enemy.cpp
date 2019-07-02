@@ -109,6 +109,10 @@ bool Enemy::IsOpponent(GameObject &other) {
   return (not other.Has("Enemy"));
 }
 
-void Enemy::SetSpeed() {
+void Enemy::ResetSpeed() {
   this->speed = ENEMY_SPEED;
+}
+
+void Enemy::SetSpeed(int speed) {
+  this->speed = speed;
 }

@@ -4,6 +4,7 @@
 #define ENEMY_HP 100
 #define ENEMY_SPEED 100
 #define ATTACK_COOLDOWN 10
+#define TEACHER_ULTIMATE_TIME 50
 
 #include "Fighter.h"
 
@@ -21,8 +22,9 @@ public:
   Enemy(GameObject &associated);
   ~Enemy();
   void Start();
-  void SetSpeed();
+  void ResetSpeed();
   void Update(float dt);
+  void SetSpeed(int speed);
   bool TargetIsInRange();
   bool Is(std::string type);
   void NotifyCollision(GameObject &other);

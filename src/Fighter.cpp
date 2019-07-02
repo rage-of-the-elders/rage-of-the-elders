@@ -443,3 +443,7 @@ void Fighter::Shoot(std::string file, int frameCount) {
     this->shootCooldown.Restart();
   }
 }
+
+void Fighter::SetState(FighterState state) {
+  this->currentState = state;
+}

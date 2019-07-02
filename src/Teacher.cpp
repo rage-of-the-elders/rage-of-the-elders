@@ -55,15 +55,15 @@ void Teacher::Update(float dt) {
   if(this->enemys.size() > 0 && this->ultimateDuration.Get() > 5) {
     for(auto &enemy : this->enemys) {
       Enemy *enemyType = (Enemy *) enemy->GetComponent("Enemy");
-      enemyType->SetSpeed();
-      enemyType->currentState = IDLE;
+      enemyType->ResetSpeed();
+      enemyType->SetState(IDLE);
     }
     this->enemys.clear();
   }
   else if(this->ultimateDuration.Get() < 5) {
     for(auto &enemy : this->enemys) {
       Enemy *enemyType = (Enemy *) enemy->GetComponent("Enemy");
-      enemyType->currentState = FROZEN;
+      enemyType->SetState(FROZEN);
     }
   }
 }
@@ -79,8 +79,8 @@ void Teacher::HandleUltimateBegin(float dt) {
 
   for(auto &enemy : this->enemys) {
     Enemy *enemyType = (Enemy *) enemy->GetComponent("Enemy");
-    enemyType->speed = 0;
-    enemyType->currentState = FROZEN;
+    enemyType->SetSpeed(0);
+    enemyType->SetState(FROZEN);
   }
 
   this->ultimateDuration.Restart();

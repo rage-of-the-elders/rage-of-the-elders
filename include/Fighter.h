@@ -22,12 +22,14 @@ protected:
   int damage[LAST];
   int comboCount;
   int points;
+  float speed;
+  Timer shootCooldown;
+  Timer ultimateDuration;
   Orientation orientation;
   FighterState storedState;
-  std::vector<Sprite*> sprite;
+  FighterState currentState;
   std::vector<Sound*> sound;
-  Timer ultimateDuration;
-  Timer shootCooldown;
+  std::vector<Sprite*> sprite;
 
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);
@@ -43,8 +45,6 @@ protected:
   virtual void HandleFrozen(float dt);
 
 public:
-  float speed;
-  FighterState currentState;
 
   Fighter(GameObject &associated);
   ~Fighter();
@@ -64,6 +64,7 @@ public:
   bool CanAttack(enum Orientation orientation, Rect targetRect);
   Rect GetColliderBox();
   int GetDamage();
+  void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
   void Shoot(std::string file, int frameCount);
 };
