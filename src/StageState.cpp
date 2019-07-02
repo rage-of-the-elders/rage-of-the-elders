@@ -17,6 +17,7 @@
 #include "StageState.h"
 #include "InputManager.h"
 #include "CameraFollower.h"
+#include "Teacher.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
@@ -54,10 +55,15 @@ void StageState::LoadBackground() {
 }
 
 void StageState::LoadPlayers() {
-  GameObject *veteranGO = new GameObject();
-  veteranGO->box.SetCenterPos(600, 300);
-  veteranGO->AddComponent(new Veteran(*veteranGO));
-  this->AddObject(veteranGO);
+  // GameObject *veteranGO = new GameObject();
+  // veteranGO->box.SetCenterPos(600, 300);
+  // veteranGO->AddComponent(new Veteran(*veteranGO));
+  // this->AddObject(veteranGO);
+
+  GameObject *teacherGO = new GameObject();
+  teacherGO->box.SetCenterPos(600, 150);
+  teacherGO->AddComponent(new Teacher(*teacherGO));
+  this->AddObject(teacherGO);
 
   GameObject *nurseGO = new GameObject();
   nurseGO->box.SetCenterPos(800, 500);
@@ -79,7 +85,7 @@ void StageState::LoadPlayers() {
   securityGO->RequestDelete();
 
 
-	Camera::Follow(veteranGO);
+	Camera::Follow(teacherGO);
 }
 
 void StageState::BuildBarriers() {
