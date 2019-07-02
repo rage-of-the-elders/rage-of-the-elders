@@ -4,6 +4,10 @@
 #include "Collider.h"
 #include "Game.h"
 #include "Enemy.h"
+#include "Nurse.h"
+#include "Janitor.h"
+#include "Security.h"
+#include "Boss.h"
 
 Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->hp = TEACHER_HP;
@@ -55,8 +59,24 @@ void Teacher::Update(float dt) {
   if(this->enemys.size() > 0 && this->ultimateDuration.Get() > 5) {
     for(auto &enemy : this->enemys) {
       Enemy *enemyType = (Enemy *) enemy->GetComponent("Enemy");
-      enemyType->ResetSpeed();
       enemyType->SetState(IDLE);
+
+      if(enemy->Has("Nurse")) {
+        Nurse *nurseType = (Nurse *) enemy->GetComponent("Nurse");
+        nurseType->ResetSpeed();
+      }
+      else if(enemy->Has("Janitor")) {
+        Janitor *janitorType = (Janitor *) enemy->GetComponent("Janitor");
+        janitorType->ResetSpeed();
+      }
+      else if(enemy->Has("Security")) {
+        Security *securityType = (Security *) enemy->GetComponent("Security");
+        securityType->ResetSpeed();
+      }
+      else if(enemy->Has("Boss")) {
+        Boss *bossType = (Boss *) enemy->GetComponent("Boss");
+        bossType->ResetSpeed();
+      }
     }
     this->enemys.clear();
   }

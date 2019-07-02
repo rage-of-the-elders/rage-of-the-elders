@@ -47,3 +47,11 @@ void Janitor::Update(float dt) {
   Collider *a = (Collider*) this->associated.GetComponent("Collider");
   a->SetOffset({(this->orientation ? RIGHT -60 : 60), 0});
 }
+
+void Janitor::ResetSpeed() {
+  this->speed = ENEMY_SPEED;
+}
+
+bool Janitor::Is(std::string type) {
+  return (type == "Janitor" || Enemy::Is(type));
+}

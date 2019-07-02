@@ -110,7 +110,18 @@ bool Enemy::IsOpponent(GameObject &other) {
 }
 
 void Enemy::ResetSpeed() {
-  this->speed = ENEMY_SPEED;
+  if(this->associated.Has("Nurse")) {
+    this->speed = 70;
+  }
+  else if(this->associated.Has("Janitor")) {
+    this->speed = ENEMY_SPEED;
+  }
+  else if(this->associated.Has("Boss")) {
+    this->speed = 400;
+  }
+  else if(this->associated.Has("Security")) {
+    this->speed = 115;
+  }
 }
 
 void Enemy::SetSpeed(int speed) {

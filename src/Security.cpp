@@ -50,3 +50,11 @@ void Security::Update(float dt) {
   Collider *a = (Collider*) this->associated.GetComponent("Collider");
   a->SetOffset({(this->orientation ? RIGHT -40 : 40), 0});
 }
+
+void Security::ResetSpeed() {
+  this->speed = 115;
+}
+
+bool Security::Is(std::string type) {
+  return (type == "Security" || Enemy::Is(type));
+}

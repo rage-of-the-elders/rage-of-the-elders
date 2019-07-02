@@ -37,3 +37,11 @@ void Nurse::Update(float dt) {
   Collider *a = (Collider*) this->associated.GetComponent("Collider");
   a->SetOffset({(this->orientation ? RIGHT -60 : 60), 0});
 }
+
+void Nurse::ResetSpeed() {
+  this->speed = 70;
+}
+
+bool Nurse::Is(std::string type) {
+  return (type == "Nurse" || Enemy::Is(type));
+}
