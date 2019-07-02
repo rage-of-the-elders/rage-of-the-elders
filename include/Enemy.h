@@ -21,6 +21,7 @@ public:
   Enemy(GameObject &associated);
   ~Enemy();
   void Start();
+  void SetSpeed();
   void Update(float dt);
   bool TargetIsInRange();
   bool Is(std::string type);
