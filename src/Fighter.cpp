@@ -79,6 +79,9 @@ void Fighter::UpdateStateMachine(float dt) {
   case DYING: {
     HandleDying(dt);
   } break;
+  case FROZEN: {
+    HandleFrozen(dt);
+  } break;
   default:
     break;
   }
@@ -405,6 +408,12 @@ void Fighter::HandleDying(float) {
   if (this->sprite[DYING]->IsFinished()) {
     this->associated.RequestDelete();
     Veteran::player = nullptr;
+  }
+}
+
+void Fighter::HandleFrozen(float) {
+  if(not this->sprite[FROZEN]->IsActive()) {
+    this->ActivateSprite(FROZEN);
   }
 }
 

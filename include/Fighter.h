@@ -16,15 +16,13 @@
 class Fighter : public Component {
 protected:
   int hp;
-  float speed;
   enum FighterState { FIRST, MOVING, BASIC_ATTACK_ONE, BASIC_ATTACK_TWO, COMBO, ULTIMATE_BEGIN,
-                      ULTIMATE_MIDLE, ULTIMATE_FINAL, IDLE, HURTING, DYING, HIT, LAST, INVALID };
+                      ULTIMATE_MIDLE, ULTIMATE_FINAL, IDLE, HURTING, DYING, HIT, FROZEN, LAST, INVALID };
   enum Orientation { LEFT, RIGHT };
   int damage[LAST];
   int comboCount;
   int points;
   Orientation orientation;
-  FighterState currentState;
   FighterState storedState;
   std::vector<Sprite*> sprite;
   std::vector<Sound*> sound;
@@ -42,8 +40,11 @@ protected:
   virtual void HandleUltimateFinal(float dt);
   virtual void HandleHurting(float dt);
   virtual void HandleDying(float dt);
+  virtual void HandleFrozen(float dt);
 
 public:
+  float speed;
+  FighterState currentState;
 
   Fighter(GameObject &associated);
   ~Fighter();
