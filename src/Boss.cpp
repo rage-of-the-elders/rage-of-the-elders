@@ -50,7 +50,6 @@ bool Boss::Is(std::string type) {
 void Boss::Update(float dt) {
   Enemy::Update(dt);
   this->frozenTime.Update(dt);
-  std::cout << this->hp << std::endl;
 }
 
 void Boss::ManageInput(float dt) {

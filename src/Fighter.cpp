@@ -202,7 +202,7 @@ void Fighter::NotifyCollision(GameObject &other) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
             this->sound[HIT]->Play(1);
-            if (other.Has("Veteran")) {
+            if (other.Has("Playable")) {
               opponent->comboCount++;
               opponent->points++;
               if (opponent->comboCount > 3) {
@@ -393,7 +393,10 @@ void Fighter::HandleHurting(float) {
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);
     this->sprite[HURTING]->SetFinished(false);
-    this->currentState = MOVING;
+    if(this->associated.Has("Boss"))
+      this->currentState = FROZEN;
+    else
+      this->currentState = MOVING;
     this->storedState = INVALID;
   }
 }
