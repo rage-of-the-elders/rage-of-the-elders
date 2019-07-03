@@ -2,6 +2,7 @@
 #include "Collision.h"
 #include "Sprite.h"
 #include "Collider.h"
+#include <iostream>
 
 Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->hp = VETERAN_HP;
@@ -44,4 +45,8 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
 
 Veteran::~Veteran() {
   Veteran::player = nullptr;
+}
+
+bool Veteran::Is(std::string type) {
+  return (type == "Veteran" || Fighter::Is(type));
 }

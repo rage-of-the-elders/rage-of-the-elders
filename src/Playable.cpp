@@ -100,7 +100,7 @@ void Playable::HandleMovement(float) {
 }
 
 bool Playable::Is(std::string type) {
-  return (type == "Veteran" || Fighter::Is(type));
+  return (type == "Playable" || Fighter::Is(type));
 }
 
 void Playable::NotifyCollision(GameObject &other) {
@@ -108,7 +108,7 @@ void Playable::NotifyCollision(GameObject &other) {
 }
 
 bool Playable::IsOpponent(GameObject &other) {
-  return (not other.Has("Veteran"));
+  return (not other.Has("Playable"));
 }
 
 void Playable::HandleUltimateBegin(float dt) {
