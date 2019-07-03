@@ -31,6 +31,7 @@ public:
   void Render();
   bool IsDead();
   bool IsActive();
+  void ToggleActive();
   bool Has(std::string type);
   void Activate();
   static void NewRender(std::vector <std::shared_ptr<GameObject>> objectArray);

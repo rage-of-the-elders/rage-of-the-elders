@@ -75,6 +75,16 @@ Game::Game(std::string title, int width, int height) {
     exit(-1);
   }
 
+  SDL_Surface *icon;
+  icon = IMG_Load("assets/img/icon.png");
+  if (!icon) {
+    printf("Could not load icon: %s\n", IMG_GetError());
+    exit(-1);
+  }
+  SDL_SetWindowIcon(window, icon);
+  SDL_FreeSurface(icon);
+  // SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+
   // Renderer creation
   int SUPPORTED_RENDERER = -1;
   renderer = SDL_CreateRenderer(window, SUPPORTED_RENDERER, SDL_RENDERER_ACCELERATED);
@@ -119,9 +129,8 @@ void Game::Run() {
   }
 
   if (not this->stateStack.empty()) {
-
     while (!this->GetCurrentState().QuitRequested() && !this->stateStack.empty()) {
-    this->CalculateDeltaTime(); // TODO: Where to put this?
+      this->CalculateDeltaTime(); // TODO: Where to put this?
       if (this->GetCurrentState().PopRequested()) {
         this->stateStack.pop();
         Resources::Clear();

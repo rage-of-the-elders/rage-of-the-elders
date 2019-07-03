@@ -114,8 +114,9 @@ void Sprite::Update(float dt) {
 
   if (this->secondsToSelfDestruct > 0) {
     this->selfDestructCount.Update(dt);
-    if (this->selfDestructCount.Get() > this->secondsToSelfDestruct)
+    if (this->selfDestructCount.Get() > this->secondsToSelfDestruct) {
       this->associated.RequestDelete();
+    }
   }
   this->timeElapsed += dt;
 
@@ -171,4 +172,11 @@ void Sprite::Desactivate() {
 Rect Sprite::GetPosition() {
   Rect realPosition = Rect((this->associated.box.x + (this->width / (this->frameCount * 1.0))), this->associated.box.y, this->width / (this->frameCount * 1.0), this->height);
   return realPosition;
+}
+
+void Sprite::SetAlpha(int alpha) {
+  if (SDL_SetTextureAlphaMod(this->texture.get(), alpha)) {
+    printf("Could not update texture alpha channel: %s\n", SDL_GetError());
+    exit(-1);
+  }
 }
