@@ -18,6 +18,7 @@
 #include "InputManager.h"
 #include "CameraFollower.h"
 #include "Teacher.h"
+#include "Boss.h"
 
 StageState::StageState() : music("audio/stage1.ogg") {
   this->quitRequested = false;
@@ -70,6 +71,12 @@ void StageState::LoadPlayers() {
   nurseGO->AddComponent(new Nurse(*nurseGO));
   this->AddObject(nurseGO);
   nurseGO->RequestDelete();
+
+  GameObject *bossGO = new GameObject();
+  bossGO->box.SetCenterPos(800, 500);
+  bossGO->AddComponent(new Boss(*bossGO));
+  this->AddObject(bossGO);
+  bossGO->RequestDelete();
 
   GameObject *janitorGO = new GameObject();
   janitorGO->box.SetCenterPos(800, 500);
@@ -140,10 +147,9 @@ void StageState::HandleHorde() {
   }
 
   if(this->gateMap->GetCurrentGate() > 0) {
-    // TODO: Change "Veteran" class to "Player"
     int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
-    if (Veteran::player != nullptr) {
-      int playerPosition = Veteran::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
+    if (Playable::player != nullptr) {
+      int playerPosition = Playable::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
 
       if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
         this->LockCamera(gatePosition);
@@ -183,6 +189,7 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
       break;
     case 3:
       enemyGO->AddComponent(new Security(*enemyGO));
+      // enemyGO->AddComponent(new Boss(*enemyGO));      
       break;
     default:
       printf("WARNING: No enemy type given!\n");
