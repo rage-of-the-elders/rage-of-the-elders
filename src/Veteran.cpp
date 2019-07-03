@@ -17,7 +17,7 @@ Veteran::Veteran(GameObject &associated) : Fighter(associated) {
   this->damage[COMBO] = 7;
 
   std::string character = "veteran";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.04, 0, true);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.04, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.04, 0, false);
   this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
@@ -70,7 +70,6 @@ void Veteran::ManageInput(float dt) {
     }
     else if(InputManager::GetInstance().KeyPress(J_KEY) && (not this->IsAttacking())) {
       this->currentState = ULTIMATE_BEGIN;
-      Camera::Flicker(5, 0.3);
     }
     else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
       this->currentState = MOVING;
