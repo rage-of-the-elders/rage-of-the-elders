@@ -113,6 +113,7 @@ void StageState::Update(float dt) {
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
 		this->popRequested = true;
+    this->UnlockCamera();
 		Game::GetInstance().Push(new TitleState());
 	}
 
