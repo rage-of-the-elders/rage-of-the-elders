@@ -10,9 +10,10 @@
 #define CHANGE 1
 
 #define TEXT_FLICKER_TIME 0.35
-#define OPTIONS_Y 480
+#define OPTIONS_Y 500
 #define OPTIONS_FONT "assets/font/Berlin Sans FB Demi Negrito.ttf"
 #define OPTIONS_FONT_SIZE 50
+#define OPTIONS_SPACING 50
 #define SELECTED_OPTION YELLOW
 #define NOT_SELECTED_OPTION WHITE
 
@@ -31,6 +32,7 @@ private:
   Text *startOption;
   GameObject *bgBright;
   GameObject *bgDark;
+  GameObject *gameName;
   Timer flickerTimer;
 
 public:

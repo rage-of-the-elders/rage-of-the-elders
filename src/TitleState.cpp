@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "StageState.h"
 #include "CameraFollower.h"
+#include "Camera.h"
 
 TitleState::TitleState(bool startOption) {
   this->currentOption = 0;
@@ -18,15 +19,21 @@ TitleState::TitleState(bool startOption) {
 TitleState::~TitleState() {}
 
 void TitleState::LoadAssets() {
-  bgBright = new GameObject();
-  bgBright->AddComponent(new Sprite(*bgBright, "img/title-bright.png"));
-  bgBright->AddComponent(new CameraFollower(*bgBright));
+  this->bgBright = new GameObject();
+  this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title-bright.png"));
   this->AddObject(bgBright);
 
-  bgDark = new GameObject();
-  bgDark->AddComponent(new Sprite(*bgDark, "img/title.png"));
-  bgDark->AddComponent(new CameraFollower(*bgDark));
+  this->gameName = new GameObject();
+  this->gameName->AddComponent(new Sprite(*gameName, "img/menu/name-2.png", 15, 0.15));
+  this->gameName->box.SetPos(530, 0);
+  this->AddObject(gameName);
+
+  this->bgDark = new GameObject();
+  Sprite *black = new Sprite(*bgDark, "img/black.png");
+  black->SetAlpha(160);
+  this->bgDark->AddComponent(black);
   this->AddObject(bgDark);
+
 
   if (not this->startPressed)
     bgDark->Desactivate();
@@ -34,6 +41,7 @@ void TitleState::LoadAssets() {
   GameObject *text = new GameObject();
   this->startOption = new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PRESS START", WHITE, 0.5);
   this->startOption->SetPos(640, OPTIONS_Y);
+  Camera::Follow(text);
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE));
   text = new GameObject();
@@ -48,7 +56,7 @@ void TitleState::LoadAssets() {
   for(int i = 0; i < currentOption; i++){
   	Text* nextOption = options[i + 1];
 
-    int newX = nextOption->GetBox().x - options[i]->GetBox().w - 20;
+    int newX = nextOption->GetBox().x - options[i]->GetBox().w - OPTIONS_SPACING;
     options[i]->SetPos(newX, OPTIONS_Y, false, true);
     options[i]->SetColor(NOT_SELECTED_OPTION);
   }
@@ -57,7 +65,7 @@ void TitleState::LoadAssets() {
   for(unsigned int i = currentOption + 1; i < options.size(); i++){
   	Text* previousOption = options[i - 1];
 
-    int newX = previousOption->GetBox().x + previousOption->GetBox().w + 20;
+    int newX = previousOption->GetBox().x + previousOption->GetBox().w + OPTIONS_SPACING;
     options[i]->SetPos(newX, OPTIONS_Y, false, true);
   	options[i]->SetColor(NOT_SELECTED_OPTION);
   }
@@ -76,7 +84,7 @@ void TitleState::Update(float dt) {
         this->buttonSounds[SELECTED]->Play(1);
         this->startPressed = false;
         this->bgDark->Desactivate();
-        this->bgBright->Activate();
+        // this->bgBright->Activate();
       }
 
       bool pressedLeft = InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) || InputManager::GetInstance().KeyPress(A_KEY);
@@ -110,7 +118,7 @@ void TitleState::Update(float dt) {
       if (not startPressed) {
         this->currentOption = PLAY;
         this->startPressed = true;
-        this->bgBright->Desactivate();
+        // this->bgBright->Desactivate();
         this->bgDark->Activate();
         // bg = new GameObject();
         // bg->AddComponent(new Sprite(*bg, "img/title.png"));
