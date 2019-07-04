@@ -76,6 +76,7 @@ void TitleState::LoadAssets() {
   GameObject *sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*text, "audio/select.ogg"));
   this->buttonSounds.push_back(new Sound(*text, "audio/cursor.ogg"));
+  this->buttonSounds.push_back(new Sound(*text, "audio/cancel.ogg"));
 }
 
 void TitleState::Update(float dt) {
@@ -83,7 +84,7 @@ void TitleState::Update(float dt) {
 
     if(this->startPressed) {
       if(InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
-        this->buttonSounds[SELECTED]->Play(1);
+        this->buttonSounds[CANCEL]->Play(1);
         this->startPressed = false;
         this->bgDark->Desactivate();
         // this->bgBright->Activate();
