@@ -20,14 +20,14 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->enemys = std::vector <std::shared_ptr<GameObject>>();
 
   std::string character = "teacher";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 30, 0.04, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.04, 0, false);
-  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.04, 0, false);
-  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
-  this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 3, 0.04, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
-  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 10, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/combo.png", 18, 0.04, 0, false);
+  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 21, 0.04, 0, false);
+  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 20, 0.04, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 17, 0.04, 0, false);
+  this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 29, 0.04, 0, false);
+  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
+  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 11, 0.04, 0, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 23, 0.04, 0, false);
 
   this->ActivateSprite(IDLE);
 
@@ -41,7 +41,7 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->sprite[HURTING]);
   this->associated.AddComponent(this->sprite[DYING]);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.7,0.8}));
+  this->associated.AddComponent(new Collider(this->associated, {0.7,0.55}));
 }
 
 Teacher::~Teacher() {
@@ -50,7 +50,7 @@ Teacher::~Teacher() {
 
 #include <iostream>
 
-void Teacher::Update(float dt) { 
+void Teacher::Update(float dt) {
   Playable::Update(dt);
 
   this->ultimateDuration.Update(dt);
@@ -89,6 +89,18 @@ void Teacher::Update(float dt) {
 }
 
 void Teacher::HandleUltimateBegin(float dt) {
+
+  if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
+    this->ActivateSprite(ULTIMATE_BEGIN);
+    // this->sound[ULTIMATE_BEGIN]->Play(1);
+    // this->ultimateDuration.Restart();
+  }
+  if(this->sprite[ULTIMATE_BEGIN]->IsFinished()) {
+    this->currentState = IDLE;
+    this->sprite[ULTIMATE_BEGIN]->SetFrame(0);
+    this->sprite[ULTIMATE_BEGIN]->SetFinished(false);
+  } 
+
   std::vector <std::shared_ptr<GameObject>> objects = Game::GetInstance().GetCurrentState().GetObjects();
 
   for(auto &object : objects) {
@@ -104,6 +116,5 @@ void Teacher::HandleUltimateBegin(float dt) {
   }
 
   this->ultimateDuration.Restart();
-  this->currentState = IDLE;
 
 }
