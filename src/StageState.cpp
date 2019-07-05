@@ -18,7 +18,7 @@
 #include "InputManager.h"
 #include "CameraFollower.h"
 
-StageState::StageState() : music("audio/stage1.ogg") {
+StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();

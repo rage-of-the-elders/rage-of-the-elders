@@ -8,6 +8,7 @@
 
 #define SELECTED 0
 #define CHANGE 1
+#define CANCEL 2
 
 #define TEXT_FLICKER_TIME 0.35
 #define OPTIONS_Y 500
@@ -21,6 +22,7 @@
 #include "State.h"
 #include "Text.h"
 #include "Sound.h"
+#include "Music.h"
 
 class TitleState : public State {
 private:
@@ -33,6 +35,7 @@ private:
   GameObject *bgBright;
   GameObject *bgDark;
   GameObject *gameName;
+  Music menuMusic;
   Timer flickerTimer;
 
 public:

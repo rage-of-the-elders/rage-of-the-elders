@@ -18,6 +18,7 @@ public:
   ~Veteran();
   void Start();
   bool Is(std::string type);
+  // void UpdateStateMachine(float dt);
   bool IsOpponent(GameObject &other);
   void NotifyCollision(GameObject &other);
 };

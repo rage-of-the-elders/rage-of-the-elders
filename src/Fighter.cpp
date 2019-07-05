@@ -86,15 +86,12 @@ void Fighter::UpdateStateMachine(float dt) {
   if (this->currentState != ULTIMATE_MIDLE) {
     // if (this->sound[ULTIMATE_MIDLE]->IsPlaying())
       // this->sound[ULTIMATE_MIDLE]->Stop();
-
-    if (this->currentState != ULTIMATE_BEGIN) {
-      Camera::StopFlicker();
-    }
   }
 
 }
 
 void Fighter::Update(float dt) {
+
   if(this->IsDead() || this->storedState == INVALID) {
     ManageInput(dt);
   } else {
@@ -199,15 +196,28 @@ void Fighter::NotifyCollision(GameObject &other) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
             this->sound[HIT]->Play(1);
+
             if (other.Has("Veteran")) {
+              this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
               if (opponent->comboCount > 3) {
                 opponent->points += (opponent->comboCount * 0.2);
               }
             }
-            else if (other.Has("Enemy"))
+            else if (other.Has("Enemy")) {
+              this->MoveInX(FIGHTER_RECOIL * (opponent->GetOrientation() == LEFT ? -1 : 1));
               opponent->comboCount = 0;
+            }
+
+            auto pow = new GameObject();
+            int rand = (int)floor(Math::GetRand(0, 2));
+            std::string file = (rand % 2 == 0 ? "img/pow.png" : "img/bam.png");
+            auto sprite = new Sprite(*pow, file, 1, 0, 0.35);
+            sprite->SetScaleX(0.3);
+            pow->AddComponent(sprite);
+            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 20);
+            Game::GetInstance().GetCurrentState().AddObject(pow);
           }
         }
       }
@@ -227,6 +237,9 @@ void Fighter::NotifyCollision(GameObject &other) {
       Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
       explosionSound->Play(1);
       this->storedState = HURTING;
+      if (Veteran::player != nullptr) {
+        this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+      }
       bullet->RemoveBullet();
     }
   }
@@ -354,7 +367,7 @@ void Fighter::HandleUltimateMidle(float dt) {
     this->ActivateSprite(ULTIMATE_MIDLE);
   }
 
-  this->Shoot("img/veteran/shoot.png", 9);
+  this->Shoot("img/veteran/shoot.png", 6);
   this->ultimateDuration.Update(dt);
   // if(this->sprite[ULTIMATE_MIDLE]->IsFinished()) {
   //   this->currentState = ULTIMATE_FINAL;
@@ -395,7 +408,8 @@ void Fighter::HandleHurting(float) {
   }
 }
 
-void Fighter::HandleDying(float) {
+auto dead = Timer();
+void Fighter::HandleDying(float dt) {
   if (not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);
@@ -403,7 +417,11 @@ void Fighter::HandleDying(float) {
     // this->sound[DYING]->Play(1);
   }
   if (this->sprite[DYING]->IsFinished()) {
-    this->associated.RequestDelete();
+    dead.Update(dt);
+    // printf("%f\n", dead.Get());
+    if (dead.Get() > 1) {
+      this->associated.RequestDelete();
+    }
     Veteran::player = nullptr;
   }
 }
@@ -427,10 +445,15 @@ void Fighter::Shoot(std::string file, int frameCount) {
     Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? 130 : -260))),
                                  (this->associated.box.GetCenter().y - 60));
     bullet->box.SetCenterPos(gunShootPosition);
-    bullet->AddComponent(new Bullet(*bullet, this->orientation == RIGHT ? 0 : 180, ((this->orientation == RIGHT ? 1 : -1) * bulletSpeed), damage,
+    bullet->AddComponent(new Bullet(*bullet, this->orientation == RIGHT ? 0 : 180, ((this->orientation == RIGHT ? 1 : -1) * bulletSpeed),
+                                    damage,
                                     maxDistance, file,
                                     frameCount, frameTime, true));
     Game::GetInstance().GetCurrentState().AddObject(bullet);
     this->shootCooldown.Restart();
   }
+}
+
+void Fighter::MoveInX(float distance) {
+  this->associated.box.x += distance;
 }
