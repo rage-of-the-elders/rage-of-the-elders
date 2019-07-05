@@ -131,7 +131,6 @@ bool Fighter::Is(std::string type) {
   return (type == "Fighter");
 }
 
-int i = 0; // FIXME: Shame...
 void Fighter::NotifyCollision(GameObject &other) {
   if(other.Has("Barrier")) { // TODO: mover pra função, tá horrível
     Collider *colliderBox = (Collider *)this->associated.GetComponent("Collider");
@@ -212,8 +211,8 @@ void Fighter::NotifyCollision(GameObject &other) {
             }
 
             auto pow = new GameObject();
-            // (int)floor(Math::GetRand(0, 2))
-            std::string file = (i++ % 2 == 0 ? "img/pow.png" : "img/bam.png");
+            int rand = (int)floor(Math::GetRand(0, 2));
+            std::string file = (rand % 2 == 0 ? "img/pow.png" : "img/bam.png");
             auto sprite = new Sprite(*pow, file, 1, 0, 0.35);
             sprite->SetScaleX(0.3);
             pow->AddComponent(sprite);

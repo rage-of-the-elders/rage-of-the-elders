@@ -24,7 +24,7 @@ bool Enemy::TargetIsInRange() {
   float targetDistanceX = abs(target.GetCenter().x - enemyAttackX);
   float targetDistanceY = abs((target.y + target.h) - enemyAttackY);
 
-  return((enemyXRange > targetDistanceX) && (ATTACK_Y_RANGE > targetDistanceY));
+  return ((enemyXRange > (targetDistanceX + ATTACK_OFFSET)) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
 void Enemy::ManageInput(float dt) {
@@ -46,7 +46,7 @@ void Enemy::ManageInput(float dt) {
     // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
     //   if(this->sprite[MOVING]->IsFinished())
     // }
-    else {
+    else if(not this->IsAttacking()) {
       this->currentState = MOVING;
     }
 
