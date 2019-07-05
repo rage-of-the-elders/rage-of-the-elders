@@ -22,6 +22,7 @@
 #include "State.h"
 #include "Text.h"
 #include "Sound.h"
+#include "Music.h"
 
 class TitleState : public State {
 private:
@@ -34,6 +35,7 @@ private:
   GameObject *bgBright;
   GameObject *bgDark;
   GameObject *gameName;
+  Music menuMusic;
   Timer flickerTimer;
 
 public:

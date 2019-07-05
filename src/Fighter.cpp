@@ -419,7 +419,7 @@ void Fighter::HandleDying(float dt) {
   }
   if (this->sprite[DYING]->IsFinished()) {
     dead.Update(dt);
-    printf("%f\n", dead.Get());
+    // printf("%f\n", dead.Get());
     if (dead.Get() > 1) {
       this->associated.RequestDelete();
     }

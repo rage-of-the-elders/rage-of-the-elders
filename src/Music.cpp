@@ -12,11 +12,11 @@ Music::Music(std::string file) {
 }
 
 Music::~Music() {
-  Stop();
+  // Stop();
 }
 
 void Music::Play(int times) {
-  Mix_VolumeMusic(10);
+  Mix_VolumeMusic(70);
   int mixPlayMusic = Mix_PlayMusic(music.get(), times);
   if (mixPlayMusic) {
     printf("Play music: %s\n", Mix_GetError());
