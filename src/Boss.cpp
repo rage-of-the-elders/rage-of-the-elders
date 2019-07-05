@@ -126,7 +126,7 @@ void Boss::HandleMovement(float dt) {
       Vec2 direction = this->GetFoot().GetCenter().GetSpeed(Vec2(targetDirection.x + 1280, targetDirection.y));
       this->associated.box.UpdatePos((direction * this->speed) * dt);
     }
-    if(this->associated.box.x < this->tagetPlayer.x) {
+    if(this->associated.box.x < (targetDirection.x + 640)) {
       if((this->associated.box.GetPos().x - targetDirection.x) < 50) {
         this->currentState = IDLE;
         this->attackCooldown.Restart();
@@ -135,7 +135,7 @@ void Boss::HandleMovement(float dt) {
         this->timesThatTheBossTurnArround++;
       }
     }
-    else if (this->associated.box.x > this->tagetPlayer.x) {
+    else if (this->associated.box.x > (targetDirection.x + 640)) {
       if(not this->bossAlredyMove) {
         if(((targetDirection.x + 1280) - this->associated.box.GetPos().x) < 400) {
           this->currentState = IDLE;
