@@ -131,7 +131,7 @@ bool Fighter::Is(std::string type) {
   return (type == "Fighter");
 }
 
-int i = 0;
+int i = 0; // FIXME: Shame...
 void Fighter::NotifyCollision(GameObject &other) {
   if(other.Has("Barrier")) { // TODO: mover pra função, tá horrível
     Collider *colliderBox = (Collider *)this->associated.GetComponent("Collider");
@@ -217,7 +217,7 @@ void Fighter::NotifyCollision(GameObject &other) {
             auto sprite = new Sprite(*pow, file, 1, 0, 0.35);
             sprite->SetScaleX(0.3);
             pow->AddComponent(sprite);
-            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 50);
+            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 20);
             Game::GetInstance().GetCurrentState().AddObject(pow);
           }
         }
