@@ -21,6 +21,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->comboCount = 0;
   this->points = 0;
   this->shootCooldown = Timer();
+  this->timeToDelete = Timer();
 
   this->sprite = std::vector<Sprite *>(LAST);
   this->sound = std::vector<Sound *>(LAST);
@@ -413,7 +414,7 @@ void Fighter::HandleHurting(float) {
   }
 }
 
-auto dead = Timer();
+
 void Fighter::HandleDying(float dt) {
   if (not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
@@ -422,9 +423,8 @@ void Fighter::HandleDying(float dt) {
     // this->sound[DYING]->Play(1);
   }
   if (this->sprite[DYING]->IsFinished()) {
-    dead.Update(dt);
-    // printf("%f\n", dead.Get());
-    if (dead.Get() > 1) {
+    timeToDelete.Update(dt);
+    if (timeToDelete.Get() > TIME_TO_DELETE) {
       this->associated.RequestDelete();
     }
     Veteran::player = nullptr;

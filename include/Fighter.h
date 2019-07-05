@@ -12,6 +12,7 @@
 #define ATTACK_Y_RANGE 30
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
+#define TIME_TO_DELETE 1 // second
 
 
 class Fighter : public Component {
@@ -31,6 +32,9 @@ protected:
   FighterState currentState;
   std::vector<Sound*> sound;
   std::vector<Sprite*> sprite;
+  Timer ultimateDuration;
+  Timer shootCooldown;
+  Timer timeToDelete;
 
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);
