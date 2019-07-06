@@ -137,7 +137,7 @@ void Boss::HandleMovement(float dt) {
     }
     else if (this->associated.box.x > (targetDirection.x + HALF_OF_THE_SCREEN)) {
       if(not this->bossAlredyMove) {
-        if(((targetDirection.x + 1280) - this->associated.box.GetPos().x) < RIGHT_GAP_TO_KEEP_BOSS_ON_THE_SCREEN) {
+        if(((targetDirection.x + WIDTH_OF_THE_SCREEN) - this->associated.box.GetPos().x) < RIGHT_GAP_TO_KEEP_BOSS_ON_THE_SCREEN) {
           this->currentState = IDLE;
           this->attackCooldown.Restart();
           this->bossIsOnLeft = (not this->bossIsOnLeft);
