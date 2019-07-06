@@ -5,6 +5,8 @@
 #define ENEMY_SPEED 100
 #define ATTACK_COOLDOWN 10
 #define TEACHER_ULTIMATE_TIME 50
+#define ATTACK_OFFSET 10
+
 
 #include "Fighter.h"
 

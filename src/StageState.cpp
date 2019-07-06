@@ -20,7 +20,7 @@
 #include "Teacher.h"
 #include "Boss.h"
 
-StageState::StageState() : music("audio/stage1.ogg") {
+StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
@@ -126,6 +126,7 @@ void StageState::Update(float dt) {
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
 		this->popRequested = true;
+    this->UnlockCamera();
 		Game::GetInstance().Push(new TitleState());
 	}
 

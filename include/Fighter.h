@@ -11,6 +11,7 @@
 #define FIGHTER_SPEED 20
 #define ATTACK_Y_RANGE 30
 #define SHOOT_COOLDOWN 0.5
+#define FIGHTER_RECOIL 20 // px
 
 
 class Fighter : public Component {
@@ -54,6 +55,7 @@ public:
   void Render();
   void ApplyDamage(int damage);
   bool IsHurting();
+  void MoveInX(float distance);
   bool IsAttacking();
   bool IsDead();
   bool Is(std::string type);
