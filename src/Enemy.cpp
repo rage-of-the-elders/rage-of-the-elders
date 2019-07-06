@@ -39,14 +39,14 @@ void Enemy::ManageInput(float dt) {
       if(sprite[currentState]->IsFinished())
         this->currentState = IDLE;
     }
-    else if (TargetIsInRange()) {
+    else if (TargetIsInRange() && this->currentState != FROZEN) {
       this->currentState = BASIC_ATTACK_ONE;
       this->attackCooldown.Restart();
     }
     // else if(this->sprite[MOVING]->IsActive()) { // FIXME: Why?
     //   if(this->sprite[MOVING]->IsFinished())
     // }
-    else if(not this->IsAttacking()) {
+    else if(not this->IsAttacking() && this->currentState != FROZEN) {
       this->currentState = MOVING;
     }
 
@@ -73,13 +73,16 @@ void Enemy::Update(float dt) {
 }
 
 void Enemy::HandleMovement(float dt) {
-  if(not this->sprite[MOVING]->IsActive()) {
-    this->ActivateSprite(MOVING);
-    // this->sound[MOVING]->Play(-1);
-  }
+  // if(this->currentState != FROZEN) {
+    if(not this->sprite[MOVING]->IsActive()) {
+      this->ActivateSprite(MOVING);
+      // this->sound[MOVING]->Play(-1);
+    }
 
-  Vec2 direction = this->GetFoot().GetCenter().GetSpeed(this->tagetPlayer.GetCenter());
-  this->associated.box.UpdatePos((direction * this->speed) * dt);
+    Vec2 direction = this->GetFoot().GetCenter().GetSpeed(this->tagetPlayer.GetCenter());
+    this->associated.box.UpdatePos((direction * this->speed) * dt);
+
+  // }
 }
 
 void Enemy::HandleDying(float) {
@@ -104,4 +107,23 @@ void Enemy::NotifyCollision(GameObject &other) {
 
 bool Enemy::IsOpponent(GameObject &other) {
   return (not other.Has("Enemy"));
+}
+
+void Enemy::ResetSpeed() {
+  if(this->associated.Has("Nurse")) {
+    this->speed = 70;
+  }
+  else if(this->associated.Has("Janitor")) {
+    this->speed = ENEMY_SPEED;
+  }
+  else if(this->associated.Has("Boss")) {
+    this->speed = 400;
+  }
+  else if(this->associated.Has("Security")) {
+    this->speed = 115;
+  }
+}
+
+void Enemy::SetSpeed(int speed) {
+  this->speed = speed;
 }

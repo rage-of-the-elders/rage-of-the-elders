@@ -15,7 +15,9 @@ private:
 public:
   Security(GameObject &associated);
   ~Security();
+  void ResetSpeed();
   void Update(float dt);
+  bool Is(std::string type);
   // void Start();
   // bool TargetIsInRange();
   // bool Is(std::string type);

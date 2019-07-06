@@ -79,6 +79,9 @@ void Fighter::UpdateStateMachine(float dt) {
   case DYING: {
     HandleDying(dt);
   } break;
+  case FROZEN: {
+    HandleFrozen(dt);
+  } break;
   default:
     break;
   }
@@ -196,8 +199,7 @@ void Fighter::NotifyCollision(GameObject &other) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
             this->sound[HIT]->Play(1);
-
-            if (other.Has("Veteran")) {
+            if (other.Has("Playable")) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
@@ -403,7 +405,10 @@ void Fighter::HandleHurting(float) {
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);
     this->sprite[HURTING]->SetFinished(false);
-    this->currentState = MOVING;
+    if(this->associated.Has("Boss"))
+      this->currentState = FROZEN;
+    else
+      this->currentState = MOVING;
     this->storedState = INVALID;
   }
 }
@@ -423,6 +428,12 @@ void Fighter::HandleDying(float dt) {
       this->associated.RequestDelete();
     }
     Veteran::player = nullptr;
+  }
+}
+
+void Fighter::HandleFrozen(float) {
+  if(not this->sprite[FROZEN]->IsActive()) {
+    this->ActivateSprite(FROZEN);
   }
 }
 
@@ -454,6 +465,9 @@ void Fighter::Shoot(std::string file, int frameCount) {
   }
 }
 
+void Fighter::SetState(FighterState state) {
+  this->currentState = state;
+}
 void Fighter::MoveInX(float distance) {
   this->associated.box.x += distance;
 }

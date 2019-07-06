@@ -51,6 +51,10 @@ void State::RenderArray() {
   //   this->objectArray[i]->Render();
 }
 
+std::vector <std::shared_ptr<GameObject>> State::GetObjects() {
+  return this->objectArray;
+}
+
 void State::LoadAssets() {}
 void State::Update(float) {}
 void State::Render() {}

@@ -13,7 +13,9 @@ private:
 public:
   Janitor(GameObject &associated);
   ~Janitor();
+  void ResetSpeed();
   void Update(float dt);
+  bool Is(std::string type);
   // bool TargetIsInRange();
   // bool Is(std::string type);
   // void NotifyCollision(GameObject &other);

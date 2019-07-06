@@ -4,23 +4,23 @@
 #define VETERAN_HP 100
 #define VETERAN_SPEED 200
 
-#include "Fighter.h"
+#include "Playable.h"
 
-class Veteran : public Fighter {
+class Veteran : public Playable {
 private:
-  void ManageInput(float dt);
-  void HandleMovement(float dt);
+  // void ManageInput(float dt);
+  // void HandleMovement(float dt);
   // void UpdateStateMachine(float dt);
 
 public:
-  static Veteran *player;
+  // static Veteran *player;
   Veteran(GameObject &associated);
   ~Veteran();
-  void Start();
+  // void Update(float dt);
+  // void Start();
   bool Is(std::string type);
-  // void UpdateStateMachine(float dt);
-  bool IsOpponent(GameObject &other);
-  void NotifyCollision(GameObject &other);
+  // bool IsOpponent(GameObject &other);
+  // void NotifyCollision(GameObject &other);
 };
 
 #endif
