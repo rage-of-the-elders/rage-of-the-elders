@@ -204,6 +204,7 @@ void Fighter::NotifyCollision(GameObject &other) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
+              puts("player bateu");
               if (opponent->comboCount > 3) {
                 opponent->points += (opponent->comboCount * 0.2);
               }

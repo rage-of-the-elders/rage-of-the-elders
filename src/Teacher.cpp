@@ -89,7 +89,6 @@ void Teacher::Update(float dt) {
 }
 
 void Teacher::HandleUltimateBegin(float dt) {
-
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
     this->ActivateSprite(ULTIMATE_BEGIN);
     // this->sound[ULTIMATE_BEGIN]->Play(1);
@@ -117,4 +116,8 @@ void Teacher::HandleUltimateBegin(float dt) {
 
   this->ultimateDuration.Restart();
 
+}
+
+bool Teacher::Is(std::string type) {
+  return (type == "Teacher" || Playable::Is(type));
 }
