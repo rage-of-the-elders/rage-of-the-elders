@@ -25,8 +25,6 @@ protected:
   int comboCount;
   int points;
   float speed;
-  Timer shootCooldown;
-  Timer ultimateDuration;
   Orientation orientation;
   FighterState storedState;
   FighterState currentState;

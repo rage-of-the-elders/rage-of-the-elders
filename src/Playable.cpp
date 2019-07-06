@@ -43,7 +43,7 @@ void Playable::ManageInput(float dt) {
     }
     else if(InputManager::GetInstance().KeyPress(J_KEY) && (not this->IsAttacking())) {
       this->currentState = ULTIMATE_BEGIN;
-      Camera::Flicker(5, 0.3);
+      // Camera::Flicker(5, 0.3);
     }
     else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
       this->currentState = MOVING;
