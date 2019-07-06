@@ -126,8 +126,8 @@ void Boss::HandleMovement(float dt) {
       Vec2 direction = this->GetFoot().GetCenter().GetSpeed(Vec2(targetDirection.x + 1280, targetDirection.y));
       this->associated.box.UpdatePos((direction * this->speed) * dt);
     }
-    if(this->associated.box.x < (targetDirection.x + 640)) {
-      if((this->associated.box.GetPos().x - targetDirection.x) < 50) {
+    if(this->associated.box.x < (targetDirection.x + HALF_OF_THE_SCREEN)) {
+      if((this->associated.box.GetPos().x - targetDirection.x) < LEFT_GAP_TO_KEEP_BOSS_ON_THE_SCREEN) {
         this->currentState = IDLE;
         this->attackCooldown.Restart();
         this->bossIsOnLeft = (not this->bossIsOnLeft);
@@ -135,9 +135,9 @@ void Boss::HandleMovement(float dt) {
         this->timesThatTheBossTurnArround++;
       }
     }
-    else if (this->associated.box.x > (targetDirection.x + 640)) {
+    else if (this->associated.box.x > (targetDirection.x + HALF_OF_THE_SCREEN)) {
       if(not this->bossAlredyMove) {
-        if(((targetDirection.x + 1280) - this->associated.box.GetPos().x) < 400) {
+        if(((targetDirection.x + 1280) - this->associated.box.GetPos().x) < RIGHT_GAP_TO_KEEP_BOSS_ON_THE_SCREEN) {
           this->currentState = IDLE;
           this->attackCooldown.Restart();
           this->bossIsOnLeft = (not this->bossIsOnLeft);
