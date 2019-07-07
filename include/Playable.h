@@ -23,6 +23,7 @@ protected:
   void ManageInput(float dt);
   void HandleMovement(float dt);
   void UpdateUltimateBarSprite(int spriteNumber);
+  void CreateInfoBar();
   virtual void HandleUltimateBegin(float dt);
   virtual void HandleUltimateMidle(float dt);
   virtual void HandleUltimateFinal(float dt);
