@@ -10,7 +10,7 @@
 
 Playable *Playable::player;
 Playable::Playable(GameObject &associated) : Fighter(associated) {
-  this->hp = PLAYABLE_HP;
+  this->hp = PLAYABLE_MAX_HP;
   this->speed = PLAYABLE_SPEED;
   // this->player = this;
   this->orientation = RIGHT;
@@ -35,7 +35,10 @@ void Playable::ManageInput(float dt) {
   if (currentUltimateSpriteNumber != this->ultimateBarSpriteNumber) {
     this->UpdateUltimateBarSprite(currentUltimateSpriteNumber);
   }
-  
+
+
+  this->UpdateLifeBar();
+
   if (this->IsDead()) {
     this->currentState = DYING;
   } else {
@@ -139,7 +142,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 90;
+  this->points = 0;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));
@@ -183,4 +186,53 @@ void Playable::UpdateUltimateBarSprite(int spriteNumber) {
     ultimateBarSprite = newUltimateSprite;
     this->ultimateBarSpriteNumber = spriteNumber;
   }
+}
+
+void Playable::UpdateLifeBar() {
+  if (GetHPPercentage() <= 0)
+    this->hearts[0]->Desactivate();
+  if (GetHPPercentage() < 25)
+    this->hearts[1]->Desactivate();
+  if (GetHPPercentage() < 50)
+    this->hearts[2]->Desactivate();
+  if (GetHPPercentage() < 75)
+    this->hearts[3]->Desactivate();
+
+  // TODO: Maybe...
+  // if (GetHPPercentage() < 15) {
+  //   Sprite *asdf = (Sprite *)this->hearts[0]->GetComponent("Sprite");
+  //   Vec2 center = hearts[0]->box.GetCenter();
+  //   CameraFollower *follower = (CameraFollower *)this->hearts[0]->GetComponent("CameraFollower");
+  //   asdf->SetScaleX(0.7);
+  //   follower->centered = true;
+  //   follower->offset.y = center.y - Camera::position.y;
+  //   follower->offset.x = center.x - Camera::position.x;
+  // }
+  // else if (GetHPPercentage() < 40) {
+  //   Sprite *asdf = (Sprite *)this->hearts[1]->GetComponent("Sprite");
+  //   Vec2 center = hearts[1]->box.GetCenter();
+  //   CameraFollower *follower = (CameraFollower *)this->hearts[1]->GetComponent("CameraFollower");
+  //   asdf->SetScaleX(0.7);
+  //   follower->centered = true;
+  //   follower->offset.y = center.y - Camera::position.y;
+  //   follower->offset.x = center.x - Camera::position.x;
+  // }
+  // else if (GetHPPercentage() < 65) {
+  //   Sprite *asdf = (Sprite *)this->hearts[2]->GetComponent("Sprite");
+  //   Vec2 center = hearts[2]->box.GetCenter();
+  //   CameraFollower *follower = (CameraFollower *)this->hearts[2]->GetComponent("CameraFollower");
+  //   asdf->SetScaleX(0.7);
+  //   follower->centered = true;
+  //   follower->offset.y = center.y - Camera::position.y;
+  //   follower->offset.x = center.x - Camera::position.x;
+  // }
+  // else if (GetHPPercentage() < 90) {
+  //   Sprite *asdf = (Sprite *)this->hearts[3]->GetComponent("Sprite");
+  //   Vec2 center = hearts[3]->box.GetCenter();
+  //   CameraFollower *follower = (CameraFollower *)this->hearts[3]->GetComponent("CameraFollower");
+  //   asdf->SetScaleX(0.7);
+  //   follower->centered = true;
+  //   follower->offset.y = center.y - Camera::position.y;
+  //   follower->offset.x = center.x - Camera::position.x;
+  // }
 }

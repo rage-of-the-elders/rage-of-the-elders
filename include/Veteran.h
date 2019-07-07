@@ -22,6 +22,7 @@ public:
   // void Update(float dt);
   // void Start();
   bool Is(std::string type);
+  float GetHPPercentage();
   // bool IsOpponent(GameObject &other);
   // void NotifyCollision(GameObject &other);
 };

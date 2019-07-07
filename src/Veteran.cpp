@@ -48,3 +48,7 @@ Veteran::~Veteran() {
 bool Veteran::Is(std::string type) {
   return (type == "Veteran" || Playable::Is(type));
 }
+
+float Veteran::GetHPPercentage() {
+  return (this->hp*1.0/VETERAN_HP*1.0) * 100;
+}
