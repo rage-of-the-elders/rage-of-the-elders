@@ -121,7 +121,10 @@ void TitleState::Update(float dt) {
       }
     }
 
-    if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {  
+    bool enterPressed = InputManager::GetInstance().KeyPress(ENTER_KEY) 
+                        || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)
+                        || InputManager::GetInstance().KeyPress(SPACE_KEY);
+    if (enterPressed) {  
       this->buttonSounds[SELECTED]->Play(1);
 
       if (not startPressed) {
