@@ -4,7 +4,8 @@
 #define PLAYABLE_HP 100
 #define PLAYABLE_SPEED 200
 #define POINTS_TO_ULTIMATE 100
-#define ICONS_Y_POS 15 // px
+#define ICONS_INITIAL_X_POS 20.0 // px
+#define ICONS_Y_POS 15.0 // px
 #define ICON_SPACING 0 // px
 #define HEARTS_COUNTER 4 // px
 

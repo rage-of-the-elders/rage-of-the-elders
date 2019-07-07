@@ -3,6 +3,7 @@
 
 #define VETERAN_HP 100
 #define VETERAN_SPEED 200
+#define BULLET_DAMAGE 30
 
 #include "Playable.h"
 

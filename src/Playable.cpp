@@ -16,15 +16,15 @@ Playable::Playable(GameObject &associated) : Fighter(associated) {
   this->orientation = RIGHT;
   this->damage[BASIC_ATTACK_TWO] = 10;
   this->damage[COMBO] = 7;
-  this->ultimateBarSpriteNumber = 0;
-  this->points = 90;
+  this->ultimateBarSpriteNumber = -1;
+  this->points = 0;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));
   this->infoBar->AddComponent(new CameraFollower(*infoBar));
   Game::GetInstance().GetCurrentState().AddObject(infoBar);
 
-  int iconXPos = 10;
+  float iconXPos = ICONS_INITIAL_X_POS;
   this->picture = new GameObject();
   this->picture->AddComponent(new Sprite(*picture, "img/playable/picture.png"));
   this->picture->AddComponent(new CameraFollower(*picture, {iconXPos, ICONS_Y_POS}));
@@ -58,9 +58,7 @@ void Playable::Update(float dt) {
 void Playable::Start() {}
 
 void Playable::UpdateUltimateBarSprite(int spriteNumber) {
-  if (spriteNumber <= 7) {
-    if (spriteNumber == 0)
-      spriteNumber = 1;
+  if (spriteNumber <= 6) {
     Sprite *newUltimateSprite = new Sprite(*ultimateBar, "img/playable/ult" + std::to_string(spriteNumber) + ".png");
     ultimateBar->AddComponent(newUltimateSprite);
     ultimateBar->RemoveComponent(ultimateBarSprite);
@@ -70,10 +68,9 @@ void Playable::UpdateUltimateBarSprite(int spriteNumber) {
 }
 
 void Playable::ManageInput(float dt) {
-  int currentUltimateSpriteNumber = points/(POINTS_TO_ULTIMATE/7.0);
+  int currentUltimateSpriteNumber = points/(POINTS_TO_ULTIMATE/6.0);
 
-  
-  if (currentUltimateSpriteNumber  != this->ultimateBarSpriteNumber) {
+  if (currentUltimateSpriteNumber != this->ultimateBarSpriteNumber) {
     this->UpdateUltimateBarSprite(currentUltimateSpriteNumber);
   }
   

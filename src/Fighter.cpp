@@ -204,7 +204,7 @@ void Fighter::NotifyCollision(GameObject &other) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
-              puts("player bateu");
+
               if (opponent->comboCount > 3) {
                 opponent->points += (opponent->comboCount * 0.2);
               }
@@ -449,7 +449,7 @@ Rect Fighter::GetColliderBox() {
 void Fighter::Shoot(std::string file, int frameCount) {
   if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
     float bulletSpeed = 400;
-    float damage = 10;
+    float damage = BULLET_DAMAGE;
     float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
     float frameTime = 0.09;
 
