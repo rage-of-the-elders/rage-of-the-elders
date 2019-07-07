@@ -1,7 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#define ENEMY_HP 50
+#define ENEMY_HP 30
 #define ENEMY_SPEED 100
 #define ATTACK_COOLDOWN 10
 #define TEACHER_ULTIMATE_TIME 50

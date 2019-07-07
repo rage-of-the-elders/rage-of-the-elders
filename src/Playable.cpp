@@ -82,34 +82,34 @@ void Playable::ManageInput(float dt) {
 
       InputManager::GetInstance().SetLastsPressKeys("");
     }
-    else if(InputManager::GetInstance().KeyPress(F_KEY) && (not this->IsAttacking())) {
+    else if(InputManager::GetInstance().KeyPress(A_KEY) && (not this->IsAttacking())) {
       this->currentState = BASIC_ATTACK_ONE;
     }
-    else if(InputManager::GetInstance().KeyPress(G_KEY) && (not this->IsAttacking())) {
+    else if(InputManager::GetInstance().KeyPress(S_KEY) && (not this->IsAttacking())) {
       this->currentState = BASIC_ATTACK_TWO;
     }
-    else if(InputManager::GetInstance().KeyPress(J_KEY) && (not this->IsAttacking()) && this->UltimateReady()) {
+    else if(InputManager::GetInstance().KeyPress(D_KEY) && (not this->IsAttacking()) && this->UltimateReady()) {
       this->currentState = ULTIMATE_BEGIN;
       this->points = 0;
     }
-    else if(InputManager::GetInstance().IsKeyDown(D_KEY)) {
+    else if(InputManager::GetInstance().IsKeyDown(RIGHT_ARROW_KEY)) {
       this->currentState = MOVING;
       Vec2 direction = Vec2::GetSpeed(0); // FIXME: This shouldn't be here. Move to Update
       this->associated.box.UpdatePos((direction * this->speed) * dt);
       this->orientation = RIGHT;
     }
-    else if(InputManager::GetInstance().IsKeyDown(A_KEY)){
+    else if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY)){
       this->currentState = MOVING;
       Vec2 direction = Vec2::GetSpeed(0);
       this->associated.box.UpdatePos((direction * -this->speed) * dt);
       this->orientation = LEFT;
     }
-    if(InputManager::GetInstance().IsKeyDown(S_KEY)){
+    if(InputManager::GetInstance().IsKeyDown(DOWN_ARROW_KEY)){
       this->currentState = MOVING;
       Vec2 direction = Vec2::GetSpeed(90);
       this->associated.box.UpdatePos((direction * this->speed) * dt);
     }
-    if(InputManager::GetInstance().IsKeyDown(W_KEY)){
+    if(InputManager::GetInstance().IsKeyDown(UP_ARROW_KEY)){
       this->currentState = MOVING;
       Vec2 direction = Vec2::GetSpeed(270);
       this->associated.box.UpdatePos((direction * this->speed) * dt);
