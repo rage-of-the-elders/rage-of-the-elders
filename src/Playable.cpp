@@ -139,7 +139,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 0;
+  this->points = 90;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));
@@ -172,7 +172,12 @@ void Playable::CreateInfoBar() {
 
 void Playable::UpdateUltimateBarSprite(int spriteNumber) {
   if (spriteNumber <= 6) {
-    Sprite *newUltimateSprite = new Sprite(*ultimateBar, "img/playable/ult" + std::to_string(spriteNumber) + ".png");
+    Sprite *newUltimateSprite;
+    if (spriteNumber == 6) {
+      newUltimateSprite = new Sprite(*ultimateBar, "img/playable/ult" + std::to_string(spriteNumber) + ".png", 3, 0.12);
+    } else {
+      newUltimateSprite = new Sprite(*ultimateBar, "img/playable/ult" + std::to_string(spriteNumber) + ".png");
+    }
     ultimateBar->AddComponent(newUltimateSprite);
     ultimateBar->RemoveComponent(ultimateBarSprite);
     ultimateBarSprite = newUltimateSprite;
