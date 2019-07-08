@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "CameraFollower.h"
+#include "GameData.h"
 #include <iostream>
 
 Playable *Playable::player;
@@ -151,7 +152,7 @@ void Playable::CreateInfoBar() {
 
   float iconXPos = ICONS_INITIAL_X_POS;
   this->picture = new GameObject();
-  this->picture->AddComponent(new Sprite(*picture, "img/playable/picture.png"));
+  this->picture->AddComponent(new Sprite(*picture, "img/"+ GameData::choosedCharacter + "/picture.png"));
   this->picture->AddComponent(new CameraFollower(*picture, {iconXPos, ICONS_Y_POS}));
   iconXPos += picture->box.w + ICON_SPACING;
   Game::GetInstance().GetCurrentState().AddObject(picture);
