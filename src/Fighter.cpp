@@ -214,10 +214,10 @@ void Fighter::NotifyCollision(GameObject &other) {
             }
 
             auto pow = new GameObject();
-            int rand = (int)floor(Math::GetRand(0, 2));
-            std::string file = (rand % 2 == 0 ? "img/pow.png" : "img/bam.png");
-            auto sprite = new Sprite(*pow, file, 1, 0, 0.35);
-            sprite->SetScaleX(0.3);
+            int rand = (int)floor(Math::GetRand(0, 4));
+            std::string file = HITS[rand];
+            Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
+            sprite->SetScaleX(0.25);
             pow->AddComponent(sprite);
             pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 20);
             Game::GetInstance().GetCurrentState().AddObject(pow);

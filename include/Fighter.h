@@ -13,6 +13,7 @@
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
 #define TIME_TO_DELETE 1 // second
+const std::string HITS[] = {"pow.png", "smash.png", "bam.png", "boom.png"};
 
 
 class Fighter : public Component {
