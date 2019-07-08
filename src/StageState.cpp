@@ -62,7 +62,7 @@ void StageState::LoadPlayers() {
   // this->AddObject(veteranGO);
 
   GameObject *teacherGO = new GameObject();
-  teacherGO->box.SetCenterPos(600, 150);
+  teacherGO->box.SetCenterPos(600, 300);
   teacherGO->AddComponent(new Teacher(*teacherGO));
   this->AddObject(teacherGO);
 

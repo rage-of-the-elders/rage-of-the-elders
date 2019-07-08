@@ -52,7 +52,6 @@ public:
   Fighter(GameObject &associated);
   ~Fighter();
   void Start();
-  Rect GetFoot();
   void Update(float dt);
   void Render();
   void ApplyDamage(int damage);
@@ -62,12 +61,13 @@ public:
   bool IsDead();
   bool Is(std::string type);
   virtual bool IsOpponent(GameObject &other) = 0;
+  int GetDamage();
+  Rect GetFoot();
+  Rect GetColliderBox();
+  enum Orientation GetOrientation();
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);
-  enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
-  Rect GetColliderBox();
-  int GetDamage();
   void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
   void Shoot(std::string file, int frameCount);

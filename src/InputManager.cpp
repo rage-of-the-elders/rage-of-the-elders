@@ -86,16 +86,16 @@ void InputManager::MakeCombos(int buttonId) {
   switch (buttonId)
   {
   case 102:
-    this->lastsPressKeys += "F";
+    this->lastsPressKeys += "A";
     break;
   case 103:
-    this->lastsPressKeys += "G";    
+    this->lastsPressKeys += "S";    
     break;
   case 104:
-    this->lastsPressKeys += "H";  
+    this->lastsPressKeys += "D";  
     break;
   case 106:
-    this->lastsPressKeys += "J";  
+    this->lastsPressKeys += "F";  
     break;
 
   default:

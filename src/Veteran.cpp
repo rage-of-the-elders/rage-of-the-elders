@@ -9,8 +9,8 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->speed = VETERAN_SPEED;
   this->player = this;
   this->orientation = RIGHT;
-  this->damage[BASIC_ATTACK_TWO] = 10;
-  this->damage[COMBO] = 7;
+  this->damage[BASIC_ATTACK_TWO] = BASIC_ATK_2_DAMAGE;
+  this->damage[COMBO] = COMBO_DAMAGE;
 
   std::string character = "veteran";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
@@ -46,5 +46,9 @@ Veteran::~Veteran() {
 }
 
 bool Veteran::Is(std::string type) {
-  return (type == "Veteran" || Fighter::Is(type));
+  return (type == "Veteran" || Playable::Is(type));
+}
+
+float Veteran::GetHPPercentage() {
+  return (this->hp*1.0/VETERAN_HP*1.0) * 100;
 }
