@@ -7,6 +7,8 @@
 #include "Component.h"
 #include "Timer.h"
 #include <string>
+#define STOP_SPRITE -1
+
 
 class Sprite : public Component {
 private:

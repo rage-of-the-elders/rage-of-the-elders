@@ -4,7 +4,9 @@
 #include "State.h"
 #include "GameObject.h"
 #include "Music.h"
+#include "Sprite.h"
 #include "Sound.h"
+#include "Text.h"
 
 #define VETERAN_OPTION 0
 #define TEACHER_OPTION 1
@@ -12,9 +14,11 @@
 
 class ChoosePlayerState : public State {
 private:
-  int currentOption;
+  int currentCharacter;
   Music music;
+  Sprite *characters[4];
   GameObject *bg;
+  std::vector<Text *> characterNames;
   std::vector<Sound *> buttonSounds;
 
 public:

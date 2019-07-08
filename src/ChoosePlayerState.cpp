@@ -8,7 +8,7 @@
 
 ChoosePlayerState::ChoosePlayerState() : State(){
   this->objectArray = std::vector<std::shared_ptr<GameObject>>();
-  this->currentOption = 0;
+  this->currentCharacter = 0;
 
   this->LoadAssets();
 }
@@ -18,8 +18,34 @@ ChoosePlayerState::~ChoosePlayerState() {
 
 void ChoosePlayerState::LoadAssets() {
   this->bg = new GameObject();
-  this->bg->AddComponent(new Sprite(*bg, "img/menu/title-bright.png"));
+  this->bg->AddComponent(new Sprite(*bg, "img/menu/choose-player.png"));
   this->AddObject(bg);
+
+  float leftXPosition = (Game::screenWidth/2) - 300;
+  float rightXPosition = (Game::screenWidth/2) + 300;
+  float yPosition = Game::screenHeight / 2;
+
+  auto go = new GameObject();
+  this->characters[VETERAN_OPTION] = new Sprite(*go, "img/veteran/idle.png", 15, STOP_SPRITE);
+  go->AddComponent(characters[VETERAN_OPTION]);
+  go->box.SetCenterPos(leftXPosition, yPosition);
+  this->AddObject(go);
+
+  go = new GameObject();
+  this->characters[TEACHER_OPTION] = new Sprite(*go, "img/teacher/idle.png", 25, STOP_SPRITE);
+  go->AddComponent(characters[TEACHER_OPTION]);
+  go->box.SetCenterPos(rightXPosition, yPosition);
+  this->AddObject(go);
+
+  auto text = new GameObject();
+  this->characterNames.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "VETERAN", WHITE));
+  text->box.SetCenterPos(leftXPosition, yPosition + 200);
+  // this->AddObject(text);
+
+  text = new GameObject();
+  this->characterNames.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "TEACHER", WHITE));
+  text->box.SetCenterPos(rightXPosition, yPosition + 200);
+  // this->AddObject(text);11
 
   GameObject *sound = new GameObject();
   sound = new GameObject();
@@ -35,7 +61,6 @@ void ChoosePlayerState::LoadAssets() {
 }
 
 void ChoosePlayerState::Update(float dt) {
-  printf("Curr opt: %d\n", currentOption);
   this->quitRequested = InputManager::GetInstance().QuitRequested();
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
@@ -51,21 +76,27 @@ void ChoosePlayerState::Update(float dt) {
                       || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)
                       || InputManager::GetInstance().KeyPress(SPACE_KEY);
 
-  if (pressedLeft && this->currentOption > VETERAN_OPTION) {
+  if (pressedLeft && this->currentCharacter > VETERAN_OPTION) {
     this->buttonSounds[CHANGE]->Play(1);
-    this->currentOption--;
+    this->currentCharacter--;
   }
 
-  if (pressedRight && this->currentOption < TEACHER_OPTION) {
+  if (pressedRight && this->currentCharacter < TEACHER_OPTION) {
     this->buttonSounds[CHANGE]->Play(1);
-    this->currentOption++;
+    this->currentCharacter++;
   }
+
+  int otherCharacter = currentCharacter == VETERAN_OPTION ? TEACHER_OPTION : VETERAN_OPTION;
+  this->characters[currentCharacter]->SetFrameTime(0.04);
+  this->characters[otherCharacter]->SetFrameTime(STOP_SPRITE);
+  this->characterNames[currentCharacter]->SetColor(SELECTED_OPTION);
+  this->characterNames[otherCharacter]->SetColor(NOT_SELECTED_OPTION);
 
   if (enterPressed) {
     this->buttonSounds[SELECTED]->Play(1);
 
     std::string character = "";
-    switch (this->currentOption) {
+    switch (this->currentCharacter) {
       case VETERAN_OPTION:
         character = "veteran";
         break;
@@ -86,6 +117,9 @@ void ChoosePlayerState::Update(float dt) {
 
 void ChoosePlayerState::Render() {
   this->RenderArray();
+  for (auto option : this->characterNames) {
+    option->Render();
+  }
 }
 
 void ChoosePlayerState::Start() {
