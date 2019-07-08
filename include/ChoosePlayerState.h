@@ -30,6 +30,8 @@ public:
   void Start();
   void Pause();
   void Resume();
+  void HandleInput();
+  void UpdateScreenElements();
 };
 
 #endif

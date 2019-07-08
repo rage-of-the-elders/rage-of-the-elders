@@ -61,6 +61,24 @@ void ChoosePlayerState::LoadAssets() {
 }
 
 void ChoosePlayerState::Update(float dt) {
+  this->HandleInput();
+  this->UpdateScreenElements();
+  this->UpdateArray(dt);
+}
+
+void ChoosePlayerState::Render() {
+  this->RenderArray();
+  for (auto option : this->characterNames) {
+    option->Render();
+  }
+}
+
+
+void ChoosePlayerState::Start() {
+  this->StartArray();
+  this->started = true;
+}
+void ChoosePlayerState::HandleInput() {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
@@ -86,11 +104,6 @@ void ChoosePlayerState::Update(float dt) {
     this->currentCharacter++;
   }
 
-  int otherCharacter = currentCharacter == VETERAN_OPTION ? TEACHER_OPTION : VETERAN_OPTION;
-  this->characters[currentCharacter]->SetFrameTime(0.04);
-  this->characters[otherCharacter]->SetFrameTime(STOP_SPRITE);
-  this->characterNames[currentCharacter]->SetColor(SELECTED_OPTION);
-  this->characterNames[otherCharacter]->SetColor(NOT_SELECTED_OPTION);
 
   if (enterPressed) {
     this->buttonSounds[SELECTED]->Play(1);
@@ -112,21 +125,15 @@ void ChoosePlayerState::Update(float dt) {
     GameData::choosedCharacter = character;
     Game::GetInstance().Push(new StageState());
   }
-  this->UpdateArray(dt);
 }
 
-void ChoosePlayerState::Render() {
-  this->RenderArray();
-  for (auto option : this->characterNames) {
-    option->Render();
-  }
+void ChoosePlayerState::UpdateScreenElements() {
+  int otherCharacter = currentCharacter == VETERAN_OPTION ? TEACHER_OPTION : VETERAN_OPTION;
+  this->characters[currentCharacter]->SetFrameTime(0.04);
+  this->characters[otherCharacter]->SetFrameTime(STOP_SPRITE);
+  this->characterNames[currentCharacter]->SetColor(SELECTED_OPTION);
+  this->characterNames[otherCharacter]->SetColor(NOT_SELECTED_OPTION);
 }
-
-void ChoosePlayerState::Start() {
-  this->StartArray();
-  this->started = true;
-}
-
 void ChoosePlayerState::Pause() {
 
 }
