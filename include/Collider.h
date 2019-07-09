@@ -23,6 +23,7 @@ public:
   bool Is(std::string type);
   void SetScale (Vec2 scale);
   void SetOffset (Vec2 offset);
+  Vec2 GetOffset ();
   void SetColliderType(int type);
   int GetColliderType();
 };

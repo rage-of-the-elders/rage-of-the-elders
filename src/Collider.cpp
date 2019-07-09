@@ -80,3 +80,7 @@ void Collider::SetColliderType(int type) {
 int Collider::GetColliderType() {
   return this->colliderType;
 }
+
+Vec2 Collider::GetOffset() {
+  return this->offset;
+}

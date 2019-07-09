@@ -166,7 +166,7 @@ bool Fighter::Is(std::string type) {
 
 void Fighter::NotifyCollision(GameObject &other) {
   if(other.Has("Barrier")) { // TODO: mover pra função, tá horrível
-    Collider *colliderBox = (Collider *)this->associated.GetComponent("Collider");
+    Collider *colliderBox = this->bodyColliderBox;
     Rect fighterFoot = this->GetFoot();
 
     if (Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
@@ -206,14 +206,14 @@ void Fighter::NotifyCollision(GameObject &other) {
           objX = other.box.x;
 
           if ((fighterFoot.x + fighterFoot.w) > objX) {
-            this->associated.box.x = other.box.x - colliderBox->GetWidth() - ((this->associated.box.w - colliderBox->GetWidth()) / 2);
+            this->associated.box.x = (other.box.x - colliderBox->GetWidth() - ((this->associated.box.w - colliderBox->GetWidth()) / 2)) - this->bodyColliderBox->GetOffset().x;
           }
         }
         else {
           objX = other.box.x + other.box.w;
 
           if (fighterFoot.x < objX) {
-            this->associated.box.x = other.box.x + other.box.w - ((this->associated.box.w - colliderBox->GetWidth()) / 2);
+            this->associated.box.x = other.box.x + other.box.w - ((this->associated.box.w - colliderBox->GetWidth()) / 2) - this->bodyColliderBox->GetOffset().x;
           }
         }
       }
@@ -306,8 +306,7 @@ int Fighter::GetDamage() {
 }
 
 Rect Fighter::GetFoot() {
-  Collider *colliderBox = (Collider *)this->associated.GetComponent("Collider");
-  return Rect(colliderBox->GetX(), ((colliderBox->GetY() + colliderBox->GetHeigth()) - 10), colliderBox->GetWidth(), 10);
+  return Rect((GetBodyCollider()->x), (GetBodyCollider()->y + GetBodyCollider()->h - 10), GetBodyCollider()->w, 10);
 }
 
 bool Fighter::IsAttacking() {
