@@ -6,6 +6,7 @@
 #include "StageState.h"
 #include "CameraFollower.h"
 #include "Camera.h"
+#include "ChoosePlayerState.h"
 
 TitleState::TitleState(bool startOption) {
   this->currentOption = 0;
@@ -16,15 +17,18 @@ TitleState::TitleState(bool startOption) {
   this->LoadAssets();
 }
 
-TitleState::~TitleState() {}
+TitleState::~TitleState() {
+  this->objectArray.clear();
+}
 
 void TitleState::LoadAssets() {
   this->bgBright = new GameObject();
-  this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title-bright.png"));
+  // this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title-bright.png"));
+  this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title.png", 12, 0.08));
   this->AddObject(bgBright);
 
   this->gameName = new GameObject();
-  Sprite *name = new Sprite(*gameName, "img/menu/name-2.png", 15, 0.15);
+  Sprite *name = new Sprite(*gameName, "img/menu/name-2.png", 15, 0.12);
   name->SetScaleX(0.8);
   this->gameName->AddComponent(name);
   this->gameName->box.SetPos(650, 10);
@@ -93,7 +97,6 @@ void TitleState::Update(float dt) {
         this->buttonSounds[CANCEL]->Play(1);
         this->startPressed = false;
         this->bgDark->Desactivate();
-        // this->bgBright->Activate();
       }
 
       bool pressedLeft = InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) || InputManager::GetInstance().KeyPress(A_KEY);
@@ -121,25 +124,21 @@ void TitleState::Update(float dt) {
       }
     }
 
-    if (InputManager::GetInstance().KeyPress(ENTER_KEY) || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)) {  
+    bool enterPressed = InputManager::GetInstance().KeyPress(ENTER_KEY) 
+                        || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)
+                        || InputManager::GetInstance().KeyPress(SPACE_KEY);
+    if (enterPressed) {
       this->buttonSounds[SELECTED]->Play(1);
 
       if (not startPressed) {
         this->currentOption = PLAY;
         this->startPressed = true;
-        // this->bgBright->Desactivate();
         this->bgDark->Activate();
-        // bg = new GameObject();
-        // bg->AddComponent(new Sprite(*bg, "img/title.png"));
-        // bg->AddComponent(new CameraFollower(*bg));
-        // this->AddObject(bg);
-        // this->bg->RemoveComponent("Sprite");
-        // this->bg->AddComponent(new Sprite(*bg, "img/title.png"));
       } else {
         switch (this->currentOption) {
           case PLAY:
             this->popRequested = true;
-            Game::GetInstance().Push(new StageState());
+            Game::GetInstance().Push(new ChoosePlayerState());
             break;
 
           case DIFFICULTY:

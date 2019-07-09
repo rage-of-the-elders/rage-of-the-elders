@@ -3,6 +3,9 @@
 
 #define VETERAN_HP 100
 #define VETERAN_SPEED 200
+#define BULLET_DAMAGE 30
+#define BASIC_ATK_2_DAMAGE 15
+#define COMBO_DAMAGE 20
 
 #include "Playable.h"
 
@@ -19,6 +22,7 @@ public:
   void Update(float dt);
   // void Start();
   bool Is(std::string type);
+  float GetHPPercentage();
   // bool IsOpponent(GameObject &other);
   // void NotifyCollision(GameObject &other);
 };

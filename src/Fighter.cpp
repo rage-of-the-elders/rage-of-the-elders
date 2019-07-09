@@ -234,6 +234,7 @@ void Fighter::NotifyCollision(GameObject &other) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
+
               if (opponent->comboCount > 3) {
                 opponent->points += (opponent->comboCount * 0.2);
               }
@@ -244,10 +245,10 @@ void Fighter::NotifyCollision(GameObject &other) {
             }
 
             auto pow = new GameObject();
-            int rand = (int)floor(Math::GetRand(0, 2));
-            std::string file = (rand % 2 == 0 ? "img/pow.png" : "img/bam.png");
-            auto sprite = new Sprite(*pow, file, 1, 0, 0.35);
-            sprite->SetScaleX(0.3);
+            int rand = (int)floor(Math::GetRand(0, 4));
+            std::string file = HITS[rand];
+            Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
+            sprite->SetScaleX(0.25);
             pow->AddComponent(sprite);
             pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 20);
             Game::GetInstance().GetCurrentState().AddObject(pow);
@@ -484,7 +485,7 @@ Rect *Fighter::GetBodyCollider() {
 void Fighter::Shoot(std::string file, int frameCount) {
   if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
     float bulletSpeed = 400;
-    float damage = 10;
+    float damage = BULLET_DAMAGE;
     float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
     float frameTime = 0.09;
 

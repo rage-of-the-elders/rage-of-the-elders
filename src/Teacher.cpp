@@ -22,16 +22,17 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->leftOfsetColliderAttack = 75;
   this->attackColliderGapBasicAtacck1 = 80;
   this->attackColliderGapBasicAtacck2 = 115;
+  this->points = 0;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 21, 0.04, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 20, 0.04, 0, false);
-  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 15, 0.04, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 20, 0.04, 0, false);
   this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 29, 0.04, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 11, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 23, 0.04, 0, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 18, 0.04, 0, false);
 
   this->ActivateSprite(IDLE);
 
@@ -100,9 +101,15 @@ void Teacher::Update(float dt) {
 }
 
 void Teacher::HandleUltimateBegin(float dt) {
-
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
     this->ActivateSprite(ULTIMATE_BEGIN);
+    GameObject *ultimate = new GameObject();
+    ultimate->box.SetCenterPos(this->GetBox().GetCenter() - Vec2(60, 365));
+    auto sprite = new Sprite(*ultimate, "img/teacher/ultimate.png", 16, 0.04, 0.9, false);
+    // auto sprite = new Sprite(*ultimate, "img/teacher/ultimate2.png", 16, 0.04, 0.9, true);
+    sprite->SetScaleX(0.8);
+    ultimate->AddComponent(sprite);
+    Game::GetInstance().GetCurrentState().AddObject(ultimate);
     // this->sound[ULTIMATE_BEGIN]->Play(1);
     // this->ultimateDuration.Restart();
   }
@@ -132,4 +139,8 @@ void Teacher::HandleUltimateBegin(float dt) {
 
 bool Teacher::Is(std::string type) {
   return (type == "Teacher" || Playable::Is(type));
+}
+
+float Teacher::GetHPPercentage() {
+  return (this->hp*1.0/TEACHER_HP*1.0) * 100;
 }

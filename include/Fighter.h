@@ -14,6 +14,7 @@
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
 #define TIME_TO_DELETE 1 // second
+const std::string HITS[] = {"pow.png", "smash.png", "bam.png", "boom.png"};
 
 
 class Fighter : public Component {
@@ -59,7 +60,6 @@ public:
   Fighter(GameObject &associated);
   ~Fighter();
   void Start();
-  Rect GetFoot();
   void Update(float dt);
   void Render();
   void ApplyDamage(int damage);
@@ -69,13 +69,14 @@ public:
   bool IsDead();
   bool Is(std::string type);
   virtual bool IsOpponent(GameObject &other) = 0;
+  int GetDamage();
+  Rect GetFoot();
+  enum Orientation GetOrientation();
   void NotifyCollision(GameObject &other);
   void ActivateSprite(FighterState state);
-  enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
   Rect *GetColliderBox();
   Rect *GetBodyCollider();
-  int GetDamage();
   void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
   void Shoot(std::string file, int frameCount);

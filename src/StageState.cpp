@@ -56,15 +56,16 @@ void StageState::LoadBackground() {
 }
 
 void StageState::LoadPlayers() {
-  GameObject *veteranGO = new GameObject();
-  veteranGO->box.SetCenterPos(600, 300);
-  veteranGO->AddComponent(new Veteran(*veteranGO));
-  this->AddObject(veteranGO);
+  GameObject *playerGO = new GameObject();
+  playerGO->box.SetCenterPos(600, 300);
 
-  // GameObject *teacherGO = new GameObject();
-  // teacherGO->box.SetCenterPos(600, 150);
-  // teacherGO->AddComponent(new Teacher(*teacherGO));
-  // this->AddObject(teacherGO);
+  if (GameData::choosedCharacter == "veteran") {
+    playerGO->AddComponent(new Veteran(*playerGO));
+  } else {
+    playerGO->AddComponent(new Teacher(*playerGO));
+  }
+  this->AddObject(playerGO);
+  Camera::Follow(playerGO);
 
   GameObject *nurseGO = new GameObject();
   nurseGO->box.SetCenterPos(800, 500);
@@ -90,9 +91,6 @@ void StageState::LoadPlayers() {
   securityGO->AddComponent(new Security(*securityGO));
   this->AddObject(securityGO);
   securityGO->RequestDelete();
-
-
-	Camera::Follow(veteranGO);
 }
 
 void StageState::BuildBarriers() {

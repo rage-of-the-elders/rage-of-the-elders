@@ -84,10 +84,11 @@ void Sprite::SetScaleX(float scale) {
 }
 
 void Sprite::SetScaleX(float scaleX, float scaleY) {
-  // TODO: keep sprite box on the same spot before scale changes
+  Vec2 center = this->associated.box.GetCenter();
   this->scale = Vec2(scaleX, scaleY);
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
+  this->associated.box.SetCenterPos(center);
 }
 
 void Sprite::SetFrame(int frame) {
@@ -110,6 +111,7 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
+  std::cout << dt << std::endl;
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
 
@@ -121,7 +123,7 @@ void Sprite::Update(float dt) {
   }
   this->timeElapsed += dt;
 
-  if (this->timeElapsed > this->frameTime) {
+  if (this->frameTime != STOP_SPRITE && this->timeElapsed > this->frameTime) {
     this->timeElapsed -= this->frameTime; // "Restarting" the counter
     if(this->currentFrame < this->frameCount -1)
       this->currentFrame++;

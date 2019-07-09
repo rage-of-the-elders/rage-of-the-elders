@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "InputManager.h"
 #include "StageState.h"
+#include "TitleState.h"
 #include "CameraFollower.h"
 
 EndState::EndState() {
@@ -48,7 +49,7 @@ void EndState::Update(float dt) {
 
   if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
     this->popRequested = true;
-    Game::GetInstance().Push(new StageState());
+    Game::GetInstance().Push(new TitleState());
   }
 
   this->UpdateArray(dt);
