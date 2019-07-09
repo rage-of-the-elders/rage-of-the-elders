@@ -18,6 +18,7 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->damage[COMBO] = 7;
   this->ultimateDuration = Timer();
   this->enemys = std::vector <std::shared_ptr<GameObject>>();
+  this->points = 0;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
@@ -91,6 +92,13 @@ void Teacher::Update(float dt) {
 void Teacher::HandleUltimateBegin(float dt) {
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
     this->ActivateSprite(ULTIMATE_BEGIN);
+    GameObject *ultimate = new GameObject();
+    ultimate->box.SetCenterPos(this->GetBox().GetCenter() - Vec2(60, 365));
+    auto sprite = new Sprite(*ultimate, "img/teacher/ultimate.png", 16, 0.04, 0.9, false);
+    // auto sprite = new Sprite(*ultimate, "img/teacher/ultimate2.png", 16, 0.04, 0.9, true);
+    sprite->SetScaleX(0.8);
+    ultimate->AddComponent(sprite);
+    Game::GetInstance().GetCurrentState().AddObject(ultimate);
     // this->sound[ULTIMATE_BEGIN]->Play(1);
     // this->ultimateDuration.Restart();
   }
