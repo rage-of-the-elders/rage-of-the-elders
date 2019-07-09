@@ -19,7 +19,7 @@ public:
   // static Veteran *player;
   Veteran(GameObject &associated);
   ~Veteran();
-  // void Update(float dt);
+  void Update(float dt);
   // void Start();
   bool Is(std::string type);
   float GetHPPercentage();

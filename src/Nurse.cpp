@@ -5,6 +5,9 @@ Nurse::Nurse(GameObject &associated) : Enemy(associated) {
   this->speed = 70;
   this->enemyAttackCooldown = NURSE_ATTACK_COOLDOWN;
   this->attackCooldown.Set(this->enemyAttackCooldown);
+  this->attackColliderGapBasicAtacck1 = 0;
+  this->rightOfsetColliderAttack = 0;
+  this->leftOfsetColliderAttack = 0;
 
   std::string character = "nurse";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
@@ -24,7 +27,12 @@ Nurse::Nurse(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.4,0.9}));
+  this->bodyColliderBox = new Collider(this->associated, {0.3,0.9});
+  this->attackColliderBox = new Collider(this->associated, {0,0}, 1);
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  this->attackColliderBox->SetColliderType(1);
 
 }
 
@@ -34,8 +42,7 @@ Nurse::~Nurse() {
 
 void Nurse::Update(float dt) {
   Enemy::Update(dt);
-  Collider *a = (Collider*) this->associated.GetComponent("Collider");
-  a->SetOffset({(this->orientation ? RIGHT -60 : 60), 0});
+  this->bodyColliderBox->SetOffset({(this->orientation ? RIGHT -58 : 58), 0});
 }
 
 void Nurse::ResetSpeed() {

@@ -24,6 +24,7 @@ Sprite::Sprite(GameObject &associated, std::string file, int frameCount,
   this->Open(file);
   this->repeat = repeat;
   this->finished = false;
+  this->animationIsOnMidle = false;
 }
 
 Sprite::~Sprite() {
@@ -135,6 +136,13 @@ void Sprite::Update(float dt) {
       this->finished = true;
     }
   }
+
+  if(currentFrame == ((this->frameCount/2))) {
+    this->animationIsOnMidle = true;
+  }
+  else {
+    this->animationIsOnMidle = false;
+  }
 }
 
 
@@ -181,4 +189,8 @@ void Sprite::SetAlpha(int alpha) {
     printf("Could not update texture alpha channel: %s\n", SDL_GetError());
     exit(-1);
   }
+}
+
+bool Sprite::MidleOfTheAnimation() {
+  return this->animationIsOnMidle;
 }

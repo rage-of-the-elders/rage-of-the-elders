@@ -16,20 +16,25 @@ Enemy::~Enemy() {}
 void Enemy::Start() {}
 
 bool Enemy::TargetIsInRange() {
-  float enemyAttackX = this->GetColliderBox().GetCenter().x;
-  float enemyAttackY = (this->GetColliderBox().y + this->GetColliderBox().h);
-  float enemyAttackWidth = this->GetColliderBox().w;
-  float enemyXRange = (enemyAttackWidth/2.0) + (this->target.w/2.0);
+  float enemyAttackX = this->GetBodyCollider()->GetCenter().x;
+  float enemyAttackY = (this->GetBodyCollider()->y + this->GetBodyCollider()->h);
+  float enemyAttackWidth = this->GetBodyCollider()->w;
+  float enemyXRange = (enemyAttackWidth/2.0) + (this->target->w/2.0);
 
-  float targetDistanceX = abs(target.GetCenter().x - enemyAttackX);
-  float targetDistanceY = abs((target.y + target.h) - enemyAttackY);
+  float targetDistanceX = abs(target->GetCenter().x - enemyAttackX);
+  float targetDistanceY = abs((target->y + target->h) - enemyAttackY);
 
-  return ((enemyXRange > (targetDistanceX + ATTACK_OFFSET)) && (ATTACK_Y_RANGE > targetDistanceY));
+  if(this->associated.Has("Janitor"))
+    return ((enemyXRange > (targetDistanceX - (this->attackColliderGapBasicAtacck1 + (target->w/2)))) && (ATTACK_Y_RANGE > targetDistanceY));
+  else if(this->associated.Has("Security"))
+    return ((enemyXRange > (targetDistanceX - (this->attackColliderGapBasicAtacck1))) && (ATTACK_Y_RANGE > targetDistanceY));
+  else
+   return ((enemyXRange > (targetDistanceX - ATTACK_OFFSET)) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
 void Enemy::ManageInput(float dt) {
   if(Veteran::player != nullptr) {
-    this->target = Veteran::player->GetColliderBox();
+    this->target = Veteran::player->GetBodyCollider();
     this->tagetPlayer = Veteran::player->GetFoot();
     
     if(this->IsDead()){
@@ -51,7 +56,7 @@ void Enemy::ManageInput(float dt) {
     }
 
     if (this->currentState != DYING) {
-      if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
+      if (this->target->GetCenter().x + 10 < this->GetBox().GetCenter().x)
         this->orientation = LEFT;
       else
         this->orientation = RIGHT;

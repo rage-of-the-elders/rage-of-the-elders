@@ -90,6 +90,15 @@ Component *GameObject::GetComponent(std::string type) {
   return nullptr;
 }
 
+std::vector<std::shared_ptr<Component>> GameObject::GetAllComponent(std::string type) {
+  std::vector<std::shared_ptr<Component>> allComponents = std::vector<std::shared_ptr<Component>>();
+  for (unsigned i = 0; i < components.size(); i++)
+    if (components[i]->Is(type))
+      allComponents.push_back(components[i]);
+  
+  return allComponents;
+}
+
 void GameObject::Start() {
   for (auto &obj : this->components)
     obj->Start();

@@ -5,6 +5,10 @@ Security::Security(GameObject &associated) : Enemy(associated) {
   this->speed = 115;
   this->enemyAttackCooldown = SECURITY_ATTACK_COOLDOWN;
   this->attackCooldown.Set(this->enemyAttackCooldown);
+  this->attackColliderGapBasicAtacck1 = 90;
+  this->rightOfsetColliderAttack = -80;
+  this->leftOfsetColliderAttack = 80;
+  this->attackColliderGapBasicAtacck1 = 70;
 
   std::string character = "security";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
@@ -24,7 +28,14 @@ Security::Security(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 40,0}));
+  this->bodyColliderBox = new Collider(this->associated, {0.35,1});
+  this->attackColliderBox = new Collider(this->associated, {0.3,1}, 1);
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  this->attackColliderBox->SetColliderType(1);
+
+  // this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 40,0}));
 
 }
 
@@ -47,8 +58,7 @@ void Security::HandleDying(float) {
 
 void Security::Update(float dt) {
   Enemy::Update(dt);
-  Collider *a = (Collider*) this->associated.GetComponent("Collider");
-  a->SetOffset({(this->orientation ? RIGHT -40 : 40), 0});
+  this->bodyColliderBox->SetOffset({(this->orientation ? RIGHT -30 : 30), 0});
 }
 
 void Security::ResetSpeed() {

@@ -9,6 +9,10 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->speed = VETERAN_SPEED;
   this->player = this;
   this->orientation = RIGHT;
+  this->leftOfsetColliderAttack = 80;
+  this->rightOfsetColliderAttack = -80;
+  this->attackColliderGapBasicAtacck1 = 100;
+  this->attackColliderGapBasicAtacck2 = 70;
   this->damage[BASIC_ATTACK_TWO] = BASIC_ATK_2_DAMAGE;
   this->damage[COMBO] = COMBO_DAMAGE;
 
@@ -38,11 +42,21 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->sprite[HURTING]);
   this->associated.AddComponent(this->sprite[DYING]);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.7,0.8}));
+  this->bodyColliderBox = new Collider(this->associated, {0.4,0.8});
+  this->attackColliderBox = new Collider(this->associated, {0.4,0.8}, 1);
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  this->attackColliderBox->SetColliderType(1);
 }
 
 Veteran::~Veteran() {
   Veteran::player = nullptr;
+}
+
+void Veteran::Update(float dt) {
+  Fighter::Update(dt);
+  this->bodyColliderBox->SetOffset({(this->orientation == RIGHT ? 7 : -7), 0});
 }
 
 bool Veteran::Is(std::string type) {

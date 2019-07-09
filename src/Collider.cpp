@@ -8,10 +8,11 @@
 #include <SDL2/SDL.h> // Shouldn't it be INCLUDE_SDL?
 #endif // DEBUG
 
-Collider::Collider(GameObject &associated, Vec2 scale, Vec2 offset) : Component(associated) {
+Collider::Collider(GameObject &associated, Vec2 scale, Vec2 offset, int colliderType) : Component(associated) {
   this->scale = scale;
   this->offset = offset;
   this->active = true;
+  this->colliderType = colliderType;
 }
 
 void Collider::Update(float) {
@@ -70,4 +71,12 @@ float Collider::GetX(){
 
 float Collider::GetY(){
   return this->associated.box.y + (( this->associated.box.h - (this->associated.box.h * this->scale.y))/2) + this->offset.y;
+}
+
+void Collider::SetColliderType(int type) {
+  this->colliderType = type;
+}
+
+int Collider::GetColliderType() {
+  return this->colliderType;
 }
