@@ -23,6 +23,7 @@ private:
   Timer selfDestructCount;
   float secondsToSelfDestruct;
   bool finished;
+  bool animationIsOnMidle;
 
 public:
   Sprite(GameObject &associated);
@@ -43,6 +44,7 @@ public:
   void SetFrameTime (float frameTime);
   void UpdateFrame();
   bool IsOpen();
+  bool MidleOfTheAnimation();
   void Update(float dt);
   void SetFinished(bool finished);
   bool Is(std::string type);
