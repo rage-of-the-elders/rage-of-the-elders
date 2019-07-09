@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "CameraFollower.h"
+#include "GameData.h"
 #include <iostream>
 
 Playable *Playable::player;
@@ -151,15 +152,16 @@ void Playable::CreateInfoBar() {
 
   float iconXPos = ICONS_INITIAL_X_POS;
   this->picture = new GameObject();
-  this->picture->AddComponent(new Sprite(*picture, "img/playable/picture.png"));
+  this->picture->AddComponent(new Sprite(*picture, "img/"+ GameData::choosedCharacter + "/picture.png"));
   this->picture->AddComponent(new CameraFollower(*picture, {iconXPos, ICONS_Y_POS}));
-  iconXPos += picture->box.w + ICON_SPACING;
+  float spaceBetweenPictureAndHearts = 8;
+  iconXPos += picture->box.w + ICON_SPACING + spaceBetweenPictureAndHearts;
   Game::GetInstance().GetCurrentState().AddObject(picture);
 
 
   for (int i=0; i < HEARTS_COUNTER; i++) {
     this->hearts[i] = new GameObject();
-    this->hearts[i]->AddComponent(new Sprite(*hearts[i], "img/playable/heart.png", 10, 0.04));
+    this->hearts[i]->AddComponent(new Sprite(*hearts[i], "img/playable/heart.png", 10, 0.05));
     this->hearts[i]->AddComponent(new CameraFollower(*hearts[i], {iconXPos, ICONS_Y_POS}));
     iconXPos += hearts[i]->box.w + ICON_SPACING;
     Game::GetInstance().GetCurrentState().AddObject(hearts[i]);

@@ -41,6 +41,7 @@ void State::StartArray() {
 }
 
 void State::UpdateArray(float dt) {
+  // printf("%d\n", objectArray.size());
   for (unsigned i = 0; i < this->objectArray.size(); i++)
     this->objectArray[i]->Update(dt);
 }

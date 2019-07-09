@@ -5,6 +5,7 @@ class GameData {
 private:
 public:
   static bool playerVictory;
+  static std::string choosedCharacter;
 };
 
 #endif
