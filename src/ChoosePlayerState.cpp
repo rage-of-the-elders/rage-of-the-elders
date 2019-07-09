@@ -63,7 +63,7 @@ void ChoosePlayerState::LoadAssets() {
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cancel.ogg"));
 
 
-  music = Music("audio/menu/bg.ogg");
+  music = Music("audio/menu/bg2.ogg");
   music.Play();
 }
 
