@@ -16,9 +16,9 @@ class ChoosePlayerState : public State {
 private:
   int currentCharacter;
   Music music;
-  Sprite *characters[4];
+  Sprite *characters[2];
+  Sprite *characterNames[2];
   GameObject *bg;
-  std::vector<Text *> characterNames;
   std::vector<Sound *> buttonSounds;
 
 public:

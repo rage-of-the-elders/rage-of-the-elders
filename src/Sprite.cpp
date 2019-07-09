@@ -83,10 +83,11 @@ void Sprite::SetScaleX(float scale) {
 }
 
 void Sprite::SetScaleX(float scaleX, float scaleY) {
-  // TODO: keep sprite box on the same spot before scale changes
+  Vec2 center = this->associated.box.GetCenter();
   this->scale = Vec2(scaleX, scaleY);
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
+  this->associated.box.SetCenterPos(center);
 }
 
 void Sprite::SetFrame(int frame) {

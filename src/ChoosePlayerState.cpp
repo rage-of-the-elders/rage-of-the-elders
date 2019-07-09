@@ -21,14 +21,14 @@ void ChoosePlayerState::LoadAssets() {
   this->bg->AddComponent(new Sprite(*bg, "img/menu/choose-player.png"));
   this->AddObject(bg);
 
-  float leftXPosition = (Game::screenWidth/2) - 300;
-  float rightXPosition = (Game::screenWidth/2) + 300;
+  float leftXPosition = (Game::screenWidth/2) - 205;
+  float rightXPosition = (Game::screenWidth/2) + 265;
   float yPosition = Game::screenHeight / 2;
 
   auto go = new GameObject();
   this->characters[VETERAN_OPTION] = new Sprite(*go, "img/veteran/idle.png", 15, STOP_SPRITE);
   go->AddComponent(characters[VETERAN_OPTION]);
-  go->box.SetCenterPos(leftXPosition, yPosition);
+  go->box.SetCenterPos(leftXPosition, yPosition + 30);
   this->AddObject(go);
 
   go = new GameObject();
@@ -38,15 +38,22 @@ void ChoosePlayerState::LoadAssets() {
   this->AddObject(go);
 
   auto text = new GameObject();
-  this->characterNames.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "VETERAN", WHITE));
-  text->box.SetCenterPos(leftXPosition, yPosition + 200);
-  // this->AddObject(text);
+  text->AddComponent(new Sprite(*text, "img/menu/choose-your-player.png"));
+  text->box.SetCenterPos(Game::screenWidth/2, 70);
+  this->AddObject(text);
 
   text = new GameObject();
-  this->characterNames.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "TEACHER", WHITE));
-  text->box.SetCenterPos(rightXPosition, yPosition + 200);
-  // this->AddObject(text);11
+  this->characterNames[VETERAN_OPTION] = new Sprite(*text, "img/menu/veteran.png");
+  text->AddComponent(characterNames[VETERAN_OPTION]);
+  text->box.SetCenterPos(leftXPosition, yPosition + 262);
+  this->AddObject(text);
 
+  text = new GameObject();
+  this->characterNames[TEACHER_OPTION] = new Sprite(*text, "img/menu/teacher.png");
+  text->AddComponent(characterNames[TEACHER_OPTION]);
+  text->box.SetCenterPos(rightXPosition, yPosition + 235);
+  this->AddObject(text);
+  
   GameObject *sound = new GameObject();
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/select.ogg"));
@@ -68,9 +75,6 @@ void ChoosePlayerState::Update(float dt) {
 
 void ChoosePlayerState::Render() {
   this->RenderArray();
-  for (auto option : this->characterNames) {
-    option->Render();
-  }
 }
 
 
@@ -131,8 +135,9 @@ void ChoosePlayerState::UpdateScreenElements() {
   int otherCharacter = currentCharacter == VETERAN_OPTION ? TEACHER_OPTION : VETERAN_OPTION;
   this->characters[currentCharacter]->SetFrameTime(0.04);
   this->characters[otherCharacter]->SetFrameTime(STOP_SPRITE);
-  this->characterNames[currentCharacter]->SetColor(SELECTED_OPTION);
-  this->characterNames[otherCharacter]->SetColor(NOT_SELECTED_OPTION);
+
+  this->characterNames[currentCharacter]->SetScaleX(0.7);
+  this->characterNames[otherCharacter]->SetScaleX(0.5);
 }
 void ChoosePlayerState::Pause() {
 

@@ -27,7 +27,7 @@ void TitleState::LoadAssets() {
   this->AddObject(bgBright);
 
   this->gameName = new GameObject();
-  Sprite *name = new Sprite(*gameName, "img/menu/name-2.png", 15, 0.15);
+  Sprite *name = new Sprite(*gameName, "img/menu/name-2.png", 15, 0.12);
   name->SetScaleX(0.8);
   this->gameName->AddComponent(name);
   this->gameName->box.SetPos(650, 10);
