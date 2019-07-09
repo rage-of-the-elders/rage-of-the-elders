@@ -18,12 +18,16 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->damage[COMBO] = 7;
   this->ultimateDuration = Timer();
   this->enemys = std::vector <std::shared_ptr<GameObject>>();
+  this->rightOfsetColliderAttack = -75;
+  this->leftOfsetColliderAttack = 75;
+  this->attackColliderGapBasicAtacck1 = 80;
+  this->attackColliderGapBasicAtacck2 = 115;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 21, 0.04, 0, false);
   this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 20, 0.04, 0, false);
-  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 17, 0.04, 0, false);
+  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 15, 0.04, 0, false);
   this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 29, 0.04, 0, false);
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 11, 0.04, 0, false);
@@ -41,7 +45,13 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->sprite[HURTING]);
   this->associated.AddComponent(this->sprite[DYING]);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.7,0.55}));
+  this->bodyColliderBox = new Collider(this->associated, {0.37,0.55});
+  this->attackColliderBox = new Collider(this->associated, {0.3,0.55}, 1);
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  this->attackColliderBox->SetColliderType(1);
+
 }
 
 Teacher::~Teacher() {
@@ -54,6 +64,7 @@ void Teacher::Update(float dt) {
   Playable::Update(dt);
 
   this->ultimateDuration.Update(dt);
+  this->bodyColliderBox->SetOffset({this->orientation == LEFT ? 23 : -23,0});
 
   // std::cout << this->ultimateDuration.Get() << std::endl;
   if(this->enemys.size() > 0 && this->ultimateDuration.Get() > 5) {

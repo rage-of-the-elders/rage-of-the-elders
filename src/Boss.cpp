@@ -34,7 +34,12 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.4,0.9}));
+  this->bodyColliderBox = new Collider(this->associated, {0.37,0.55});
+  this->attackColliderBox = new Collider(this->associated, {0.37,0.55});
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  // this->associated.AddComponent(new Collider(this->associated, {0.4,0.9}));
 }
 
 Boss::~Boss() {}
@@ -87,7 +92,7 @@ void Boss::ManageInput(float dt) {
       this->currentState = MOVING;
     }
     if (this->currentState != DYING) {
-      if (this->target.GetCenter().x + 10 < this->GetBox().GetCenter().x)
+      if (this->target->GetCenter().x + 10 < this->GetBox().GetCenter().x)
         this->orientation = LEFT;
       else
         this->orientation = RIGHT;

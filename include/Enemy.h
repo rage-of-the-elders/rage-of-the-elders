@@ -12,7 +12,7 @@
 
 class Enemy : public Fighter {
 protected:
-  Rect target;
+  Rect *target;
   Rect tagetPlayer;
   void ManageInput(float dt);
   void HandleMovement(float dt);

@@ -3,6 +3,10 @@
 
 Janitor::Janitor(GameObject &associated) : Enemy(associated) {
 
+  this->rightOfsetColliderAttack = -150;
+  this->leftOfsetColliderAttack = 150;
+  this->attackColliderGapBasicAtacck1 = 100;
+
   std::string character = "janitor";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
   this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/attacking.png", 16, 0.04, 0, false);
@@ -21,7 +25,13 @@ Janitor::Janitor(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 60,0}));
+  this->bodyColliderBox = new Collider(this->associated, {0.2,1});
+  this->attackColliderBox = new Collider(this->associated, {0.3,1}, 1);
+  this->associated.AddComponent(this->bodyColliderBox);
+  this->associated.AddComponent(this->attackColliderBox);
+
+  this->attackColliderBox->SetColliderType(1);
+  // this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 60,0}));
 
 }
 
@@ -44,8 +54,7 @@ void Janitor::HandleDying(float) {
 
 void Janitor::Update(float dt) {
   Enemy::Update(dt);
-  Collider *a = (Collider*) this->associated.GetComponent("Collider");
-  a->SetOffset({(this->orientation ? RIGHT -60 : 60), 0});
+  this->bodyColliderBox->SetOffset({(this->orientation ? RIGHT -75 : 75), 0});
 }
 
 void Janitor::ResetSpeed() {
