@@ -60,5 +60,5 @@ void Veteran::Update(float dt) {
 }
 
 bool Veteran::Is(std::string type) {
-  return (type == "Veteran" || Fighter::Is(type));
+  return (type == "Veteran" || Playable::Is(type));
 }
