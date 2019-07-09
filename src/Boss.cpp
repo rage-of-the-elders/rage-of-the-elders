@@ -34,8 +34,8 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->bodyColliderBox = new Collider(this->associated, {0.37,0.55});
-  this->attackColliderBox = new Collider(this->associated, {0.37,0.55});
+  this->bodyColliderBox = new Collider(this->associated, {0.8,1});
+  this->attackColliderBox = new Collider(this->associated, {0.8,1});
   this->associated.AddComponent(this->bodyColliderBox);
   this->associated.AddComponent(this->attackColliderBox);
 

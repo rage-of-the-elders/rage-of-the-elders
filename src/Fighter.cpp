@@ -230,7 +230,7 @@ void Fighter::NotifyCollision(GameObject &other) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
             this->sound[HIT]->Play(1);
-            if (other.Has("Playable")) {
+            if (other.Has("Playable") && (not this->associated.Has("Boss"))) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
               opponent->points++;
