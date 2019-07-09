@@ -110,6 +110,7 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
+  std::cout << dt << std::endl;
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
 

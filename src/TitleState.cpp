@@ -23,7 +23,8 @@ TitleState::~TitleState() {
 
 void TitleState::LoadAssets() {
   this->bgBright = new GameObject();
-  this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title-bright.png"));
+  // this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title-bright.png"));
+  this->bgBright->AddComponent(new Sprite(*bgBright, "img/menu/title.png", 12, 0.08));
   this->AddObject(bgBright);
 
   this->gameName = new GameObject();
