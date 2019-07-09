@@ -56,15 +56,15 @@ void StageState::LoadBackground() {
 }
 
 void StageState::LoadPlayers() {
-  // GameObject *veteranGO = new GameObject();
-  // veteranGO->box.SetCenterPos(600, 300);
-  // veteranGO->AddComponent(new Veteran(*veteranGO));
-  // this->AddObject(veteranGO);
+  GameObject *veteranGO = new GameObject();
+  veteranGO->box.SetCenterPos(600, 300);
+  veteranGO->AddComponent(new Veteran(*veteranGO));
+  this->AddObject(veteranGO);
 
-  GameObject *teacherGO = new GameObject();
-  teacherGO->box.SetCenterPos(600, 150);
-  teacherGO->AddComponent(new Teacher(*teacherGO));
-  this->AddObject(teacherGO);
+  // GameObject *teacherGO = new GameObject();
+  // teacherGO->box.SetCenterPos(600, 150);
+  // teacherGO->AddComponent(new Teacher(*teacherGO));
+  // this->AddObject(teacherGO);
 
   GameObject *nurseGO = new GameObject();
   nurseGO->box.SetCenterPos(800, 500);
@@ -92,7 +92,7 @@ void StageState::LoadPlayers() {
   securityGO->RequestDelete();
 
 
-	Camera::Follow(teacherGO);
+	Camera::Follow(veteranGO);
 }
 
 void StageState::BuildBarriers() {
@@ -261,20 +261,70 @@ void StageState::CheckGameEnd() {
 void StageState::CollisionCheck() {
 	for (unsigned i = 0; i < this->objectArray.size(); i++) {
 		for (unsigned j = i + 1; j < this->objectArray.size(); j++) {
-			if (objectArray[i]->IsActive() && objectArray[j]->IsActive()) {
-				Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
-				Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+      if(objectArray[i]->IsActive() && objectArray[j]->IsActive()) {
+        if(objectArray[i]->Has("Fighter") && objectArray[j]->Has("Fighter")){
+            std::vector<std::shared_ptr<Component>> cptsA = objectArray[i]->GetAllComponent("Collider");
+            std::vector<std::shared_ptr<Component>> cptsB = objectArray[j]->GetAllComponent("Collider");
 
-				if(objA && objB) {
-					if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
-						this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
-						this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
-					}
-				}
-			}
-		}
+            // cptsA[0].get();
+
+            // for(auto &cpt : objsA) {
+              // Collider *objA = (Collider *) ;
+            // }
+            // puts("AAAAAAAAAAAAAAAA");
+
+            
+
+            // for(auto &cpt : objectArray[i]->GetAllComponent("Collider")) {
+            Collider *objA = (Collider *) cptsA[0].get();
+            Collider *objB = (Collider *) cptsA[1].get();
+            Collider *objC = (Collider *) cptsB[0].get();
+            Collider *objD = (Collider *) cptsB[1].get();
+              // for(auto &cpt2 : objectArray[j]->GetAllComponent("Collider")) {
+              // }
+            // }
+            // std::cout << objA->GetColliderType() << " " << objB->GetColliderType() << " " << objC->GetColliderType() << " " << objD->GetColliderType() << std::endl;
+
+            if(Collision::IsColliding(objA->box, objC->box, 0, 0) && (objA->GetColliderType() != objC->GetColliderType())) {
+                this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+                this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            }
+            if(Collision::IsColliding(objA->box, objD->box, 0, 0) && (objA->GetColliderType() != objD->GetColliderType())) {
+                this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+                this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            }
+            if(Collision::IsColliding(objC->box, objB->box, 0, 0) && (objC->GetColliderType() != objB->GetColliderType())) {
+                this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+                this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            }
+            if(Collision::IsColliding(objD->box, objB->box, 0, 0) && (objD->GetColliderType() != objB->GetColliderType())) {
+                this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+                this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            }
+            // Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg
+            // if(objA && objB) {
+            //   if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+            //     this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+            //     this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            //   }
+            // }
+        }
+        else {
+          Collider *objA = (Collider *)objectArray[i]->GetComponent("Collider");
+          Collider *objB = (Collider *)objectArray[j]->GetComponent("Collider");
+
+          if(objA && objB) {
+            if (Collision::IsColliding(objA->box, objB->box, this->objectArray[i]->angleDeg, this->objectArray[j]->angleDeg)) {
+              this->objectArray[i]->NotifyCollision(*(this->objectArray[j]));
+              this->objectArray[j]->NotifyCollision(*(this->objectArray[i]));
+            }
+          }
+        }
+      }
+    }
 	}
 }
+
 void StageState::DeletionCheck() {
 	for (int i = objectArray.size() - 1; i >= 0; i--)
 		if (objectArray[i]->IsDead()) {

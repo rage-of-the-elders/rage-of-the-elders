@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Game.h"
 #include "Sprite.h"
-#include "Collider.h"
 #include "InputManager.h"
 #include "Collision.h"
 #include "Veteran.h"
@@ -22,6 +21,10 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->points = 0;
   this->shootCooldown = Timer();
   this->timeToDelete = Timer();
+  this->attackColliderGapBasicAtacck1 = 0;
+  this->attackColliderGapBasicAtacck2 = 0;
+  this->rightOfsetColliderAttack = 0;
+  this->leftOfsetColliderAttack = 0;
 
   this->sprite = std::vector<Sprite *>(LAST);
   this->sound = std::vector<Sound *>(LAST);
@@ -104,6 +107,32 @@ void Fighter::Update(float dt) {
 
   this->shootCooldown.Update(dt);
   UpdateStateMachine(dt);
+  
+  // Collider *coliderBox = (Collider*) this->associated.GetComponent("Collider");
+  if(this->IsAttacking()) {
+    if(this->sprite[this->currentState]->MidleOfTheAnimation()) {
+
+      if(this->currentState == BASIC_ATTACK_ONE) {
+        if(this->orientation == LEFT) {
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck1 * -1), 0});
+        }
+        else {
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck1, 0});
+        }
+      }
+      else if(this->currentState == BASIC_ATTACK_TWO) {
+        if(this->orientation == LEFT) {
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck2 * -1), 0});
+        }
+        else {
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, 0});
+        }
+      }
+    }
+  }
+  else {
+    this->attackColliderBox->SetOffset({this->orientation == LEFT? this->leftOfsetColliderAttack : this->rightOfsetColliderAttack,0});
+  }
 }
 
 void Fighter::Render() {
@@ -194,9 +223,10 @@ void Fighter::NotifyCollision(GameObject &other) {
   {
     if (not this->IsHurting()) {
       Fighter *opponent = (Fighter *)other.GetComponent("Fighter");
-      if (this->TargetIsInYRange(opponent->GetColliderBox())) {
+      if (this->TargetIsInYRange(*opponent->GetColliderBox())) {
         if (opponent->IsAttacking() && not this->IsDead()) {
-          if (this->CanAttack(opponent->GetOrientation(), opponent->GetBox())) {
+          if (this->CanAttack(opponent->GetOrientation(), *opponent->GetBodyCollider())
+          && Collision::IsColliding(*opponent->GetColliderBox(), *this->GetBodyCollider(),other.angleDeg,this->associated.angleDeg)) {
             this->storedState = HURTING;
             this->ApplyDamage(opponent->GetDamage());
             this->sound[HIT]->Play(1);
@@ -249,7 +279,7 @@ void Fighter::NotifyCollision(GameObject &other) {
 }
 
 bool Fighter::TargetIsInYRange(Rect targetBox) {
-  float fighterAttackY = (this->GetColliderBox().y + this->GetColliderBox().h);
+  float fighterAttackY = (this->GetBodyCollider()->y + this->GetBodyCollider()->h);
 
   float targetDistanceY = abs((targetBox.y + targetBox.h) - fighterAttackY);
 
@@ -296,8 +326,8 @@ bool Fighter::IsDead() {
 }
 
 bool Fighter::CanAttack(enum Orientation targetOrientation, Rect targetRect) {
-  if ((targetOrientation == Fighter::LEFT && (this->associated.box.x < targetRect.x)) ||
-      (targetOrientation == Fighter::RIGHT && (this->associated.box.x > targetRect.x)))
+  if ((targetOrientation == Fighter::LEFT && (this->GetBodyCollider()->x < targetRect.x)) ||
+      (targetOrientation == Fighter::RIGHT && (this->GetBodyCollider()->x > targetRect.x)))
     return true;
 
   return false;
@@ -437,12 +467,18 @@ void Fighter::HandleFrozen(float) {
   }
 }
 
-Rect Fighter::GetColliderBox() {
-  Collider *fighterColliderBox = (Collider *)this->associated.GetComponent("Collider");
-  return Rect(fighterColliderBox->GetX(),
-              fighterColliderBox->GetY(),
-              fighterColliderBox->GetWidth(),
-              fighterColliderBox->GetHeigth());
+Rect *Fighter::GetColliderBox() {
+  return new Rect(attackColliderBox->GetX(),
+              attackColliderBox->GetY(),
+              attackColliderBox->GetWidth(),
+              attackColliderBox->GetHeigth());
+}
+
+Rect *Fighter::GetBodyCollider() {
+  return new Rect(bodyColliderBox->GetX(),
+              bodyColliderBox->GetY(),
+              bodyColliderBox->GetWidth(),
+              bodyColliderBox->GetHeigth());
 }
 
 void Fighter::Shoot(std::string file, int frameCount) {

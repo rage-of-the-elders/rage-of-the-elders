@@ -43,6 +43,7 @@ public:
   void NotifyCollision(GameObject &other);
   Component *GetComponent(std::string type);
   std::vector<std::shared_ptr<Component>> GetComponents();
+  std::vector<std::shared_ptr<Component>> GetAllComponent(std::string type);
   void ReplaceComponent(Component *cpt, Component *replaceCpt);
 };
 

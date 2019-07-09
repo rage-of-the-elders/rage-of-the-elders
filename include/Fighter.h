@@ -6,6 +6,7 @@
 #include "Vec2.h"
 #include "Sprite.h"
 #include "Sound.h"
+#include "Collider.h"
 
 #define FIGHTER_HP 100
 #define FIGHTER_SPEED 20
@@ -24,6 +25,10 @@ protected:
   int damage[LAST];
   int comboCount;
   int points;
+  int attackColliderGapBasicAtacck1;
+  int attackColliderGapBasicAtacck2;
+  int leftOfsetColliderAttack;
+  int rightOfsetColliderAttack;
   float speed;
   Orientation orientation;
   FighterState storedState;
@@ -33,7 +38,9 @@ protected:
   Timer ultimateDuration;
   Timer shootCooldown;
   Timer timeToDelete;
-
+  Collider *attackColliderBox;
+  Collider *bodyColliderBox;
+  
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);
   virtual void HandleMovement(float dt);
@@ -66,7 +73,8 @@ public:
   void ActivateSprite(FighterState state);
   enum Orientation GetOrientation();
   bool CanAttack(enum Orientation orientation, Rect targetRect);
-  Rect GetColliderBox();
+  Rect *GetColliderBox();
+  Rect *GetBodyCollider();
   int GetDamage();
   void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
