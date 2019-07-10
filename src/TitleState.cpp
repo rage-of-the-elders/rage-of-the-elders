@@ -140,7 +140,7 @@ void TitleState::Update(float dt) {
         switch (this->currentOption) {
           case PLAY:
             this->popRequested = true;
-            Game::GetInstance().Push(new VictoryState());
+            Game::GetInstance().Push(new ChoosePlayerState());
             break;
 
           case CREDITS:

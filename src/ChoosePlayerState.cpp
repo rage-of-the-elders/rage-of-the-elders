@@ -61,10 +61,6 @@ void ChoosePlayerState::LoadAssets() {
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cursor.ogg"));
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cancel.ogg"));
-
-
-  music = Music("audio/menu/bg.ogg");
-  music.Play();
 }
 
 void ChoosePlayerState::Update(float dt) {
