@@ -111,7 +111,7 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
-  std::cout << dt << std::endl;
+  // std::cout << dt << std::endl;
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
 
@@ -184,8 +184,17 @@ Rect Sprite::GetPosition() {
   return realPosition;
 }
 
-void Sprite::SetAlpha(int alpha) {
-  if (SDL_SetTextureAlphaMod(this->texture.get(), alpha)) {
+void Sprite::SetAlpha(int alphaPercentage, bool inverted) {
+  alphaPercentage = std::max(alphaPercentage, 0);
+  alphaPercentage = std::min(alphaPercentage, 100);
+
+  float alpha = alphaPercentage/100.0;
+  if (inverted) {
+    alpha = 1 - alpha;
+  }
+
+  printf("setando alpha: %f\n", alpha);
+  if (SDL_SetTextureAlphaMod(this->texture.get(), alpha * 255)) {
     printf("Could not update texture alpha channel: %s\n", SDL_GetError());
     exit(-1);
   }

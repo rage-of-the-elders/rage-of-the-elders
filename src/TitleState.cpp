@@ -7,6 +7,7 @@
 #include "CameraFollower.h"
 #include "Camera.h"
 #include "ChoosePlayerState.h"
+#include "VictoryState.h"
 
 TitleState::TitleState(bool startOption) {
   this->currentOption = 0;
@@ -36,7 +37,7 @@ void TitleState::LoadAssets() {
 
   this->bgDark = new GameObject();
   Sprite *black = new Sprite(*bgDark, "img/black.png");
-  black->SetAlpha(160);
+  black->SetAlpha(50);
   this->bgDark->AddComponent(black);
   this->AddObject(bgDark);
 
@@ -138,7 +139,7 @@ void TitleState::Update(float dt) {
         switch (this->currentOption) {
           case PLAY:
             this->popRequested = true;
-            Game::GetInstance().Push(new ChoosePlayerState());
+            Game::GetInstance().Push(new VictoryState());
             break;
 
           case DIFFICULTY:

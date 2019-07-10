@@ -52,7 +52,7 @@ public:
   bool Is(std::string type);
   void SetRepeat(bool repeat);
   bool GetRepeat();
-  void SetAlpha(int alpha); // 0 to 255
+  void SetAlpha(int alphaPercentage, bool invert = false); // 0 to 100
   void Desactivate();
   Rect GetPosition();
 };
