@@ -193,7 +193,6 @@ void Sprite::SetAlpha(int alphaPercentage, bool inverted) {
     alpha = 1 - alpha;
   }
 
-  printf("setando alpha: %f\n", alpha);
   if (SDL_SetTextureAlphaMod(this->texture.get(), alpha * 255)) {
     printf("Could not update texture alpha channel: %s\n", SDL_GetError());
     exit(-1);
