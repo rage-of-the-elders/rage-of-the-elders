@@ -27,6 +27,9 @@ void VictoryState::LoadAssets() {
   fadeGO->AddComponent(this->fade);
   this->AddObject(fadeGO);
   fade->SetAlpha(0);
+
+  this->music = new Music("audio/menu/victory.ogg");
+  this->music->Play();
 }
 
 void VictoryState::UpdateFade(float dt) {
@@ -36,6 +39,15 @@ void VictoryState::UpdateFade(float dt) {
 }
 
 void VictoryState::UpdateCutscene(float dt) {
+  #ifdef DEBUG
+    if (InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
+      this->cutscene->SetFrame(++currentScene);
+    }
+    if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
+      this->cutscene->SetFrame(--currentScene);
+    }
+  #endif
+
   if (changeScenes.Get() > SCENE_DURATION) {
     if(this->currentScene < SCENES_NUMBER) {
       this->cutscene->SetFrame(++currentScene);

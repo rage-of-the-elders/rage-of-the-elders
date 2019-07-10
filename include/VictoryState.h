@@ -6,16 +6,16 @@
 #define FADE_DURATION 2 // seconds
 #include "State.h"
 #include "GameObject.h"
-// #include "Music.h"
+#include "Music.h"
 #include "Sprite.h"
 #include "Sound.h"
 #include "Timer.h"
-// #include "Text.h"
 
 
 class VictoryState : public State {
 private:
   int currentScene;
+  Music *music;
   Sprite *cutscene;
   Sprite *fade;
   Timer changeScenes;

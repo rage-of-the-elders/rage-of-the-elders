@@ -25,6 +25,10 @@ void CreditsState::LoadAssets() {
   this->names->AddComponent(this->fade);
   this->names->box.SetXCenter(Game::screenWidth / 2);
   this->names->box.y = Game::screenHeight;
+
+  this->music = new Music("audio/menu/credits.ogg");
+  this->music->Play();
+
   this->AddObject(this->names);
 }
 

@@ -16,7 +16,7 @@ Music::~Music() {
 }
 
 void Music::Play(int times) {
-  Mix_VolumeMusic(0);
+  Mix_VolumeMusic(120);
   int mixPlayMusic = Mix_PlayMusic(music.get(), times);
   if (mixPlayMusic) {
     printf("Play music: %s\n", Mix_GetError());

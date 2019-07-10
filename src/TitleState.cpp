@@ -53,7 +53,7 @@ void TitleState::LoadAssets() {
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE));
   text = new GameObject();
-  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "DIFFICULTY", WHITE));
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "CREDITS", WHITE));
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE));
 
@@ -143,7 +143,9 @@ void TitleState::Update(float dt) {
             Game::GetInstance().Push(new VictoryState());
             break;
 
-          case DIFFICULTY:
+          case CREDITS:
+            this->popRequested = true;
+            Game::GetInstance().Push(new CreditsState());
             break;
 
           case EXIT:

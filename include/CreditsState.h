@@ -17,6 +17,7 @@ private:
   Sprite *bg;
   Sprite *fade;
   GameObject *names;
+  Music *music;
   Timer changeScenes;
   Timer fadeTimer;
   std::vector<Sound *> buttonSounds;
