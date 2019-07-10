@@ -16,6 +16,7 @@ public:
   void SetPos(float x, float y);
   void SetPos(Vec2 pos);
   void UpdatePos(Vec2 pos);
+  void UpdatePosY(float y);
   void SetCenterPos(float centerX, float centerY);
   void SetCenterPos(Vec2 center);
   void SetSize(float w, float h);

@@ -14,6 +14,10 @@
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
 #define TIME_TO_DELETE 1 // second
+#define BULLET_Y_GAP 60
+#define BULLET_LEFT_GAP -260
+#define BULLET_RIGHT_GAP 130
+#define BULLET_FRAME_COUNT 6
 const std::string HITS[] = {"pow.png", "smash.png", "bam.png", "boom.png"};
 
 
@@ -79,7 +83,7 @@ public:
   Rect *GetBodyCollider();
   void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
-  void Shoot(std::string file, int frameCount);
+  void Shoot(std::string file, int frameCount, int damage, int yGap, int leftGap, int rigthGap, float shooterY, std::string shooterType, int speed);
 };
 
 #endif

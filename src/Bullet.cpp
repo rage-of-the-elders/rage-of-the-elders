@@ -3,7 +3,7 @@
 #include "Collider.h"
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance,
-               std::string sprite, int frameCount, float frameTime, bool targetsPlayer) : Component(associated) {
+               std::string sprite, int frameCount, float frameTime, bool targetsPlayer, float shooterY, std::string shooterType) : Component(associated) {
   this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.AddComponent(new Collider(associated));
   this->associated.angleDeg = angle;
@@ -11,6 +11,8 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   this->damage = damage;
   this->distanceLeft = maxDistance;
   this->targetsPlayer = targetsPlayer;
+  this->shooterY = shooterY;
+  this->shooterType = shooterType;
 }
 
 void Bullet::Update(float dt) {

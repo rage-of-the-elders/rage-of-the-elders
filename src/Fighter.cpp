@@ -263,18 +263,24 @@ void Fighter::NotifyCollision(GameObject &other) {
       bullet->SetDirection(-1, (this->orientation == RIGHT ? 0.0 : 180.0));
     }
     else if(not this->IsAttacking()){
-      this->ApplyDamage(bullet->GetDamage());
-      GameObject *explosionGo = new GameObject();
-      explosionGo->box = bullet->GetBox();
-      explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
-      Game::GetInstance().GetCurrentState().AddObject(explosionGo);
-      Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
-      explosionSound->Play(1);
-      this->storedState = HURTING;
-      if (Veteran::player != nullptr) {
-        this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+      if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
+        this->ApplyDamage(bullet->GetDamage());
+        GameObject *explosionGo = new GameObject();
+        explosionGo->box = bullet->GetBox();
+        if(bullet->shooterType == "Nurse")
+          explosionGo->AddComponent(new Sprite(*explosionGo, "img/nurse_explosion.png", 7, 0.07, (7 * 0.07), false));
+        else
+          explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
+
+        Game::GetInstance().GetCurrentState().AddObject(explosionGo);
+        Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
+        explosionSound->Play(1);
+        this->storedState = HURTING;
+        if (Veteran::player != nullptr) {
+          this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+        }
+        bullet->RemoveBullet();
       }
-      bullet->RemoveBullet();
     }
   }
 }
@@ -400,7 +406,8 @@ void Fighter::HandleUltimateMidle(float dt) {
     this->ActivateSprite(ULTIMATE_MIDLE);
   }
 
-  this->Shoot("img/veteran/shoot.png", 6);
+  this->Shoot("img/veteran/shoot.png", BULLET_FRAME_COUNT, BULLET_DAMAGE, BULLET_Y_GAP, BULLET_LEFT_GAP,
+              BULLET_RIGHT_GAP, this->GetFoot().y, "Playable", 400);
   this->ultimateDuration.Update(dt);
   // if(this->sprite[ULTIMATE_MIDLE]->IsFinished()) {
   //   this->currentState = ULTIMATE_FINAL;
@@ -481,21 +488,20 @@ Rect *Fighter::GetBodyCollider() {
               bodyColliderBox->GetHeigth());
 }
 
-void Fighter::Shoot(std::string file, int frameCount) {
+void Fighter::Shoot(std::string file, int frameCount, int damage, int yGap, int leftGap, int rigthGap, float shooterY, std::string shooterType, int speed) {
   if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
-    float bulletSpeed = 400;
-    float damage = BULLET_DAMAGE;
-    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
+    float bulletSpeed = speed;
+    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 10000);
     float frameTime = 0.09;
 
     GameObject *bullet = new GameObject();
-    Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? 130 : -260))),
-                                 (this->associated.box.GetCenter().y - 60));
+    Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? rigthGap : leftGap))),
+                                 (this->associated.box.GetCenter().y - yGap));
     bullet->box.SetCenterPos(gunShootPosition);
     bullet->AddComponent(new Bullet(*bullet, this->orientation == RIGHT ? 0 : 180, ((this->orientation == RIGHT ? 1 : -1) * bulletSpeed),
                                     damage,
                                     maxDistance, file,
-                                    frameCount, frameTime, true));
+                                    frameCount, frameTime, true, shooterY, shooterType));
     Game::GetInstance().GetCurrentState().AddObject(bullet);
     this->shootCooldown.Restart();
   }
