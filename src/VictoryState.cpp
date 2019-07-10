@@ -1,6 +1,7 @@
 #include "VictoryState.h"
 #include "InputManager.h"
 #include "TitleState.h"
+#include "CreditsState.h"
 #include "Game.h"
 
 VictoryState::VictoryState() {
@@ -40,7 +41,7 @@ void VictoryState::UpdateCutscene(float dt) {
       this->cutscene->SetFrame(++currentScene);
     } else {
       this->popRequested = true;
-      Game::GetInstance().Push(new TitleState(false)); // TODO: Change to Credits
+      Game::GetInstance().Push(new CreditsState());
     }
     changeScenes.Restart();
   }
@@ -49,10 +50,6 @@ void VictoryState::UpdateCutscene(float dt) {
 
 void VictoryState::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
-  if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
-		this->popRequested = true;
-   	Game::GetInstance().Push(new TitleState());
-	}
 
   if (fadeTimer.Get() < FADE_DURATION) {
     this->UpdateFade(dt);

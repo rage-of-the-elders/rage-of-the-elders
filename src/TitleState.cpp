@@ -7,6 +7,7 @@
 #include "CameraFollower.h"
 #include "Camera.h"
 #include "ChoosePlayerState.h"
+#include "CreditsState.h"
 #include "VictoryState.h"
 
 TitleState::TitleState(bool startOption) {
