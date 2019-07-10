@@ -3,8 +3,6 @@
 #include "Resources.h"
 #include "Camera.h"
 
-#include <iostream>
-
 Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->texture = nullptr;
   this->width = 0;

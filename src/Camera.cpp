@@ -1,3 +1,5 @@
+#define FOCUS_ADJUSTMENT -6
+
 #include "Game.h"
 #include "Camera.h"
 #include "InputManager.h"
@@ -55,7 +57,8 @@ void Camera::DefineLimits() {
 }
 
 void Camera::AdjustFocus() {
-  position.x = focus->box.GetCenter().x - (Game::screenWidth / 2);
+  float diference = position.x - focus->box.GetCenter().x + (Game::screenWidth / 2);
+  position.x += diference / FOCUS_ADJUSTMENT;
 }
 
 GameObject *Camera::GetFocus() {
