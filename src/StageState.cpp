@@ -99,11 +99,11 @@ void StageState::BuildBarriers() {
   this->AddObject(hallWall);
 
   GameObject *roomWall = new GameObject();
-  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
+  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, this->stageLimit , 420)));
   this->AddObject(roomWall);
 
   GameObject *baseFloor = new GameObject();
-  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
+  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,this->stageLimit,400)));
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();

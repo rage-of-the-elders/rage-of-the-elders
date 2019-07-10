@@ -3,8 +3,6 @@
 #include "Resources.h"
 #include "Camera.h"
 
-#include <iostream>
-
 Sprite::Sprite(GameObject &associated) : Component(associated) {
   this->texture = nullptr;
   this->width = 0;
@@ -111,7 +109,6 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
-  std::cout << dt << std::endl;
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
 
