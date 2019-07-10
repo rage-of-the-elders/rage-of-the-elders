@@ -27,6 +27,8 @@ public:
   ~VictoryState();
   void LoadAssets();
   void Update(float dt);
+  void UpdateFade(float dt);
+  void UpdateCutscene(float dt);
   void Render();
   void Start();
   void Pause();

@@ -28,6 +28,25 @@ void VictoryState::LoadAssets() {
   fade->SetAlpha(0);
 }
 
+void VictoryState::UpdateFade(float dt) {
+  float fadeCompletionPercentage = fadeTimer.Get() / FADE_DURATION;
+  this->fadeTimer.Update(dt);
+  this->fade->SetAlpha(floor(fadeCompletionPercentage * 100), true);
+}
+
+void VictoryState::UpdateCutscene(float dt) {
+  if (changeScenes.Get() > SCENE_DURATION) {
+    if(this->currentScene < SCENES_NUMBER) {
+      this->cutscene->SetFrame(++currentScene);
+    } else {
+      this->popRequested = true;
+      Game::GetInstance().Push(new TitleState(false)); // TODO: Change to Credits
+    }
+    changeScenes.Restart();
+  }
+  this->changeScenes.Update(dt);
+}
+
 void VictoryState::Update(float dt) {
   this->quitRequested = InputManager::GetInstance().QuitRequested();
   if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
@@ -36,25 +55,10 @@ void VictoryState::Update(float dt) {
 	}
 
   if (fadeTimer.Get() < FADE_DURATION) {
-    float fadeCompletionPercentage = fadeTimer.Get()/FADE_DURATION;
-    printf("complete: %f\n", fadeCompletionPercentage * 100);
-    this->fadeTimer.Update(dt);
-    this->fade->SetAlpha(floor(fadeCompletionPercentage * 100), true);
+    this->UpdateFade(dt);
   } else {
-    if (changeScenes.Get() > SCENE_DURATION) {
-      if(this->currentScene < SCENES_NUMBER) {
-        this->cutscene->SetFrame(++currentScene);
-      } else {
-        // cutscene->SetAlpha();
-        this->popRequested = true;
-        Game::GetInstance().Push(new TitleState(false)); // TODO: Change to Credits
-      }
-      changeScenes.Restart();
-    }
-    this->changeScenes.Update(dt);
+    this->UpdateCutscene(dt);
   }
-
-
 
   this->UpdateArray(dt);
 }
