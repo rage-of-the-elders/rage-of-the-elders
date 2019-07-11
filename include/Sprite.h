@@ -39,6 +39,7 @@ public:
   int GetHeight();
   float GetFrameTime();
   int GetFrame();
+  int GetFrameCount();
   Vec2 GetScale();
   bool IsFinished();
   void SetScaleX(float scale);

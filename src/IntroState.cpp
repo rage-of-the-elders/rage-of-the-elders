@@ -67,7 +67,7 @@ void IntroState::UpdateScreenElements(float dt) {
                         || InputManager::GetInstance().KeyPress(SPACE_KEY);
 
     if (enterPressed) {
-      this->names->SetFrame(this->names->GetFrame() + 1);
+      this->names->SetFrame(std::min(this->names->GetFrameCount()-1 , this->names->GetFrame() + 1));
     }
 
     if(not this->names->IsActive()) {

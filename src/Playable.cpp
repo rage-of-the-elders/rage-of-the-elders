@@ -58,7 +58,7 @@ void Playable::ManageInput(float dt) {
     }
     else if(InputManager::GetInstance().KeyPress(D_KEY) && (not this->IsAttacking()) && this->UltimateReady()) {
       this->currentState = ULTIMATE_BEGIN;
-      // this->points = 0;
+      this->points = 0;
     }
     else {
       if (not this->IsAttacking()) {

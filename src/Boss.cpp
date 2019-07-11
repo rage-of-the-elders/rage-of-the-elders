@@ -1,6 +1,6 @@
 #include "Boss.h"
 #include "Collider.h"
-#include "Veteran.h"
+#include "Playable.h"
 #include "Camera.h"
 
 #include <iostream> 
@@ -60,16 +60,16 @@ void Boss::Update(float dt) {
 
 void Boss::ManageInput(float dt) {
   this->attackCooldown.Update(dt);
-  if(Veteran::player != nullptr) {
-    this->target = Veteran::player->GetColliderBox();
-    this->tagetPlayer = Veteran::player->GetFoot();
+  if(Playable::player != nullptr) {
+    this->target = Playable::player->GetColliderBox();
+    this->tagetPlayer = Playable::player->GetFoot();
 
     if(this->IsDead()){
       this->currentState = DYING;
     }
     else if (TargetIsInRange() && this->currentState != FROZEN) {
-      Veteran::player->ApplyDamage(1);
-      Veteran::player->SetState(HURTING);
+      // Playable::player->ApplyDamage(1);
+      Playable::player->SetState(HURTING);
     }
     else if(this->currentState != IDLE && this->currentState != FROZEN) {
       this->currentState = MOVING;
