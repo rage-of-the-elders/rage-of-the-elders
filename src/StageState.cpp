@@ -207,7 +207,9 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
       break;
     case 3:
       enemyGO->AddComponent(new Security(*enemyGO));
-      // enemyGO->AddComponent(new Boss(*enemyGO));      
+      break;
+    case 4:
+      enemyGO->AddComponent(new Boss(*enemyGO));      
       break;
     default:
       printf("WARNING: No enemy type given!\n");
