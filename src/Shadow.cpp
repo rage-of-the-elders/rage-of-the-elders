@@ -4,7 +4,9 @@
 
 Shadow::Shadow(GameObject &associated, Vec2 offset) : Component(associated) {
   this->offset = offset;
-  this->associated.AddComponent(new Sprite(this->associated, "img/fighter/shadow.png"));
+  this->sprite = new Sprite(this->associated, "img/fighter/shadow.png");
+  this->sprite->SetScaleX(1.5, 1);
+  this->associated.AddComponent(this->sprite);
 }
 
 Shadow::~Shadow() {}
@@ -16,20 +18,21 @@ void Shadow::RequestDelete() {
 }
 
 void Shadow::UpdatePos(Vec2 footPosition) {
-    // puts("upd");
   if (not this->associated.IsDead()) {
-    // puts("vou atuali");
     float xCenterPos = footPosition.x + this->offset.x;
     float yCenterPos = footPosition.y + this->offset.y + 7;
     this->associated.box.SetCenterPos(xCenterPos, yCenterPos);
   } else {
-    // puts("morreu mlk");
+    // dead
   }
-  // puts("after");
 }
 
 void Shadow::Render() {
 
+}
+
+void Shadow::SetShadowScale(Vec2 scale) {
+  this->sprite->SetScaleX(scale.x, scale.y);
 }
 
 bool Shadow::Is(std::string type) {

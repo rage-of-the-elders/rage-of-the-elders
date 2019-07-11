@@ -5,8 +5,8 @@
 #include <iostream>
 
 Veteran::Veteran(GameObject &associated) : Playable(associated) {
-  this->hp = VETERAN_HP;
-  this->speed = VETERAN_SPEED;
+  this->hp = 1;
+  this->speed =800;
   this->player = this;
   this->orientation = RIGHT;
   this->leftOfsetColliderAttack = 80;

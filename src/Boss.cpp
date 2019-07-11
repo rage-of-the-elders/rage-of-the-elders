@@ -15,6 +15,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->timesThatTheBossTurnArround = 0;
   this->frozenTime = Timer();
   this->turnArroundTimes = 5;
+  this->shadow->SetShadowScale({3.5, 1});
 
   std::string character = "boss";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);

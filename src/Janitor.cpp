@@ -43,6 +43,7 @@ Janitor::~Janitor() {
 void Janitor::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? 60 : -320);
     this->associated.box.y += (this->orientation == RIGHT ? 30 : 30);

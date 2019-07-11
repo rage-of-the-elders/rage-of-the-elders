@@ -48,6 +48,7 @@ Security::~Security() {
 void Security::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -200 : 80);
     this->sound[DYING]->Play(1);
