@@ -20,13 +20,19 @@
 #include "Teacher.h"
 #include "Boss.h"
 
+#include <iostream>
+
+int StageState::enemiesCount = 0;
+
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
+  this->hordeEnabled = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 }
 
 StageState::~StageState() {
+  UnlockCamera();
   this->objectArray.clear();
 }
 
