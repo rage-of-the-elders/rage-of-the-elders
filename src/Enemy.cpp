@@ -1,7 +1,6 @@
 #include "Enemy.h"
 #include "Collider.h"
 #include "Veteran.h"
-#include "StageState.h"
 
 Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->hp = ENEMY_HP;
