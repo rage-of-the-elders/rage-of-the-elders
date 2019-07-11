@@ -97,7 +97,7 @@ void Nurse::ManageInput(float dt) {
 
   }
 
-  if (this->currentState != DYING && this->currentState != MOVING) {
+  if (this->currentState != DYING) {
     if (this->target->GetCenter().x + 10 < this->GetBox().GetCenter().x)
       this->orientation = LEFT;
     else
