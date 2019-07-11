@@ -22,14 +22,19 @@
 #include "VictoryState.h"
 #include "GameOverState.h"
 
+#include <iostream>
+
+int StageState::enemiesCount = 0;
+
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
+  this->hordeEnabled = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 }
 
 StageState::~StageState() {
-  Camera::position = Vec2();
+  UnlockCamera();
   this->objectArray.clear();
 }
 
@@ -197,7 +202,7 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
       // enemyGO->AddComponent(new Janitor(*enemyGO));
       break;
     case 3:
-      enemyGO->AddComponent(new Boss(*enemyGO));      
+      enemyGO->AddComponent(new Boss(*enemyGO));
       // enemyGO->AddComponent(new Security(*enemyGO));
       break;
     default:
@@ -281,7 +286,7 @@ void StageState::CollisionCheck() {
             // }
             // puts("AAAAAAAAAAAAAAAA");
 
-            
+
 
             // for(auto &cpt : objectArray[i]->GetAllComponent("Collider")) {
             Collider *objA = (Collider *) cptsA[0].get();
