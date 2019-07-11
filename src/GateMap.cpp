@@ -3,7 +3,7 @@
 #include <fstream>
 
 GateMap::GateMap(std::string file) {
-  this->gates = std::vector<int>();
+  this->gates = std::vector<Gate>();
   this->currentIndex = 0;
   this->numberOfGates = 0;
 
@@ -20,17 +20,27 @@ void GateMap::Load(std::string file) {
   if (gateMapFile.good()) {
     char comma;
 
-    int value;
-
     gateMapFile >> this->numberOfGates >> comma;
-
     for (int i = 0; i < this->numberOfGates; i++) {
-      gateMapFile >> value >> comma;
-      this->gates.emplace_back(value);
+      struct Gate newGate;
+
+      gateMapFile >> newGate.position >> comma;
+      gateMapFile >> newGate.enemiesAmount >> comma;
+
+      for(int j = 0; j < newGate.enemiesAmount; j++) {
+        EnemyInfo newEnemy;
+        gateMapFile >> newEnemy.type >> comma >> newEnemy.invertSide >> comma;
+
+        newGate.enemies.emplace_back(newEnemy);
+
+      }
+      this->gates.emplace_back(newGate);
     }
 
     // Indicates there is no gates left on the stage
-    this->gates.emplace_back(-1);
+    Gate finalGate;
+    finalGate.position = -1;
+    this->gates.emplace_back(finalGate);
   } else {
     printf("ERROR: Could not open '%s'", file.c_str());
     exit(-1);
@@ -38,7 +48,7 @@ void GateMap::Load(std::string file) {
   gateMapFile.close();
 }
 
-int GateMap::GetCurrentGate() {
+Gate GateMap::GetCurrentGate() {
   return this->gates[this->currentIndex];
 }
 
