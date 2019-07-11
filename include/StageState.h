@@ -20,6 +20,8 @@ private:
   TileSet *tileSet;
   TileMap *tileMap;
   GateMap *gateMap;
+  GameObject *cameraLockWallLeft;
+  GameObject *cameraLockWallRight;
 
   bool hordeEnabled;
 
