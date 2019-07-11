@@ -202,11 +202,17 @@ void StageState::LockCamera(int gatePosition) {
 }
 
 void StageState::UnlockCamera() {
-  Camera::initiaCameraLimit = 0;
-  Camera::finalCameraLimit = this->stageLimit;
+  if (this->hordeEnabled) {
+    Camera::initiaCameraLimit = 0;
+    Camera::finalCameraLimit = this->stageLimit;
 
-  this->cameraLockWallLeft->RequestDelete();
-  this->cameraLockWallRight->RequestDelete();
+    if (this->cameraLockWallLeft) {
+      this->cameraLockWallLeft->RequestDelete();
+    }
+    if (this->cameraLockWallRight) {
+      this->cameraLockWallRight->RequestDelete();
+    }
+  }
 }
 
 /*
