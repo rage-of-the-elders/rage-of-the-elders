@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "ChoosePlayerState.h"
 #include "StageState.h"
+#include "GameData.h"
 #include "Game.h"
 
 IntroState::IntroState() {
@@ -18,9 +19,29 @@ IntroState::~IntroState() {
 
 void IntroState::LoadAssets() {
   GameObject *bgGO = new GameObject();
-  this->bg = new Sprite(*bgGO, "img/cutscenes/typewriter.jpeg");
+  this->bg = new Sprite(*bgGO, "img/cutscenes/typewriter.png", 5, TYPEWRITER_SPEED);
   bgGO->AddComponent(this->bg);
   this->AddObject(bgGO);
+
+  int frameNumber = 0;
+  if (GameData::choosedCharacter == "veteran") {
+    frameNumber = 32;
+  } else {
+    frameNumber = 34;
+  }
+
+  GameObject *textGO = new GameObject();
+  this->names = new Sprite(*textGO,
+                           "img/cutscenes/" + GameData::choosedCharacter + "-text.png",
+                           frameNumber,
+                           INTRO_TEXT_SPEED,
+                           0,
+                           false);
+  names->Desactivate();
+  textGO->box.SetCenterPos(TEXT_POS);
+  textGO->angleDeg = 90;
+  textGO->AddComponent(this->names);
+  this->AddObject(textGO);
 
   GameObject *fadeGO = new GameObject();
   this->fade = new Sprite(*fadeGO, "img/black.png");
@@ -36,7 +57,6 @@ void IntroState::UpdateFade(float dt) {
   float fadeCompletionPercentage = fadeTimer.Get() / FADE_DURATION;
   this->fadeTimer.Update(dt);
   this->fade->SetAlpha(floor(fadeCompletionPercentage * 100), true);
-  // this->bg->SetScaleX(bg->GetScale().x+dt);
 }
 
 void IntroState::UpdateCutscene(float dt) {
@@ -75,7 +95,15 @@ void IntroState::Update(float dt) {
   if (fadeTimer.Get() < FADE_DURATION) {
     this->UpdateFade(dt);
   } else {
-    // this->UpdateCutscene(dt);
+    if(not this->names->IsActive()) {
+      this->names->Activate();
+    }
+
+    if(this->names->IsFinished()) {
+      this->popRequested = true;
+      Game::GetInstance().Push(new StageState());
+      // this->UpdateCutscene(dt);
+    }
   }
 
   this->UpdateArray(dt);

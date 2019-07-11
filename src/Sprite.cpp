@@ -75,6 +75,10 @@ int Sprite::GetHeight() {
   return this->height * this->scale.y;
 }
 
+float Sprite::GetFrameTime() {
+  return this->frameTime;
+}
+
 Vec2 Sprite::GetScale() {
   return this->scale;
 }

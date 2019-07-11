@@ -37,6 +37,7 @@ public:
   void Render(int x, int y);
   int GetWidth();
   int GetHeight();
+  float GetFrameTime();
   Vec2 GetScale();
   bool IsFinished();
   void SetScaleX(float scale);
