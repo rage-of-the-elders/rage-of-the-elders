@@ -22,6 +22,7 @@
 #include "VictoryState.h"
 #include "GameOverState.h"
 #include "CameraBarrier.h"
+#include "SceneObject.h"
 
 #include <iostream>
 
@@ -46,7 +47,21 @@ void StageState::LoadAssets() {
   this->LoadGates();
   this->LoadPlayers();
 	this->BuildBarriers();
+  this->LoadSceneObjects();
 	this->music.Play();
+}
+
+void StageState::LoadSceneObjects() {
+  this->objectMap = new ObjectMap("positioning_furniture.txt");
+  for(auto &sceneObject : this->objectMap->GetObjectList()) {
+    GameObject *sceneObjectGO = new GameObject();
+    SceneObject newSceneObject = SceneObject(*sceneObjectGO, sceneObject.environment,
+                                      sceneObject.x, sceneObject.y, sceneObject.objectType);
+
+    std::cout << newSceneObject.GetBox().x << " " << newSceneObject.GetBox().y << std::endl;
+    std::cout << newSceneObject.GetBox().w << " " << newSceneObject.GetBox().h << std::endl;
+    this->AddObject(sceneObjectGO);
+  }
 }
 
 void StageState::LoadBackground() {
