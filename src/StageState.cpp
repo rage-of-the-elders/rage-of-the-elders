@@ -20,6 +20,7 @@
 #include "Teacher.h"
 #include "Boss.h"
 #include "CameraBarrier.h"
+#include "SceneObject.h"
 
 #include <iostream>
 
@@ -43,7 +44,21 @@ void StageState::LoadAssets() {
   this->LoadGates();
   this->LoadPlayers();
 	this->BuildBarriers();
+  this->LoadSceneObjects();
 	this->music.Play();
+}
+
+void StageState::LoadSceneObjects() {
+  this->objectMap = new ObjectMap("positioning_furniture.txt");
+  for(auto &sceneObject : this->objectMap->GetObjectList()) {
+    GameObject *sceneObjectGO = new GameObject();
+    SceneObject newSceneObject = SceneObject(*sceneObjectGO, sceneObject.environment,
+                                      sceneObject.x, sceneObject.y, sceneObject.objectType);
+
+    std::cout << newSceneObject.GetBox().x << " " << newSceneObject.GetBox().y << std::endl;
+    std::cout << newSceneObject.GetBox().w << " " << newSceneObject.GetBox().h << std::endl;
+    this->AddObject(sceneObjectGO);
+  }
 }
 
 void StageState::LoadBackground() {
@@ -184,7 +199,7 @@ void StageState::LockCamera(int gatePosition) {
     this->gateMap->NextGate();
 
     this->cameraLockWallLeft = new GameObject();
-    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::position.x +30, Camera::position.y, 10, 900)));
+    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::position.x + 30, Camera::position.y, 10, 900)));
     this->AddObject(cameraLockWallLeft);
     
     this->cameraLockWallRight = new GameObject();
