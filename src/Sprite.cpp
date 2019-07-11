@@ -139,7 +139,7 @@ void Sprite::Update(float dt) {
 
     this->UpdateFrame();
 
-    if(not this->repeat && this->currentFrame == this->frameCount-1){
+    if(not this->repeat && this->currentFrame >= this->frameCount-1){
       this->finished = true;
     }
   }

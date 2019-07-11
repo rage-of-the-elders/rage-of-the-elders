@@ -19,7 +19,6 @@ private:
   Sprite *fade;
   Sprite *names;
   Music *music;
-  Timer changeScenes;
   Timer fadeTimer;
 
 public:
@@ -28,7 +27,7 @@ public:
   void LoadAssets();
   void Update(float dt);
   void UpdateFade(float dt);
-  void UpdateCutscene(float dt);
+  void UpdateScreenElements(float dt);
   void Render();
   void Start();
   void Pause();

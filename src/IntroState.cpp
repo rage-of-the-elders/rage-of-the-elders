@@ -6,7 +6,6 @@
 #include "Game.h"
 
 IntroState::IntroState() {
-  this->changeScenes = Timer();
   this->fadeTimer = Timer();
   this->currentScene = 0;
 
@@ -59,35 +58,7 @@ void IntroState::UpdateFade(float dt) {
   this->fade->SetAlpha(floor(fadeCompletionPercentage * 100), true);
 }
 
-void IntroState::UpdateCutscene(float dt) {
-  #ifdef DEBUG
-    if (InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
-      // this->cutscene->SetFrame(++currentScene);
-    }
-    if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
-      // this->cutscene->SetFrame(--currentScene);
-    }
-  #endif
-
-  // if (changeScenes.Get() > TEXT_DURATION) {
-  //   if(this->currentScene < LINES_NUMBER) {
-  //     this->bg->SetFrame(++currentScene);
-  //   } else {
-  //     this->popRequested = true;
-  //     Game::GetInstance().Push(new CreditsState());
-  //   }
-  //   changeScenes.Restart();
-  // }
-  this->changeScenes.Update(dt);
-}
-
-void IntroState::Update(float dt) {
-  this->quitRequested = InputManager::GetInstance().QuitRequested();
-  if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
-		this->popRequested = true;
-   	Game::GetInstance().Push(new ChoosePlayerState());
-	}
-
+void IntroState::UpdateScreenElements(float dt) {
   if (fadeTimer.Get() < FADE_DURATION) {
     this->UpdateFade(dt);
   } else {
@@ -106,10 +77,18 @@ void IntroState::Update(float dt) {
     if(this->names->IsFinished()) {
       this->popRequested = true;
       Game::GetInstance().Push(new StageState());
-      // this->UpdateCutscene(dt);
     }
   }
+}
 
+void IntroState::Update(float dt) {
+  this->quitRequested = InputManager::GetInstance().QuitRequested();
+  if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
+		this->popRequested = true;
+   	Game::GetInstance().Push(new ChoosePlayerState());
+	}
+
+  this->UpdateScreenElements(dt);
   this->UpdateArray(dt);
 }
 
