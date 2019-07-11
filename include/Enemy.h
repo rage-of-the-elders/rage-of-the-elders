@@ -9,6 +9,8 @@
 
 
 #include "Fighter.h"
+#include "StageState.h"
+
 
 class Enemy : public Fighter {
 protected:
