@@ -87,14 +87,18 @@ void IntroState::Update(float dt) {
 		this->popRequested = true;
    	Game::GetInstance().Push(new ChoosePlayerState());
 	}
-  if (InputManager::GetInstance().KeyPress(ENTER_KEY)) {
-		this->popRequested = true;
-   	Game::GetInstance().Push(new StageState());
-	}
 
   if (fadeTimer.Get() < FADE_DURATION) {
     this->UpdateFade(dt);
   } else {
+    bool enterPressed = InputManager::GetInstance().KeyPress(ENTER_KEY) 
+                        || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)
+                        || InputManager::GetInstance().KeyPress(SPACE_KEY);
+
+    if (enterPressed) {
+      this->names->SetFrame(this->names->GetFrame() + 1);
+    }
+
     if(not this->names->IsActive()) {
       this->names->Activate();
     }

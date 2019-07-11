@@ -100,6 +100,10 @@ void Sprite::SetFrame(int frame) {
   this->UpdateFrame();
 }
 
+int Sprite::GetFrame() {
+  return this->currentFrame;
+}
+
 void Sprite::SetFrameCount(int frameCount) {
   this->frameCount = frameCount;
   this->currentFrame = 0;

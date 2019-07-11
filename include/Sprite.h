@@ -38,6 +38,7 @@ public:
   int GetWidth();
   int GetHeight();
   float GetFrameTime();
+  int GetFrame();
   Vec2 GetScale();
   bool IsFinished();
   void SetScaleX(float scale);
