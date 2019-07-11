@@ -82,7 +82,7 @@ void Boss::ManageInput(float dt) {
       this->currentState = FROZEN;
       this->frozenTime.Restart();
     }
-    
+
     else if(this->timesThatTheBossTurnArround >= this->turnArroundTimes && this->frozenTime.Get() > 6) {
       this->timesThatTheBossTurnArround = 0;
       this->currentState = MOVING;
@@ -159,6 +159,7 @@ void Boss::HandleDying(float) {
     this->associated.box.x += (this->orientation == RIGHT ? -100 : 0);
   }
   if(this->sprite[DYING]->IsFinished()){
+    StageState::DecreaseEnemiesCount();
     this->associated.RequestDelete();
   }
 }
