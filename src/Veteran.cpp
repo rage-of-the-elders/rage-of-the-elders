@@ -47,8 +47,6 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
-
-  this->sound[HURTING] = new Sound(this->associated, "audio/veteran/hurting2.ogg");
 }
 
 Veteran::~Veteran() {

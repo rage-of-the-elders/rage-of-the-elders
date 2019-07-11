@@ -1,7 +1,7 @@
 #ifndef TEACHER_H
 #define TEACHER_H
 
-#define TEACHER_HP 100
+#define TEACHER_HP 30
 #define TEACHER_SPEED 200
 
 #include "Playable.h"
