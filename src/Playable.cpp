@@ -68,8 +68,8 @@ void Playable::ManageInput(float dt) {
         }
         else if(InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY)){
           this->currentState = MOVING;
-          Vec2 direction = Vec2::GetSpeed(0);
-          this->associated.box.UpdatePos((direction * -this->speed) * dt);
+          Vec2 direction = Vec2::GetSpeed(180);
+          this->associated.box.UpdatePos((direction * this->speed) * dt);
           this->orientation = LEFT;
         }
         if(InputManager::GetInstance().IsKeyDown(DOWN_ARROW_KEY)){

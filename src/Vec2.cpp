@@ -100,13 +100,17 @@ Vec2 Vec2::operator-(const float other) const {
 }
 
 Vec2 Vec2::operator*(const float other) const {
-	return Vec2(x * other, y * other);
+	return Vec2(this->x * other, this->y * other);
 }
 
 float Vec2::operator*(const Vec2& other) const {
-	return (x * other.x) + (y * other.y);
+	return (this->x * other.x) + (this->y * other.y);
 }
 
 Vec2 Vec2::operator/(const float other) const {
-	return Vec2(x / other, y / other);
+	return Vec2(this->x / other, this->y / other);
+}
+
+Vec2 Vec2::Multiply(const Vec2& other) const {
+	return Vec2(this->x * other.x, this->y * other.y);
 }

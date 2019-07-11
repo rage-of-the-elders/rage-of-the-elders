@@ -3,11 +3,12 @@
 #include "Collider.h"
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance,
-               std::string sprite, int frameCount, float frameTime, bool targetsPlayer, float shooterY, std::string shooterType) : Component(associated) {
+               std::string sprite, int frameCount, float frameTime, bool targetsPlayer,
+               float shooterY, std::string shooterType) : Component(associated) {
   this->associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
   this->associated.AddComponent(new Collider(associated));
   this->associated.angleDeg = angle;
-  this->speed = Vec2::GetSpeed(0) * speed;
+  this->speed = Vec2(speed);
   this->damage = damage;
   this->distanceLeft = maxDistance;
   this->targetsPlayer = targetsPlayer;
@@ -17,7 +18,8 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
 
 void Bullet::Update(float dt) {
   if (this->distanceLeft > 0) {
-    this->associated.box.UpdatePos(this->speed * dt);
+    Vec2 direction = Vec2::GetSpeed(associated.angleDeg);
+    this->associated.box.UpdatePos((direction.Multiply(speed)) * dt);
     this->distanceLeft -= Vec2().GetDistance(this->speed * dt);
   } else {
     this->associated.RequestDelete();
@@ -34,9 +36,8 @@ void Bullet::RemoveBullet() {
   this->associated.RequestDelete();
 }
 
-void Bullet::SetDirection(float speed, float angleDeg) {
-  this->associated.angleDeg = angleDeg;
-  this->speed = (this->speed * speed);
+void Bullet::SetDirection(float direction) {
+  this->associated.angleDeg = direction;
 }
 
 float Bullet::GetAngleDeg() {
@@ -52,17 +53,12 @@ int Bullet::GetDamage() {
 }
 
 void Bullet::NotifyCollision(GameObject &other) {
-  // if (this->targetsPlayer) {
-  //   if (other.GetComponent("Enemy") != nullptr) {
-  //     this->associated.RequestDelete();
-  //   }
-  // } else {
-  //   if (other.GetComponent("Enemy") != nullptr) {
-  //     this->associated.RequestDelete();
-  //   }
-  // }
 }
 
 bool Bullet::TargetsPlayer() {
   return this->targetsPlayer;
+}
+
+Rect *Bullet::GetBulletBox() {
+  return new Rect(this->associated.box.x, this->associated.box.y, this->associated.box.w, this->associated.box.h);
 }

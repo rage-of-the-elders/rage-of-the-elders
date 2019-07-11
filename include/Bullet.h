@@ -9,6 +9,7 @@ private:
   int damage;
   float distanceLeft;
   Vec2 speed;
+  float direction;
   bool targetsPlayer;
 
 public:
@@ -23,9 +24,10 @@ public:
   int GetDamage();
   void NotifyCollision(GameObject &other);
   bool TargetsPlayer();
-  void SetDirection(float speed, float angleDeg);
+  void SetDirection(float direction);
   float GetAngleDeg();
   void RemoveBullet();
+  Rect *GetBulletBox();
 };
 
 #endif

@@ -114,18 +114,18 @@ void Fighter::Update(float dt) {
 
       if(this->currentState == BASIC_ATTACK_ONE) {
         if(this->orientation == LEFT) {
-          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck1 * -1), 0});
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck1 * (float)-1), (float)0});
         }
         else {
-          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck1, 0});
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck1, (float)0});
         }
       }
       else if(this->currentState == BASIC_ATTACK_TWO) {
         if(this->orientation == LEFT) {
-          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck2 * -1), 0});
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck2 * (float)-1), (float)0});
         }
         else {
-          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, 0});
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, (float)0});
         }
       }
     }
@@ -258,9 +258,25 @@ void Fighter::NotifyCollision(GameObject &other) {
     }
   }
   else if (other.Has("Bullet")) {
+
     Bullet *bullet = (Bullet *)other.GetComponent("Bullet");
+
     if(this->IsAttacking() && Math::Equals(bullet->GetAngleDeg(), (this->orientation == RIGHT ? 180.0 : 0.0))) {
-      bullet->SetDirection(-1, (this->orientation == RIGHT ? 0.0 : 180.0));
+      if(not Collision::IsColliding(*bullet->GetBulletBox(), *this->GetColliderBox(), other.angleDeg, this->associated.angleDeg)) {
+          if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
+            float a = (this->GetBox().GetCenter().y - bullet->GetBox().GetCenter().y);
+            if(Math::InRange(a, 7, 30)) {
+              bullet->SetDirection(225);
+            }
+            else if(Math::InRange(a, -18, 6)) {
+              bullet->SetDirection(180);
+            }
+            else if(Math::InRange(a, -40, -19)) {
+              bullet->SetDirection(-225);
+            }
+
+          }
+      }
     }
     else if(not this->IsAttacking()){
       if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
@@ -498,7 +514,9 @@ void Fighter::Shoot(std::string file, int frameCount, int damage, int yGap, int 
     Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? rigthGap : leftGap))),
                                  (this->associated.box.GetCenter().y - yGap));
     bullet->box.SetCenterPos(gunShootPosition);
-    bullet->AddComponent(new Bullet(*bullet, this->orientation == RIGHT ? 0 : 180, ((this->orientation == RIGHT ? 1 : -1) * bulletSpeed),
+    bullet->AddComponent(new Bullet(*bullet,
+                                    this->orientation == RIGHT ? 0.0 : 180.0,
+                                    (bulletSpeed),
                                     damage,
                                     maxDistance, file,
                                     frameCount, frameTime, true, shooterY, shooterType));

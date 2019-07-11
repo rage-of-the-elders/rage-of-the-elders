@@ -30,10 +30,10 @@ protected:
   int damage[LAST];
   int comboCount;
   int points;
-  int attackColliderGapBasicAtacck1;
-  int attackColliderGapBasicAtacck2;
-  int leftOfsetColliderAttack;
-  int rightOfsetColliderAttack;
+  float attackColliderGapBasicAtacck1;
+  float attackColliderGapBasicAtacck2;
+  float leftOfsetColliderAttack;
+  float rightOfsetColliderAttack;
   float speed;
   Orientation orientation;
   FighterState storedState;
