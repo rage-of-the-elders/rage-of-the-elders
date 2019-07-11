@@ -1,7 +1,7 @@
 #include "Nurse.h"
 #include "Collider.h"
 
-Nurse::Nurse(GameObject &associated) : Enemy(associated) { 
+Nurse::Nurse(GameObject &associated) : Enemy(associated) {
   this->speed = 70;
   this->enemyAttackCooldown = NURSE_ATTACK_COOLDOWN;
   this->attackCooldown.Set(this->enemyAttackCooldown);
