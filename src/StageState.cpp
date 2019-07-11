@@ -147,18 +147,30 @@ void StageState::Update(float dt) {
 }
 
 void StageState::HandleHorde() {
-  if (InputManager::GetInstance().KeyPress(P_KEY)) {
+  #ifdef DEBUG
+    if (InputManager::GetInstance().KeyPress(P_KEY)) {
+      this->hordeEnabled = false;
+      this->UnlockCamera();
+    }
+  #endif
+
+  if (this->hordeEnabled and (StageState::enemiesCount <= 0)) {
+    this->hordeEnabled = false;
     this->UnlockCamera();
   }
 
-  if(this->gateMap->GetCurrentGate() > 0) {
-    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
+  Gate currentGate = this->gateMap->GetCurrentGate();
+
+  if(currentGate.position > 0) {
+    int gatePosition = this->tileMap->GetTileEnd(currentGate.position);
     if (Playable::player != nullptr) {
       int playerPosition = Playable::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
 
       if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
         this->LockCamera(gatePosition);
-        this->SpawnEnemies(gatePosition);
+        this->SpawnEnemies(gatePosition, currentGate);
+
+        this->hordeEnabled = true;
       }
     }
   }
@@ -212,12 +224,13 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
     enemyGO->box.SetPos(gate - enemySize.x, std::min(yPosition, Game::screenHeight));
 
   this->AddObject(enemyGO);
+  StageState::enemiesCount++;
 }
 
-void StageState::SpawnEnemies(int gatePosition) {
-  Spawn(gatePosition, 1, 0);
-  Spawn(gatePosition, 2, 1);
-  Spawn(gatePosition, 3, 1);
+void StageState::SpawnEnemies(int gatePosition, Gate gate) {
+  for (int i = 0; i < gate.enemiesAmount; i++) {
+    Spawn(gatePosition, gate.enemies[i].type, gate.enemies[i].invertSide);
+  }
 }
 
 int StageState::CalculateEnemyY(Vec2 enemySize, int yLimit) {
@@ -277,7 +290,7 @@ void StageState::CollisionCheck() {
             // }
             // puts("AAAAAAAAAAAAAAAA");
 
-            
+
 
             // for(auto &cpt : objectArray[i]->GetAllComponent("Collider")) {
             Collider *objA = (Collider *) cptsA[0].get();
@@ -334,6 +347,10 @@ void StageState::DeletionCheck() {
 		if (objectArray[i]->IsDead()) {
       objectArray.erase(objectArray.begin() + i);
 		}
+}
+
+void StageState::DecreaseEnemiesCount() {
+  StageState::enemiesCount--;
 }
 
 void StageState::Pause() {}

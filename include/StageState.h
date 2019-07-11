@@ -51,7 +51,7 @@ public:
   void CollisionCheck();
   void LoadBackground();
   void LockCamera(int gatePosition);
-  void SpawnEnemies(int gatePosition);
+  void SpawnEnemies(int gatePosition, Gate gate);
 
   static void DecreaseEnemiesCount();
 
