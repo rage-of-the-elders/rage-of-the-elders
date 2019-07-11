@@ -51,6 +51,7 @@ void Janitor::HandleDying(float) {
   }
   if(this->sprite[DYING]->IsFinished()){
     shadow->RequestDelete();
+    StageState::DecreaseEnemiesCount();
     this->associated.RequestDelete();
   }
 }

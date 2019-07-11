@@ -3,7 +3,7 @@
 #include "Playable.h"
 #include "Camera.h"
 
-#include <iostream> 
+#include <iostream>
 
 Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->hp = BOSS_HP;
@@ -84,7 +84,7 @@ void Boss::ManageInput(float dt) {
       this->currentState = FROZEN;
       this->frozenTime.Restart();
     }
-    
+
     else if(this->timesThatTheBossTurnArround >= this->turnArroundTimes && this->frozenTime.Get() > 6) {
       this->timesThatTheBossTurnArround = 0;
       this->currentState = MOVING;
@@ -162,6 +162,7 @@ void Boss::HandleDying(float) {
   }
   if(this->sprite[DYING]->IsFinished()){
     shadow->RequestDelete();
+    StageState::DecreaseEnemiesCount();
     this->associated.RequestDelete();
   }
 }

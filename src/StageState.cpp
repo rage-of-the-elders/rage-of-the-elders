@@ -34,7 +34,8 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
 }
 
 StageState::~StageState() {
-  UnlockCamera();
+  Camera::position = Vec2();
+  StageState::enemiesCount = 0;
   this->objectArray.clear();
 }
 
