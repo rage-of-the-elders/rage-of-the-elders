@@ -20,6 +20,7 @@
 #include "Teacher.h"
 #include "Boss.h"
 #include "VictoryState.h"
+#include "GameOverState.h"
 
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
@@ -247,19 +248,19 @@ bool StageState::PlayerWon() {
 }
 
 bool StageState::PlayerLose() {
-	return false;
+  return Playable::player == nullptr;
 }
 
 void StageState::CheckGameEnd() {
 	if (this->PlayerWon()) {
 		GameData::playerVictory = true;
-		Game::GetInstance().Push(new EndState());
 		this->popRequested = true;
+		Game::GetInstance().Push(new VictoryState());
 	}
 	else if (this->PlayerLose()) {
 		GameData::playerVictory = false;
-		Game::GetInstance().Push(new EndState());
 		this->popRequested = true;
+		Game::GetInstance().Push(new GameOverState());
 	}
 }
 

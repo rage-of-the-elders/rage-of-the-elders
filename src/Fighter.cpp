@@ -470,7 +470,7 @@ void Fighter::HandleDying(float dt) {
       shadow->RequestDelete();
       this->associated.RequestDelete();
     }
-    Veteran::player = nullptr;
+    Veteran::player = nullptr; // FIXME: THIS SHOULD NOT BE HERE!!!!
   }
 }
 
