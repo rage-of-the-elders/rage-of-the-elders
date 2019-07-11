@@ -19,6 +19,7 @@
 #include "CameraFollower.h"
 #include "Teacher.h"
 #include "Boss.h"
+#include "VictoryState.h"
 
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
@@ -27,6 +28,7 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
 }
 
 StageState::~StageState() {
+  Camera::position = Vec2();
   this->objectArray.clear();
 }
 
@@ -124,9 +126,16 @@ void StageState::Update(float dt) {
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
 		this->popRequested = true;
-    this->UnlockCamera();
 		Game::GetInstance().Push(new TitleState());
 	}
+  if (InputManager::GetInstance().IsKeyDown(O_KEY)) {
+    this->popRequested = true;
+    Game::GetInstance().Push(new VictoryState());
+  }
+  if (InputManager::GetInstance().IsKeyDown(I_KEY)) {
+    // this->popRequested = true;
+    // Game::GetInstance().Push(new GameOverState()); //TODO
+  }
 
   this->HandleHorde();
 
