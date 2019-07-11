@@ -19,6 +19,7 @@
 #include "CameraFollower.h"
 #include "Teacher.h"
 #include "Boss.h"
+#include "CameraBarrier.h"
 
 #include <iostream>
 
@@ -170,8 +171,8 @@ void StageState::HandleHorde() {
       if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
         this->LockCamera(gatePosition);
         this->SpawnEnemies(gatePosition, currentGate);
-
-        this->hordeEnabled = true;
+        
+          this->hordeEnabled = true;
       }
     }
   }
@@ -181,11 +182,22 @@ void StageState::LockCamera(int gatePosition) {
     Camera::initiaCameraLimit = gatePosition;
     Camera::finalCameraLimit = gatePosition + Game::screenWidth;
     this->gateMap->NextGate();
+
+    this->cameraLockWallLeft = new GameObject();
+    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::position.x +30, Camera::position.y, 10, 900)));
+    this->AddObject(cameraLockWallLeft);
+    
+    this->cameraLockWallRight = new GameObject();
+    cameraLockWallRight->AddComponent(new CameraBarrier(*cameraLockWallRight, CameraBarrier::RIGHT_SIDE, Rect(Camera::position.x + 1316, Camera::position.y, 10, 900)));
+    this->AddObject(cameraLockWallRight);
 }
 
 void StageState::UnlockCamera() {
   Camera::initiaCameraLimit = 0;
   Camera::finalCameraLimit = this->stageLimit;
+
+  this->cameraLockWallLeft->RequestDelete();
+  this->cameraLockWallRight->RequestDelete();
 }
 
 /*
