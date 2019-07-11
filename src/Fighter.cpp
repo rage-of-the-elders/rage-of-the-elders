@@ -36,14 +36,16 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound[ULTIMATE_FINAL] = new Sound(this->associated, "audio/machine_gun.ogg");
   this->sound[ULTIMATE_MIDLE] = new Sound(this->associated, "audio/machine_gun_shot.ogg");
   this->sound[HIT] = new Sound(this->associated, "audio/hit.ogg");
+  this->sound[HURTING] = new Sound(this->associated, "audio/fighter/hurting-janitor.ogg");
+  this->sound[DYING] = this->sound[HURTING];
 
-  this->associated.AddComponent(this->sound[MOVING]);
-  this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
-  this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
-  this->associated.AddComponent(this->sound[COMBO]);
-  this->associated.AddComponent(this->sound[ULTIMATE_FINAL]);
-  this->associated.AddComponent(this->sound[ULTIMATE_MIDLE]);
-  this->associated.AddComponent(this->sound[HIT]);
+  // this->associated.AddComponent(this->sound[MOVING]);
+  // this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
+  // this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
+  // this->associated.AddComponent(this->sound[COMBO]);
+  // this->associated.AddComponent(this->sound[ULTIMATE_FINAL]);
+  // this->associated.AddComponent(this->sound[ULTIMATE_MIDLE]);
+  // this->associated.AddComponent(this->sound[HIT]);
 }
 
 Fighter::~Fighter() {}
@@ -432,6 +434,7 @@ void Fighter::HandleUltimateFinal(float) {
 void Fighter::HandleHurting(float) {
   if(not this->sprite[HURTING]->IsActive()) {
     this->ActivateSprite(HURTING);
+    this->sound[HURTING]->Play(1);
     //Som
   }
   if(this->sprite[HURTING]->IsFinished()) {
@@ -451,7 +454,7 @@ void Fighter::HandleDying(float dt) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);
     // this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if (this->sprite[DYING]->IsFinished()) {
     timeToDelete.Update(dt);

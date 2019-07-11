@@ -30,7 +30,6 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
 
   this->ActivateSprite(IDLE);
 
-
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_ONE]);
   this->associated.AddComponent(this->sprite[BASIC_ATTACK_TWO]);
@@ -48,6 +47,8 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
+
+  this->sound[HURTING] = new Sound(this->associated, "audio/veteran/hurting2.ogg");
 }
 
 Veteran::~Veteran() {

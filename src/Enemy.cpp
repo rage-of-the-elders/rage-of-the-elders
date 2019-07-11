@@ -95,7 +95,7 @@ void Enemy::HandleDying(float) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * this->sprite[MOVING]->GetWidth();
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){
     this->associated.RequestDelete();
