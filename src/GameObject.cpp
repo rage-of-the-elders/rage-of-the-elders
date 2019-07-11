@@ -31,8 +31,8 @@ void GameObject::Render() {
     // if(component->IsActive())   
 }
 
-bool SortByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) { 
-    return ((c1.get()->GetBox().y) < (c2.get()->GetBox().y)); 
+bool SortByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) {
+  return ((c1.get()->GetBox().GetCenter().y) < (c2.get()->GetBox().GetCenter().y));
 }
 
 void GameObject::NewRender(std::vector <std::shared_ptr<GameObject>> objectArray) {
