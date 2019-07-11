@@ -159,6 +159,7 @@ void Boss::HandleDying(float) {
     this->associated.box.x += (this->orientation == RIGHT ? -100 : 0);
   }
   if(this->sprite[DYING]->IsFinished()){
+    shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

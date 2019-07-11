@@ -49,6 +49,7 @@ void Janitor::HandleDying(float) {
     this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){
+    shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

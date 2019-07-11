@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Sound.h"
 #include "Collider.h"
+#include "Shadow.h"
 
 #define FIGHTER_HP 100
 #define FIGHTER_SPEED 20
@@ -41,6 +42,7 @@ protected:
   Timer timeToDelete;
   Collider *attackColliderBox;
   Collider *bodyColliderBox;
+  Shadow *shadow;
   
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);

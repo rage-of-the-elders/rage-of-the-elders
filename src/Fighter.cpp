@@ -39,6 +39,11 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound[HURTING] = new Sound(this->associated, "audio/fighter/hurting-janitor.ogg");
   this->sound[DYING] = this->sound[HURTING];
 
+  auto shadowGO = new GameObject();
+  shadowGO->box.SetCenterPos(this->associated.box.GetCenter());
+  this->shadow = new Shadow(*shadowGO);
+  shadowGO->AddComponent(this->shadow);
+  Game::GetInstance().GetCurrentState().AddObject(shadowGO);
   // this->associated.AddComponent(this->sound[MOVING]);
   // this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
   // this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
@@ -135,6 +140,8 @@ void Fighter::Update(float dt) {
   else {
     this->attackColliderBox->SetOffset({this->orientation == LEFT? this->leftOfsetColliderAttack : this->rightOfsetColliderAttack,0});
   }
+
+  this->shadow->UpdatePos(this->GetFoot().GetCenter());
 }
 
 void Fighter::Render() {
@@ -459,6 +466,7 @@ void Fighter::HandleDying(float dt) {
   if (this->sprite[DYING]->IsFinished()) {
     timeToDelete.Update(dt);
     if (timeToDelete.Get() > TIME_TO_DELETE) {
+      shadow->RequestDelete();
       this->associated.RequestDelete();
     }
     Veteran::player = nullptr;
