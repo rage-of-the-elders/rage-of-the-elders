@@ -58,7 +58,7 @@ void Playable::ManageInput(float dt) {
     }
     else if(InputManager::GetInstance().KeyPress(D_KEY) && (not this->IsAttacking()) && this->UltimateReady()) {
       this->currentState = ULTIMATE_BEGIN;
-      // this->points = 0;
+      this->points = 0;
     }
     else {
       if (not this->IsAttacking()) {
@@ -145,7 +145,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 0;
+  this->points = 100;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));
