@@ -23,7 +23,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
   this->sprite[FROZEN] = new Sprite(this->associated, "img/" + character + "/frozen.png", 25, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 25, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 25, 0.04, 0, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 25, 0.08, 1.5, false);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[MOVING]);
@@ -159,10 +159,31 @@ void Boss::HandleDying(float) {
     this->associated.GetComponent("Collider")->Desactivate();
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -100 : 0);
+    
+    GameObject *explosion1GO = new GameObject(this->associated);
+    Sprite *explosion1 = new Sprite(*explosion1GO, "img/explosion.png", 7, 0.07, (7 * 0.07), false);
+    explosion1GO->box.SetPos(this->associated.box.GetCenter().x + 50, this->associated.box.GetCenter().y);
+
+    GameObject *explosion2GO = new GameObject(this->associated);
+    Sprite *explosion2 = new Sprite(*explosion2GO, "img/explosion.png", 7, 0.07, (7 * 0.07), false);
+    explosion2GO->box.SetPos(this->associated.box.GetCenter().x - 50, this->associated.box.GetCenter().y);
+
+    GameObject *explosion3GO = new GameObject(this->associated);
+    Sprite *explosion3 = new Sprite(*explosion3GO, "img/explosion.png", 7, 0.07, (7 * 0.07), false);
+    explosion3GO->box.SetPos(this->associated.box.GetCenter().x, this->associated.box.GetCenter().y + 50);
+
+    GameObject *explosion4GO = new GameObject(this->associated);
+    Sprite *explosion4 = new Sprite(*explosion4GO, "img/explosion.png", 7, 0.07, (7 * 0.07), false);
+    explosion4GO->box.SetPos(this->associated.box.x, this->associated.box.y - 50);
+
+    
+    this->associated.AddComponent(explosion1);
+    this->associated.AddComponent(explosion2);
+    this->associated.AddComponent(explosion3);
+    this->associated.AddComponent(explosion4);
   }
   if(this->sprite[DYING]->IsFinished()){
     shadow->RequestDelete();
     StageState::DecreaseEnemiesCount();
-    this->associated.RequestDelete();
   }
 }
