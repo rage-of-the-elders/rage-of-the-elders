@@ -102,6 +102,7 @@ void Teacher::Update(float dt) {
 
 void Teacher::HandleUltimateBegin(float dt) {
   if(not this->sprite[ULTIMATE_BEGIN]->IsActive()) {
+    this->points = 0;
     this->ActivateSprite(ULTIMATE_BEGIN);
     GameObject *ultimate = new GameObject();
     ultimate->box.SetCenterPos(this->GetBox().GetCenter() - Vec2(60, 365));
