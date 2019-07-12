@@ -13,8 +13,8 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->rightOfsetColliderAttack = -80;
   this->attackColliderGapBasicAtacck1 = 100;
   this->attackColliderGapBasicAtacck2 = 70;
-  this->damage[BASIC_ATTACK_TWO] = BASIC_ATK_2_DAMAGE;
-  this->damage[COMBO] = COMBO_DAMAGE;
+  this->damage[BASIC_ATTACK_TWO] = VETERAN_BASIC_ATK_2_DAMAGE;
+  this->damage[COMBO] = VETERAN_COMBO_DAMAGE;
 
   std::string character = "veteran";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);

@@ -14,8 +14,8 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->speed = TEACHER_SPEED;
   this->player = this;
   this->orientation = RIGHT;
-  this->damage[BASIC_ATTACK_TWO] = 10;
-  this->damage[COMBO] = 7;
+  this->damage[BASIC_ATTACK_TWO] = TEACHER_BASIC_ATK_2_DAMAGE;
+  this->damage[COMBO] = TEACHER_COMBO_DAMAGE;
   this->ultimateDuration = Timer();
   this->enemys = std::vector <std::shared_ptr<GameObject>>();
   this->rightOfsetColliderAttack = -75;
