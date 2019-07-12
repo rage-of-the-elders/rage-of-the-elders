@@ -1,6 +1,6 @@
 #include "Boss.h"
 #include "Collider.h"
-#include "Veteran.h"
+#include "Playable.h"
 #include "Camera.h"
 
 #include <iostream> 
@@ -15,6 +15,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->timesThatTheBossTurnArround = 0;
   this->frozenTime = Timer();
   this->turnArroundTimes = 5;
+  this->shadow->SetShadowScale({3.5, 1});
 
   std::string character = "boss";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
@@ -39,6 +40,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->associated.AddComponent(this->bodyColliderBox);
   this->associated.AddComponent(this->attackColliderBox);
 
+  this->sound[HURTING] = new Sound(this->associated, "audio/boss/hurting.ogg");
   // this->associated.AddComponent(new Collider(this->associated, {0.4,0.9}));
 }
 
@@ -59,16 +61,16 @@ void Boss::Update(float dt) {
 
 void Boss::ManageInput(float dt) {
   this->attackCooldown.Update(dt);
-  if(Veteran::player != nullptr) {
-    this->target = Veteran::player->GetColliderBox();
-    this->tagetPlayer = Veteran::player->GetFoot();
+  if(Playable::player != nullptr) {
+    this->target = Playable::player->GetColliderBox();
+    this->tagetPlayer = Playable::player->GetFoot();
 
     if(this->IsDead()){
       this->currentState = DYING;
     }
     else if (TargetIsInRange() && this->currentState != FROZEN) {
-      Veteran::player->ApplyDamage(1);
-      Veteran::player->SetState(HURTING);
+      // Playable::player->ApplyDamage(1);
+      Playable::player->SetState(HURTING);
     }
     else if(this->currentState != IDLE && this->currentState != FROZEN) {
       this->currentState = MOVING;
@@ -159,6 +161,7 @@ void Boss::HandleDying(float) {
     this->associated.box.x += (this->orientation == RIGHT ? -100 : 0);
   }
   if(this->sprite[DYING]->IsFinished()){
+    shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

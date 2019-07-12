@@ -2,7 +2,9 @@
 #define TEACHER_H
 
 #define TEACHER_HP 100
-#define TEACHER_SPEED 200
+#define TEACHER_SPEED 280
+#define TEACHER_BASIC_ATK_2_DAMAGE 12
+#define TEACHER_COMBO_DAMAGE 15
 
 #include "Playable.h"
 

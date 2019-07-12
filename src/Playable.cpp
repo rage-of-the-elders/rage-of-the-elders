@@ -18,6 +18,8 @@ Playable::Playable(GameObject &associated) : Fighter(associated) {
   this->damage[BASIC_ATTACK_TWO] = 10;
   this->damage[COMBO] = 7;
 
+  this->sound[HURTING] = new Sound(this->associated, "audio/" + GameData::choosedCharacter + "/hurting.ogg");
+  this->sound[DYING] = new Sound(this->associated, "audio/" + GameData::choosedCharacter + "/dying.ogg");
   this->CreateInfoBar();
 }
 
@@ -143,7 +145,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 0;
+  this->points = 100;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));

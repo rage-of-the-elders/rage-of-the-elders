@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Sound.h"
 #include "Collider.h"
+#include "Shadow.h"
 
 #define FIGHTER_HP 100
 #define FIGHTER_SPEED 20
@@ -14,7 +15,7 @@
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
 #define TIME_TO_DELETE 1 // second
-const std::string HITS[] = {"pow.png", "smash.png", "bam.png", "boom.png"};
+const std::string HITS[] = {"pow.png", "pow2.png", "smash.png", "bam.png", "boom.png"};
 
 
 class Fighter : public Component {
@@ -41,6 +42,7 @@ protected:
   Timer timeToDelete;
   Collider *attackColliderBox;
   Collider *bodyColliderBox;
+  Shadow *shadow;
   
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);

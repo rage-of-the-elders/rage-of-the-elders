@@ -17,6 +17,11 @@ Sound::~Sound() {
   this->chunk = nullptr;
 }
 
+void Sound::PlayIfNotPlaying(int times) {
+  if (not this->IsPlaying())
+    this->Play(times);
+}
+
 void Sound::Play(int times) {
   int loops = times - (times > 0 ? 1 : 0);
   

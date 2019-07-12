@@ -33,7 +33,8 @@ Nurse::Nurse(GameObject &associated) : Enemy(associated) {
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
-
+  this->sound[HURTING] = new Sound(this->associated, "audio/fighter/hurting-nurse.ogg");
+  this->sound[DYING] = sound[HURTING];
 }
 
 Nurse::~Nurse() {

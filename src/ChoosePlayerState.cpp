@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "GameData.h"
 #include "Game.h"
+#include "IntroState.h"
 
 ChoosePlayerState::ChoosePlayerState() : State(){
   this->objectArray = std::vector<std::shared_ptr<GameObject>>();
@@ -55,16 +56,11 @@ void ChoosePlayerState::LoadAssets() {
   this->AddObject(text);
   
   GameObject *sound = new GameObject();
-  sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/select.ogg"));
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cursor.ogg"));
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cancel.ogg"));
-
-
-  music = Music("audio/menu/bg.ogg");
-  music.Play();
 }
 
 void ChoosePlayerState::Update(float dt) {
@@ -127,7 +123,7 @@ void ChoosePlayerState::HandleInput() {
     }
     this->popRequested = true;
     GameData::choosedCharacter = character;
-    Game::GetInstance().Push(new StageState());
+    Game::GetInstance().Push(new IntroState());
   }
 }
 

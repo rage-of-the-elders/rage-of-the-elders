@@ -75,6 +75,10 @@ int Sprite::GetHeight() {
   return this->height * this->scale.y;
 }
 
+float Sprite::GetFrameTime() {
+  return this->frameTime;
+}
+
 Vec2 Sprite::GetScale() {
   return this->scale;
 }
@@ -96,6 +100,14 @@ void Sprite::SetFrame(int frame) {
   this->UpdateFrame();
 }
 
+int Sprite::GetFrame() {
+  return this->currentFrame;
+}
+
+int Sprite::GetFrameCount() {
+  return this->frameCount;
+}
+
 void Sprite::SetFrameCount(int frameCount) {
   this->frameCount = frameCount;
   this->currentFrame = 0;
@@ -111,7 +123,6 @@ bool Sprite::IsOpen() {
 }
 
 void Sprite::Update(float dt) {
-  std::cout << dt << std::endl;
   this->associated.box.w = GetWidth();
   this->associated.box.h = GetHeight();
 
@@ -132,7 +143,7 @@ void Sprite::Update(float dt) {
 
     this->UpdateFrame();
 
-    if(not this->repeat && this->currentFrame == this->frameCount-1){
+    if(not this->repeat && this->currentFrame >= this->frameCount-1){
       this->finished = true;
     }
   }
@@ -184,8 +195,16 @@ Rect Sprite::GetPosition() {
   return realPosition;
 }
 
-void Sprite::SetAlpha(int alpha) {
-  if (SDL_SetTextureAlphaMod(this->texture.get(), alpha)) {
+void Sprite::SetAlpha(int alphaPercentage, bool inverted) {
+  alphaPercentage = std::max(alphaPercentage, 0);
+  alphaPercentage = std::min(alphaPercentage, 100);
+
+  float alpha = alphaPercentage/100.0;
+  if (inverted) {
+    alpha = 1 - alpha;
+  }
+
+  if (SDL_SetTextureAlphaMod(this->texture.get(), alpha * 255)) {
     printf("Could not update texture alpha channel: %s\n", SDL_GetError());
     exit(-1);
   }
