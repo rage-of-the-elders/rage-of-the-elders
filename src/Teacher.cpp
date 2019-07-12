@@ -23,6 +23,7 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->attackColliderGapBasicAtacck1 = 80;
   this->attackColliderGapBasicAtacck2 = 115;
   this->points = 0;
+  this->attackColliderGapCombo = 50;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);

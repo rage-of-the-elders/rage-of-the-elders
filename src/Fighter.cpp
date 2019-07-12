@@ -25,6 +25,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->attackColliderGapBasicAtacck2 = 0;
   this->rightOfsetColliderAttack = 0;
   this->leftOfsetColliderAttack = 0;
+  this->attackColliderGapCombo = 0;
 
   this->sprite = std::vector<Sprite *>(LAST);
   this->sound = std::vector<Sound *>(LAST);
@@ -126,6 +127,14 @@ void Fighter::Update(float dt) {
         }
         else {
           this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, (float)0});
+        }
+      }
+      else if(this->currentState == COMBO) {
+        if(this->orientation == LEFT) {
+          this->attackColliderBox->SetOffset({(this->attackColliderGapCombo * (float)-1), (float)0});
+        }
+        else {
+          this->attackColliderBox->SetOffset({this->attackColliderGapCombo, (float)0});
         }
       }
     }
@@ -274,7 +283,6 @@ void Fighter::NotifyCollision(GameObject &other) {
             else if(Math::InRange(a, -40, -19)) {
               bullet->SetDirection(-225);
             }
-
           }
       }
     }
