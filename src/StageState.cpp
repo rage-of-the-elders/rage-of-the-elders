@@ -21,15 +21,23 @@
 #include "Boss.h"
 #include "VictoryState.h"
 #include "GameOverState.h"
+#include "CameraBarrier.h"
+
+#include <iostream>
+
+int StageState::enemiesCount = 0;
 
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
+  this->hordeEnabled = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
 }
 
 StageState::~StageState() {
+  UnlockCamera();
   Camera::position = Vec2();
+  StageState::enemiesCount = 0;
   this->objectArray.clear();
 }
 
@@ -102,11 +110,11 @@ void StageState::BuildBarriers() {
   this->AddObject(hallWall);
 
   GameObject *roomWall = new GameObject();
-  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, 12220, 420)));
+  roomWall->AddComponent(new Barrier(*roomWall, Rect(0, 0, this->stageLimit , 420)));
   this->AddObject(roomWall);
 
   GameObject *baseFloor = new GameObject();
-  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,12220,400)));
+  baseFloor->AddComponent(new Barrier(*baseFloor, Rect(0,720,this->stageLimit,400)));
   this->AddObject(baseFloor);
 
   GameObject *initialWall = new GameObject();
@@ -151,18 +159,27 @@ void StageState::Update(float dt) {
 }
 
 void StageState::HandleHorde() {
-  if (InputManager::GetInstance().KeyPress(P_KEY)) {
+  #ifdef DEBUG
+    if (InputManager::GetInstance().KeyPress(P_KEY)) {
+      this->hordeEnabled = false;
+      this->UnlockCamera();
+    }
+  #endif
+
+  if (this->hordeEnabled and (StageState::enemiesCount <= 0)) {
     this->UnlockCamera();
   }
 
-  if(this->gateMap->GetCurrentGate() > 0) {
-    int gatePosition = this->tileMap->GetTileEnd(this->gateMap->GetCurrentGate());
-    if (Playable::player != nullptr) {
-      int playerPosition = Playable::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
+  Gate currentGate = this->gateMap->GetCurrentGate();
 
+  if(currentGate.position > 0) {
+    int gatePosition = this->tileMap->GetTileEnd(currentGate.position);
+    if (Playable::player != nullptr) {
+      int playerPosition = Camera::position.x;
       if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
         this->LockCamera(gatePosition);
-        this->SpawnEnemies(gatePosition);
+        this->SpawnEnemies(gatePosition, currentGate);
+        this->hordeEnabled = true;
       }
     }
   }
@@ -172,11 +189,29 @@ void StageState::LockCamera(int gatePosition) {
     Camera::initiaCameraLimit = gatePosition;
     Camera::finalCameraLimit = gatePosition + Game::screenWidth;
     this->gateMap->NextGate();
+
+    this->cameraLockWallLeft = new GameObject();
+    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::initiaCameraLimit, Camera::position.y, -10, 900)));
+    this->AddObject(cameraLockWallLeft);
+
+    this->cameraLockWallRight = new GameObject();
+    cameraLockWallRight->AddComponent(new CameraBarrier(*cameraLockWallRight, CameraBarrier::RIGHT_SIDE, Rect(Camera::finalCameraLimit, Camera::position.y, 10, 900)));
+    this->AddObject(cameraLockWallRight);
 }
 
 void StageState::UnlockCamera() {
-  Camera::initiaCameraLimit = 0;
-  Camera::finalCameraLimit = this->stageLimit;
+  if (this->hordeEnabled) {
+    Camera::initiaCameraLimit = 0;
+    Camera::finalCameraLimit = this->stageLimit;
+
+    if (this->cameraLockWallLeft) {
+      this->cameraLockWallLeft->RequestDelete();
+    }
+    if (this->cameraLockWallRight) {
+      this->cameraLockWallRight->RequestDelete();
+    }
+    this->hordeEnabled = false;
+  }
 }
 
 /*
@@ -191,14 +226,16 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
 
   switch (type) {
     case 1:
-      // enemyGO->AddComponent(new Nurse(*enemyGO));
+      enemyGO->AddComponent(new Nurse(*enemyGO));
       break;
     case 2:
-      // enemyGO->AddComponent(new Janitor(*enemyGO));
+      enemyGO->AddComponent(new Janitor(*enemyGO));
       break;
     case 3:
-      enemyGO->AddComponent(new Boss(*enemyGO));      
-      // enemyGO->AddComponent(new Security(*enemyGO));
+      enemyGO->AddComponent(new Security(*enemyGO));
+      break;
+    case 4:
+      enemyGO->AddComponent(new Boss(*enemyGO));
       break;
     default:
       printf("WARNING: No enemy type given!\n");
@@ -216,12 +253,13 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
     enemyGO->box.SetPos(gate - enemySize.x, std::min(yPosition, Game::screenHeight));
 
   this->AddObject(enemyGO);
+  StageState::enemiesCount++;
 }
 
-void StageState::SpawnEnemies(int gatePosition) {
-  Spawn(gatePosition, 1, 0);
-  Spawn(gatePosition, 2, 1);
-  Spawn(gatePosition, 3, 1);
+void StageState::SpawnEnemies(int gatePosition, Gate gate) {
+  for (int i = 0; i < gate.enemiesAmount; i++) {
+    Spawn(gatePosition, gate.enemies[i].type, gate.enemies[i].invertSide);
+  }
 }
 
 int StageState::CalculateEnemyY(Vec2 enemySize, int yLimit) {
@@ -281,7 +319,7 @@ void StageState::CollisionCheck() {
             // }
             // puts("AAAAAAAAAAAAAAAA");
 
-            
+
 
             // for(auto &cpt : objectArray[i]->GetAllComponent("Collider")) {
             Collider *objA = (Collider *) cptsA[0].get();
@@ -338,6 +376,10 @@ void StageState::DeletionCheck() {
 		if (objectArray[i]->IsDead()) {
       objectArray.erase(objectArray.begin() + i);
 		}
+}
+
+void StageState::DecreaseEnemiesCount() {
+  StageState::enemiesCount--;
 }
 
 void StageState::Pause() {}

@@ -32,7 +32,6 @@ void InputManager::Update(float dt) {
   this->quitRequested = false;
   this->comboTimer.Update(dt);
 
-
   SDL_GetMouseState(&this->mouseX, &this->mouseY);
   this->mouseX += Camera::position.x;
   this->mouseY += Camera::position.y;
@@ -85,22 +84,34 @@ void InputManager::MakeCombos(int buttonId) {
 
   switch (buttonId)
   {
-  case 102:
-    this->lastsPressKeys += "A";
-    break;
-  case 103:
-    this->lastsPressKeys += "S";    
-    break;
-  case 104:
-    this->lastsPressKeys += "D";  
-    break;
-  case 106:
-    this->lastsPressKeys += "F";  
-    break;
+    case SDLK_a:
+      this->lastsPressKeys += "A";
+      break;
+    case SDLK_s:
+      this->lastsPressKeys += "S";    
+      break;
+    case SDLK_d:
+      this->lastsPressKeys += "D";  
+      break;
+    case SDLK_f:
+      this->lastsPressKeys += "F";  
+      break;
+    case SDLK_g:
+      this->lastsPressKeys += "G";  
+      break;
+    case SDLK_h:
+      this->lastsPressKeys += "H";  
+      break;
+    case SDLK_j:
+      this->lastsPressKeys += "J";  
+      break;
+    case SDLK_w:
+      this->lastsPressKeys += "W";  
+      break;
 
-  default:
-    this->lastsPressKeys += "0";
-    break;
+    default:
+      this->lastsPressKeys += "0";
+      break;
   }
 
 }

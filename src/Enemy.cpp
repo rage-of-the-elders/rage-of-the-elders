@@ -2,8 +2,6 @@
 #include "Collider.h"
 #include "Veteran.h"
 
-#include <iostream> 
-
 Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->hp = ENEMY_HP;
   this->speed = ENEMY_SPEED;
@@ -36,7 +34,7 @@ void Enemy::ManageInput(float dt) {
   if(Veteran::player != nullptr) {
     this->target = Veteran::player->GetBodyCollider();
     this->tagetPlayer = Veteran::player->GetFoot();
-    
+
     if(this->IsDead()){
       this->currentState = DYING;
     }
@@ -100,6 +98,7 @@ void Enemy::HandleDying(float) {
   }
   if(this->sprite[DYING]->IsFinished()){
     this->shadow->RequestDelete();
+    StageState::DecreaseEnemiesCount();
     this->associated.RequestDelete();
   }
 }

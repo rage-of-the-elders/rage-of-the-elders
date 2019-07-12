@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include <iostream>
 
-Nurse::Nurse(GameObject &associated) : Enemy(associated) { 
+Nurse::Nurse(GameObject &associated) : Enemy(associated) {
   this->speed = NURSE_SPEED;
   this->enemyAttackCooldown = NURSE_ATTACK_COOLDOWN;
   this->attackCooldown.Set(0);
@@ -62,7 +62,7 @@ void Nurse::ManageInput(float dt) {
   if(Playable::player != nullptr) {
     this->target = Playable::player->GetBodyCollider();
     this->tagetPlayer = Playable::player->GetFoot();
-    
+
     if(this->IsDead()) {
       this->currentState = DYING;
     }

@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "Veteran.h"
 #include "Bullet.h"
+#include "CameraBarrier.h"
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated) : Component(associated) {
@@ -25,6 +26,7 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->attackColliderGapBasicAtacck2 = 0;
   this->rightOfsetColliderAttack = 0;
   this->leftOfsetColliderAttack = 0;
+  this->attackColliderGapCombo = 0;
 
   this->sprite = std::vector<Sprite *>(LAST);
   this->sound = std::vector<Sound *>(LAST);
@@ -135,6 +137,14 @@ void Fighter::Update(float dt) {
           this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, (float)0});
         }
       }
+      else if(this->currentState == COMBO) {
+        if(this->orientation == LEFT) {
+          this->attackColliderBox->SetOffset({(this->attackColliderGapCombo * (float)-1), (float)0});
+        }
+        else {
+          this->attackColliderBox->SetOffset({this->attackColliderGapCombo, (float)0});
+        }
+      }
     }
   }
   else {
@@ -228,6 +238,64 @@ void Fighter::NotifyCollision(GameObject &other) {
       }
     }
   }
+  else if(other.Has("CameraBarrier")) { // TODO: mover pra função, tá horrível
+    Collider *colliderBox = this->bodyColliderBox;
+    CameraBarrier *cameraBarrier = (CameraBarrier *) other.GetComponent("CameraBarrier");
+    Rect cameraBarrierReact = other.box;
+    Rect fighterFoot = this->GetFoot();
+    if(this->associated.Has("Playable")) {
+
+      if (Collision::IsColliding(fighterFoot, other.box, this->associated.angleDeg, other.angleDeg)) {
+
+        float collisionX = std::min( abs(fighterFoot.x + fighterFoot.w - other.box.x), abs(fighterFoot.x - (other.box.x + other.box.w)));
+        float collisionY = std::min(abs(fighterFoot.y + fighterFoot.h - other.box.y), abs(fighterFoot.y - (other.box.y + other.box.h)));
+
+        if (collisionX > collisionY) {
+          float objY;
+          float distanceToBottom = fighterFoot.y - (other.box.y + other.box.h);
+          float distanceToTop = (fighterFoot.y + fighterFoot.h) - other.box.y;
+
+          if (abs(distanceToBottom) > abs(distanceToTop)) {
+            objY = other.box.y;
+
+            if ((fighterFoot.y + fighterFoot.h) > objY) {
+              this->associated.box.y = other.box.y - ((this->associated.box.h - colliderBox->GetHeigth()) / 2) -
+                                       colliderBox->GetHeigth();
+            }
+          }
+          else {
+            objY = other.box.y + other.box.h;
+
+            if (fighterFoot.y < objY) {
+              this->associated.box.y = other.box.y + other.box.h -
+                                       ((this->associated.box.h - colliderBox->GetHeigth()) / 2) -
+                                       colliderBox->GetHeigth() + fighterFoot.h;
+            }
+          }
+        }
+        else {
+          float objX;
+          float distanceToRight = fighterFoot.x - (abs(other.box.x) + other.box.w);
+          float distanceToLeft = (fighterFoot.x + fighterFoot.w) - abs(other.box.x);
+
+          if (abs(distanceToRight) > abs(distanceToLeft)) {
+            objX = other.box.x;
+
+            if ((fighterFoot.x + fighterFoot.w) > objX) {
+              this->associated.box.x = (other.box.x - colliderBox->GetWidth() - ((this->associated.box.w - colliderBox->GetWidth()) / 2)) - this->bodyColliderBox->GetOffset().x;
+            }
+          }
+          else {
+            objX = other.box.x + other.box.w;
+
+            if (fighterFoot.x < objX) {
+              this->associated.box.x = other.box.x + other.box.w - ((this->associated.box.w - colliderBox->GetWidth()) / 2) - this->bodyColliderBox->GetOffset().x;
+            }
+          }
+        }
+      }
+    }
+  }
   else if (other.Has("Fighter") && this->IsOpponent(other))
   {
     if (not this->IsHurting()) {
@@ -284,7 +352,6 @@ void Fighter::NotifyCollision(GameObject &other) {
             else if(Math::InRange(a, -40, -19)) {
               bullet->SetDirection(-225);
             }
-
           }
       }
     }

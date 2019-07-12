@@ -145,7 +145,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 100;
+  this->points = 0;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));

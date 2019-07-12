@@ -20,8 +20,13 @@ private:
   TileSet *tileSet;
   TileMap *tileMap;
   GateMap *gateMap;
+  GameObject *cameraLockWallLeft;
+  GameObject *cameraLockWallRight;
+
+  bool hordeEnabled;
 
   int stageLimit;
+  static int enemiesCount;
 
 public:
   StageState();
@@ -48,7 +53,9 @@ public:
   void CollisionCheck();
   void LoadBackground();
   void LockCamera(int gatePosition);
-  void SpawnEnemies(int gatePosition);
+  void SpawnEnemies(int gatePosition, Gate gate);
+
+  static void DecreaseEnemiesCount();
 
   /*
     If you want the enemy to come from the left side of the screen, set the value

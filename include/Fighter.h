@@ -33,6 +33,7 @@ protected:
   int points;
   float attackColliderGapBasicAtacck1;
   float attackColliderGapBasicAtacck2;
+  float attackColliderGapCombo;
   float leftOfsetColliderAttack;
   float rightOfsetColliderAttack;
   float speed;
