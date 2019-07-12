@@ -2,7 +2,7 @@
 #define ENEMY_H
 
 #define ENEMY_HP 50
-#define ENEMY_SPEED 100
+#define ENEMY_SPEED 80
 #define ENEMY_ATTACK_COOLDOWN 3
 #define TEACHER_ULTIMATE_TIME 50
 #define ATTACK_OFFSET 10

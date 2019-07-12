@@ -73,7 +73,7 @@ void Nurse::ManageInput(float dt) {
     if(targetXPosition < 1) {
       if(this->attackCooldown.Get() > enemyAttackCooldown && not this->IsAttacking()) {
         this->currentState = BASIC_ATTACK_ONE;
-        this->Shoot("img/nurse/shoot.png", NURSE_BULLET_FRAME_COUNT, NURSE_BULLET_DAMAGE, NURSE_BULLET_Y_GAP, BULLET_LEFT_GAP, BULLET_RIGHT_GAP, this->GetFoot().y, "Nurse", 600);
+        this->Shoot("img/nurse/shoot.png", NURSE_BULLET_FRAME_COUNT, NURSE_BULLET_DAMAGE, NURSE_BULLET_Y_GAP, BULLET_LEFT_GAP, BULLET_RIGHT_GAP, this->GetFoot().y, "Nurse", 400);
         this->attackCooldown.Restart();
       }
       else {
@@ -118,6 +118,7 @@ void Nurse::HandleMovement(float dt) {
 void Nurse::HandleHurting(float) {
   if(not this->sprite[HURTING]->IsActive()) {
     this->ActivateSprite(HURTING);
+    this->sound[HURTING]->Play(1);
   }
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);

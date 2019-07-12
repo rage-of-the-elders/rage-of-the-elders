@@ -13,6 +13,7 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->rightOfsetColliderAttack = -80;
   this->attackColliderGapBasicAtacck1 = 100;
   this->attackColliderGapBasicAtacck2 = 70;
+  this->damage[BASIC_ATTACK_ONE] = VETERAN_BASIC_ATK_1_DAMAGE;
   this->damage[BASIC_ATTACK_TWO] = VETERAN_BASIC_ATK_2_DAMAGE;
   this->damage[COMBO] = VETERAN_COMBO_DAMAGE;
   this->attackColliderGapCombo = 50;
