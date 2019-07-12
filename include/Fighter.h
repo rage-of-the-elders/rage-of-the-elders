@@ -15,6 +15,10 @@
 #define SHOOT_COOLDOWN 0.5
 #define FIGHTER_RECOIL 20 // px
 #define TIME_TO_DELETE 1 // second
+#define BULLET_Y_GAP 60
+#define BULLET_LEFT_GAP -260
+#define BULLET_RIGHT_GAP 130
+#define BULLET_FRAME_COUNT 6
 const std::string HITS[] = {"pow.png", "pow2.png", "smash.png", "bam.png", "boom.png"};
 
 
@@ -27,10 +31,10 @@ protected:
   int damage[LAST];
   int comboCount;
   int points;
-  int attackColliderGapBasicAtacck1;
-  int attackColliderGapBasicAtacck2;
-  int leftOfsetColliderAttack;
-  int rightOfsetColliderAttack;
+  float attackColliderGapBasicAtacck1;
+  float attackColliderGapBasicAtacck2;
+  float leftOfsetColliderAttack;
+  float rightOfsetColliderAttack;
   float speed;
   Orientation orientation;
   FighterState storedState;
@@ -43,7 +47,7 @@ protected:
   Collider *attackColliderBox;
   Collider *bodyColliderBox;
   Shadow *shadow;
-  
+
   virtual void ManageInput(float dt) = 0;
   virtual void UpdateStateMachine(float dt);
   virtual void HandleMovement(float dt);
@@ -81,7 +85,7 @@ public:
   Rect *GetBodyCollider();
   void SetState(FighterState state);
   bool TargetIsInYRange(Rect targetBox);
-  void Shoot(std::string file, int frameCount);
+  void Shoot(std::string file, int frameCount, int damage, int yGap, int leftGap, int rigthGap, float shooterY, std::string shooterType, int speed);
 };
 
 #endif

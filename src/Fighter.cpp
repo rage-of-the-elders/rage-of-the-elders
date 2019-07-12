@@ -114,25 +114,25 @@ void Fighter::Update(float dt) {
 
   this->shootCooldown.Update(dt);
   UpdateStateMachine(dt);
-  
+
   // Collider *coliderBox = (Collider*) this->associated.GetComponent("Collider");
   if(this->IsAttacking()) {
     if(this->sprite[this->currentState]->MidleOfTheAnimation()) {
 
       if(this->currentState == BASIC_ATTACK_ONE) {
         if(this->orientation == LEFT) {
-          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck1 * -1), 0});
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck1 * (float)-1), (float)0});
         }
         else {
-          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck1, 0});
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck1, (float)0});
         }
       }
       else if(this->currentState == BASIC_ATTACK_TWO) {
         if(this->orientation == LEFT) {
-          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck2 * -1), 0});
+          this->attackColliderBox->SetOffset({(this->attackColliderGapBasicAtacck2 * (float)-1), (float)0});
         }
         else {
-          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, 0});
+          this->attackColliderBox->SetOffset({this->attackColliderGapBasicAtacck2, (float)0});
         }
       }
     }
@@ -268,23 +268,45 @@ void Fighter::NotifyCollision(GameObject &other) {
     }
   }
   else if (other.Has("Bullet")) {
+
     Bullet *bullet = (Bullet *)other.GetComponent("Bullet");
+
     if(this->IsAttacking() && Math::Equals(bullet->GetAngleDeg(), (this->orientation == RIGHT ? 180.0 : 0.0))) {
-      bullet->SetDirection(-1, (this->orientation == RIGHT ? 0.0 : 180.0));
+      if(not Collision::IsColliding(*bullet->GetBulletBox(), *this->GetColliderBox(), other.angleDeg, this->associated.angleDeg)) {
+          if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
+            float a = (this->GetBox().GetCenter().y - bullet->GetBox().GetCenter().y);
+            if(Math::InRange(a, 7, 30)) {
+              bullet->SetDirection(225);
+            }
+            else if(Math::InRange(a, -18, 6)) {
+              bullet->SetDirection(180);
+            }
+            else if(Math::InRange(a, -40, -19)) {
+              bullet->SetDirection(-225);
+            }
+
+          }
+      }
     }
     else if(not this->IsAttacking()){
-      this->ApplyDamage(bullet->GetDamage());
-      GameObject *explosionGo = new GameObject();
-      explosionGo->box = bullet->GetBox();
-      explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
-      Game::GetInstance().GetCurrentState().AddObject(explosionGo);
-      Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
-      explosionSound->Play(1);
-      this->storedState = HURTING;
-      if (Veteran::player != nullptr) {
-        this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+      if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
+        this->ApplyDamage(bullet->GetDamage());
+        GameObject *explosionGo = new GameObject();
+        explosionGo->box = bullet->GetBox();
+        if(bullet->shooterType == "Nurse")
+          explosionGo->AddComponent(new Sprite(*explosionGo, "img/nurse_explosion.png", 7, 0.07, (7 * 0.07), false));
+        else
+          explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
+
+        Game::GetInstance().GetCurrentState().AddObject(explosionGo);
+        Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
+        explosionSound->Play(1);
+        this->storedState = HURTING;
+        if (Veteran::player != nullptr) {
+          this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+        }
+        bullet->RemoveBullet();
       }
-      bullet->RemoveBullet();
     }
   }
 }
@@ -308,7 +330,7 @@ void Fighter::ActivateSprite(FighterState state)
     else if (sprite[enumState]) {
       sprite[currentEnumState]->Desactivate();
     }
-  } 
+  }
 }
 
 int Fighter::GetDamage() {
@@ -410,7 +432,8 @@ void Fighter::HandleUltimateMidle(float dt) {
     this->ActivateSprite(ULTIMATE_MIDLE);
   }
 
-  this->Shoot("img/veteran/shoot.png", 6);
+  this->Shoot("img/veteran/shoot.png", BULLET_FRAME_COUNT, BULLET_DAMAGE, BULLET_Y_GAP, BULLET_LEFT_GAP,
+              BULLET_RIGHT_GAP, this->GetFoot().y, "Playable", 400);
   this->ultimateDuration.Update(dt);
   // if(this->sprite[ULTIMATE_MIDLE]->IsFinished()) {
   //   this->currentState = ULTIMATE_FINAL;
@@ -495,21 +518,22 @@ Rect *Fighter::GetBodyCollider() {
               bodyColliderBox->GetHeigth());
 }
 
-void Fighter::Shoot(std::string file, int frameCount) {
+void Fighter::Shoot(std::string file, int frameCount, int damage, int yGap, int leftGap, int rigthGap, float shooterY, std::string shooterType, int speed) {
   if (this->shootCooldown.Get() > SHOOT_COOLDOWN) {
-    float bulletSpeed = 400;
-    float damage = BULLET_DAMAGE;
-    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 600);
+    float bulletSpeed = speed;
+    float maxDistance = this->associated.box.GetCenter().GetDistance(this->associated.box.GetCenter() + 10000);
     float frameTime = 0.09;
 
     GameObject *bullet = new GameObject();
-    Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? 130 : -260))),
-                                 (this->associated.box.GetCenter().y - 60));
+    Vec2 gunShootPosition = Vec2((this->associated.box.GetCenter().x + ((this->orientation == RIGHT ? rigthGap : leftGap))),
+                                 (this->associated.box.GetCenter().y - yGap));
     bullet->box.SetCenterPos(gunShootPosition);
-    bullet->AddComponent(new Bullet(*bullet, this->orientation == RIGHT ? 0 : 180, ((this->orientation == RIGHT ? 1 : -1) * bulletSpeed),
+    bullet->AddComponent(new Bullet(*bullet,
+                                    this->orientation == RIGHT ? 0.0 : 180.0,
+                                    (bulletSpeed),
                                     damage,
                                     maxDistance, file,
-                                    frameCount, frameTime, true));
+                                    frameCount, frameTime, true, shooterY, shooterType));
     Game::GetInstance().GetCurrentState().AddObject(bullet);
     this->shootCooldown.Restart();
   }
