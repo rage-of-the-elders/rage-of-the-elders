@@ -175,13 +175,11 @@ void StageState::HandleHorde() {
   if(currentGate.position > 0) {
     int gatePosition = this->tileMap->GetTileEnd(currentGate.position);
     if (Playable::player != nullptr) {
-      int playerPosition = Playable::player->GetBox().GetCenter().x - (Game::screenWidth / 2);
-
+      int playerPosition = Camera::position.x;
       if(playerPosition >= gatePosition && playerPosition <= (gatePosition + Game::screenWidth)) {
         this->LockCamera(gatePosition);
         this->SpawnEnemies(gatePosition, currentGate);
-
-          this->hordeEnabled = true;
+        this->hordeEnabled = true;
       }
     }
   }
