@@ -142,8 +142,8 @@ void StageState::Update(float dt) {
     Game::GetInstance().Push(new VictoryState());
   }
   if (InputManager::GetInstance().IsKeyDown(I_KEY)) {
-    // this->popRequested = true;
-    // Game::GetInstance().Push(new GameOverState()); //TODO
+    this->popRequested = true;
+    Game::GetInstance().Push(new GameOverState());
   }
 
   this->HandleHorde();
@@ -282,7 +282,7 @@ void StageState::Start() {
 }
 
 bool StageState::PlayerWon() {
-	return false;
+  return GameData::playerVictory;
 }
 
 bool StageState::PlayerLose() {

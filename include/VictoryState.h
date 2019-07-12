@@ -15,6 +15,7 @@
 class VictoryState : public State {
 private:
   int currentScene;
+  Music *sea;
   Music *music;
   Sprite *cutscene;
   Sprite *fade;

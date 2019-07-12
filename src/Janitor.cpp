@@ -25,7 +25,7 @@ Janitor::Janitor(GameObject &associated) : Enemy(associated) {
 
   this->ActivateSprite(MOVING);
 
-  this->bodyColliderBox = new Collider(this->associated, {0.2,1});
+  this->bodyColliderBox = new Collider(this->associated, {0.3,1});
   this->attackColliderBox = new Collider(this->associated, {0.3,1}, 1);
   this->associated.AddComponent(this->bodyColliderBox);
   this->associated.AddComponent(this->attackColliderBox);
