@@ -58,7 +58,7 @@ void Playable::ManageInput(float dt) {
     }
     else if(InputManager::GetInstance().KeyPress(D_KEY) && (not this->IsAttacking()) && this->UltimateReady()) {
       this->currentState = ULTIMATE_BEGIN;
-      this->points = 0;
+      // this->points = 0;
     }
     else {
       if (not this->IsAttacking()) {
@@ -239,4 +239,8 @@ void Playable::UpdateLifeBar() {
   //   follower->offset.y = center.y - Camera::position.y;
   //   follower->offset.x = center.x - Camera::position.x;
   // }
+}
+
+void Playable::SetHp(int hp) {
+  this->hp = hp;
 }
