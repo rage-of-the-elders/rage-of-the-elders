@@ -109,7 +109,7 @@ void Playable::HandleMovement(float) {
     this->sound[MOVING]->Activate();
     // TODO: Add PlayIfNotPlaying()
     // if (not this->sound[MOVING]->IsPlaying())
-      this->sound[MOVING]->Play(-1);
+      // this->sound[MOVING]->Play(-1);
 
   }
   if(not (InputManager::GetInstance().IsKeyDown(D_KEY) ||

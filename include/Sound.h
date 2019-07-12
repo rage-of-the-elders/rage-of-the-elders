@@ -11,6 +11,7 @@ class Sound : public Component {
 private:
   std::shared_ptr<Mix_Chunk> chunk;
   int channel;
+  int loops;
 
 public:
   Sound(GameObject &associated);
