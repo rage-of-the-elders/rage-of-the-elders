@@ -31,27 +31,34 @@ void GameObject::Render() {
     // if(component->IsActive())   
 }
 
-bool SortByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) { 
-    return ((c1.get()->GetBox().y) < (c2.get()->GetBox().y)); 
+bool SortByY(std::shared_ptr<Component> c1, std::shared_ptr<Component> c2) {
+  return ((c1.get()->GetBox().GetCenter().y) < (c2.get()->GetBox().GetCenter().y));
 }
 
 void GameObject::NewRender(std::vector <std::shared_ptr<GameObject>> objectArray) {
-  
-  std::vector<std::shared_ptr<Component>> allTheGameComponents = std::vector<std::shared_ptr<Component>>();
+  std::vector<std::shared_ptr<Component>> unsortableComponents = std::vector<std::shared_ptr<Component>>();
+  std::vector<std::shared_ptr<Component>> sortableComponents = std::vector<std::shared_ptr<Component>>();
 
   for (unsigned i = 0; i < objectArray.size(); i++) {
     if(objectArray[i]->IsActive())
-      for(auto &component : objectArray[i]->GetComponents())
-        allTheGameComponents.push_back(component);
+      if (objectArray[i]->Has("Fighter") || objectArray[i]->Has("Bullet")) {
+        for(auto &component : objectArray[i]->GetComponents())
+          sortableComponents.push_back(component);
+      } else {
+        for(auto &component : objectArray[i]->GetComponents())
+          unsortableComponents.push_back(component);
+      }
   }
-  // for(auto &component : allTheGameComponents) {
-  std::sort(allTheGameComponents.begin(), allTheGameComponents.end(), SortByY);
-  // }
 
+  std::sort(sortableComponents.begin(), sortableComponents.end(), SortByY);
 
-  for (unsigned i = 0; i < allTheGameComponents.size(); i++)
-    if(allTheGameComponents[i]->IsActive())
-      allTheGameComponents[i]->Render();
+  for (unsigned i = 0; i < unsortableComponents.size(); i++)
+    if(unsortableComponents[i]->IsActive())
+      unsortableComponents[i]->Render();
+
+  for (unsigned i = 0; i < sortableComponents.size(); i++)
+    if(sortableComponents[i]->IsActive())
+      sortableComponents[i]->Render();
 }
 
 std::vector<std::shared_ptr<Component>> GameObject::GetComponents() {

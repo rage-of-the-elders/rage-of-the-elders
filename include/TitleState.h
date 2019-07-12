@@ -3,7 +3,7 @@
 
 
 #define PLAY 0
-#define DIFFICULTY 1
+#define CREDITS 1
 #define EXIT 2
 
 #define SELECTED 0

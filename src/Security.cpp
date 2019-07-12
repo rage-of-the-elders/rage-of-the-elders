@@ -35,6 +35,8 @@ Security::Security(GameObject &associated) : Enemy(associated) {
 
   this->attackColliderBox->SetColliderType(1);
 
+  this->sound[HURTING] = new Sound(this->associated, "audio/fighter/hurting-security.ogg");
+  this->sound[DYING] = sound[HURTING];
   // this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 40,0}));
 
 }
@@ -46,11 +48,13 @@ Security::~Security() {
 void Security::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -200 : 80);
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){
+    shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

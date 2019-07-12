@@ -18,8 +18,10 @@
 #define F_KEY SDLK_f
 #define G_KEY SDLK_g
 #define H_KEY SDLK_h
+#define I_KEY SDLK_i
 #define J_KEY SDLK_j
 #define P_KEY SDLK_p
+#define O_KEY SDLK_o
 
 #define INCLUDE_SDL
 #include "SDL_include.h"

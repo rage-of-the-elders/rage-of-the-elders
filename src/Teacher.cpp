@@ -14,15 +14,14 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->speed = TEACHER_SPEED;
   this->player = this;
   this->orientation = RIGHT;
-  this->damage[BASIC_ATTACK_TWO] = 10;
-  this->damage[COMBO] = 7;
+  this->damage[BASIC_ATTACK_TWO] = TEACHER_BASIC_ATK_2_DAMAGE;
+  this->damage[COMBO] = TEACHER_COMBO_DAMAGE;
   this->ultimateDuration = Timer();
   this->enemys = std::vector <std::shared_ptr<GameObject>>();
   this->rightOfsetColliderAttack = -75;
   this->leftOfsetColliderAttack = 75;
   this->attackColliderGapBasicAtacck1 = 80;
   this->attackColliderGapBasicAtacck2 = 115;
-  this->points = 0;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
@@ -52,7 +51,7 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
-
+  this->sound[ULTIMATE_BEGIN] = new Sound(this->associated, "audio/teacher/ultimate.ogg");
 }
 
 Teacher::~Teacher() {
@@ -110,7 +109,7 @@ void Teacher::HandleUltimateBegin(float dt) {
     sprite->SetScaleX(0.8);
     ultimate->AddComponent(sprite);
     Game::GetInstance().GetCurrentState().AddObject(ultimate);
-    // this->sound[ULTIMATE_BEGIN]->Play(1);
+    this->sound[ULTIMATE_BEGIN]->Play(1);
     // this->ultimateDuration.Restart();
   }
   if(this->sprite[ULTIMATE_BEGIN]->IsFinished()) {

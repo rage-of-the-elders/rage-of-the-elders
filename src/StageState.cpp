@@ -19,6 +19,8 @@
 #include "CameraFollower.h"
 #include "Teacher.h"
 #include "Boss.h"
+#include "VictoryState.h"
+#include "GameOverState.h"
 
 StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->quitRequested = false;
@@ -27,6 +29,7 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
 }
 
 StageState::~StageState() {
+  Camera::position = Vec2();
   this->objectArray.clear();
 }
 
@@ -124,9 +127,16 @@ void StageState::Update(float dt) {
 
 	if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
 		this->popRequested = true;
-    this->UnlockCamera();
 		Game::GetInstance().Push(new TitleState());
 	}
+  if (InputManager::GetInstance().IsKeyDown(O_KEY)) {
+    this->popRequested = true;
+    Game::GetInstance().Push(new VictoryState());
+  }
+  if (InputManager::GetInstance().IsKeyDown(I_KEY)) {
+    // this->popRequested = true;
+    // Game::GetInstance().Push(new GameOverState()); //TODO
+  }
 
   this->HandleHorde();
 
@@ -181,14 +191,14 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
 
   switch (type) {
     case 1:
-      enemyGO->AddComponent(new Nurse(*enemyGO));
+      // enemyGO->AddComponent(new Nurse(*enemyGO));
       break;
     case 2:
-      enemyGO->AddComponent(new Janitor(*enemyGO));
+      // enemyGO->AddComponent(new Janitor(*enemyGO));
       break;
     case 3:
-      enemyGO->AddComponent(new Security(*enemyGO));
-      // enemyGO->AddComponent(new Boss(*enemyGO));      
+      enemyGO->AddComponent(new Boss(*enemyGO));      
+      // enemyGO->AddComponent(new Security(*enemyGO));
       break;
     default:
       printf("WARNING: No enemy type given!\n");
@@ -238,19 +248,19 @@ bool StageState::PlayerWon() {
 }
 
 bool StageState::PlayerLose() {
-	return false;
+  return Playable::player == nullptr;
 }
 
 void StageState::CheckGameEnd() {
 	if (this->PlayerWon()) {
 		GameData::playerVictory = true;
-		Game::GetInstance().Push(new EndState());
 		this->popRequested = true;
+		Game::GetInstance().Push(new VictoryState());
 	}
 	else if (this->PlayerLose()) {
 		GameData::playerVictory = false;
-		Game::GetInstance().Push(new EndState());
 		this->popRequested = true;
+		Game::GetInstance().Push(new GameOverState());
 	}
 }
 

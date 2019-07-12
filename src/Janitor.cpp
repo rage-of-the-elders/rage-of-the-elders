@@ -31,6 +31,7 @@ Janitor::Janitor(GameObject &associated) : Enemy(associated) {
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
+  this->sound[DYING] = sound[HURTING];
   // this->associated.AddComponent(new Collider(this->associated, {0.4,1}, {this->orientation ? RIGHT -1 : 1 * 60,0}));
 
 }
@@ -42,12 +43,14 @@ Janitor::~Janitor() {
 void Janitor::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? 60 : -320);
     this->associated.box.y += (this->orientation == RIGHT ? 30 : 30);
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){
+    shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

@@ -7,6 +7,8 @@
 #include "CameraFollower.h"
 #include "Camera.h"
 #include "ChoosePlayerState.h"
+#include "CreditsState.h"
+#include "VictoryState.h"
 
 TitleState::TitleState(bool startOption) {
   this->currentOption = 0;
@@ -36,7 +38,7 @@ void TitleState::LoadAssets() {
 
   this->bgDark = new GameObject();
   Sprite *black = new Sprite(*bgDark, "img/black.png");
-  black->SetAlpha(160);
+  black->SetAlpha(50);
   this->bgDark->AddComponent(black);
   this->AddObject(bgDark);
 
@@ -51,7 +53,7 @@ void TitleState::LoadAssets() {
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "PLAY", WHITE));
   text = new GameObject();
-  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "DIFFICULTY", WHITE));
+  this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "CREDITS", WHITE));
   text = new GameObject();
   this->options.push_back(new Text(*text, OPTIONS_FONT, OPTIONS_FONT_SIZE, Text::BLENDED, "EXIT", WHITE));
 
@@ -141,7 +143,9 @@ void TitleState::Update(float dt) {
             Game::GetInstance().Push(new ChoosePlayerState());
             break;
 
-          case DIFFICULTY:
+          case CREDITS:
+            this->popRequested = true;
+            Game::GetInstance().Push(new CreditsState());
             break;
 
           case EXIT:

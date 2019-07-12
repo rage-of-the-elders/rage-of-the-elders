@@ -93,11 +93,13 @@ void Enemy::HandleMovement(float dt) {
 void Enemy::HandleDying(float) {
   if(not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * this->sprite[MOVING]->GetWidth();
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){
+    this->shadow->RequestDelete();
     this->associated.RequestDelete();
   }
 }

@@ -36,14 +36,21 @@ Fighter::Fighter(GameObject &associated) : Component(associated) {
   this->sound[ULTIMATE_FINAL] = new Sound(this->associated, "audio/machine_gun.ogg");
   this->sound[ULTIMATE_MIDLE] = new Sound(this->associated, "audio/machine_gun_shot.ogg");
   this->sound[HIT] = new Sound(this->associated, "audio/hit.ogg");
+  this->sound[HURTING] = new Sound(this->associated, "audio/fighter/hurting-janitor.ogg");
+  this->sound[DYING] = this->sound[HURTING];
 
-  this->associated.AddComponent(this->sound[MOVING]);
-  this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
-  this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
-  this->associated.AddComponent(this->sound[COMBO]);
-  this->associated.AddComponent(this->sound[ULTIMATE_FINAL]);
-  this->associated.AddComponent(this->sound[ULTIMATE_MIDLE]);
-  this->associated.AddComponent(this->sound[HIT]);
+  auto shadowGO = new GameObject();
+  shadowGO->box.SetCenterPos(this->associated.box.GetCenter());
+  this->shadow = new Shadow(*shadowGO);
+  shadowGO->AddComponent(this->shadow);
+  Game::GetInstance().GetCurrentState().AddObject(shadowGO);
+  // this->associated.AddComponent(this->sound[MOVING]);
+  // this->associated.AddComponent(this->sound[BASIC_ATTACK_ONE]);
+  // this->associated.AddComponent(this->sound[BASIC_ATTACK_TWO]);
+  // this->associated.AddComponent(this->sound[COMBO]);
+  // this->associated.AddComponent(this->sound[ULTIMATE_FINAL]);
+  // this->associated.AddComponent(this->sound[ULTIMATE_MIDLE]);
+  // this->associated.AddComponent(this->sound[HIT]);
 }
 
 Fighter::~Fighter() {}
@@ -107,7 +114,7 @@ void Fighter::Update(float dt) {
 
   this->shootCooldown.Update(dt);
   UpdateStateMachine(dt);
-  
+
   // Collider *coliderBox = (Collider*) this->associated.GetComponent("Collider");
   if(this->IsAttacking()) {
     if(this->sprite[this->currentState]->MidleOfTheAnimation()) {
@@ -133,6 +140,8 @@ void Fighter::Update(float dt) {
   else {
     this->attackColliderBox->SetOffset({this->orientation == LEFT? this->leftOfsetColliderAttack : this->rightOfsetColliderAttack,0});
   }
+
+  this->shadow->UpdatePos(this->GetFoot().GetCenter());
 }
 
 void Fighter::Render() {
@@ -245,12 +254,13 @@ void Fighter::NotifyCollision(GameObject &other) {
             }
 
             auto pow = new GameObject();
-            int rand = (int)floor(Math::GetRand(0, 4));
+            int size = (*(&HITS + 1) - HITS);
+            int rand = (int)floor(Math::GetRand(0, size));
             std::string file = HITS[rand];
             Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
-            sprite->SetScaleX(0.25);
+            sprite->SetScaleX(0.9);
             pow->AddComponent(sprite);
-            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 20);
+            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 30);
             Game::GetInstance().GetCurrentState().AddObject(pow);
           }
         }
@@ -289,7 +299,7 @@ void Fighter::NotifyCollision(GameObject &other) {
           explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
 
         Game::GetInstance().GetCurrentState().AddObject(explosionGo);
-        Sound *explosionSound = new Sound(*explosionGo, "audio/boom.wav");
+        Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
         explosionSound->Play(1);
         this->storedState = HURTING;
         if (Veteran::player != nullptr) {
@@ -320,7 +330,7 @@ void Fighter::ActivateSprite(FighterState state)
     else if (sprite[enumState]) {
       sprite[currentEnumState]->Desactivate();
     }
-  } 
+  }
 }
 
 int Fighter::GetDamage() {
@@ -452,10 +462,12 @@ void Fighter::HandleUltimateFinal(float) {
 }
 
 void Fighter::HandleHurting(float) {
+
   if(not this->sprite[HURTING]->IsActive()) {
+    this->sound[HURTING]->Play(1);
     this->ActivateSprite(HURTING);
-    //Som
   }
+
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);
     this->sprite[HURTING]->SetFinished(false);
@@ -471,16 +483,18 @@ void Fighter::HandleHurting(float) {
 void Fighter::HandleDying(float dt) {
   if (not this->sprite[DYING]->IsActive()) {
     this->associated.GetComponent("Collider")->Desactivate();
+    this->shadow->SetShadowScale({3.5, 1});
     this->ActivateSprite(DYING);
     // this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * 270;
-    // this->sound[DYING]->Play(1);
+    this->sound[DYING]->Play(1);
   }
   if (this->sprite[DYING]->IsFinished()) {
     timeToDelete.Update(dt);
     if (timeToDelete.Get() > TIME_TO_DELETE) {
+      shadow->RequestDelete();
       this->associated.RequestDelete();
     }
-    Veteran::player = nullptr;
+    Veteran::player = nullptr; // FIXME: THIS SHOULD NOT BE HERE!!!!
   }
 }
 

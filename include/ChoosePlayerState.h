@@ -15,7 +15,6 @@
 class ChoosePlayerState : public State {
 private:
   int currentCharacter;
-  Music music;
   Sprite *characters[2];
   Sprite *characterNames[2];
   GameObject *bg;
