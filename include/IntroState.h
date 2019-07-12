@@ -12,6 +12,7 @@
 #define INTRO_TEXT_SPEED 1.8 // seconds
 #define FADE_DURATION 2 // seconds
 #define TEXT_POS Vec2(570, 115)
+#define PHOTO_POS Vec2(1080, 290)
 
 class IntroState : public State {
 private:
@@ -19,6 +20,7 @@ private:
   Sprite *bg;
   Sprite *fade;
   Sprite *names;
+  Sprite *photo;
   Music *music;
   Sound *typewriter;
   Timer fadeTimer;
