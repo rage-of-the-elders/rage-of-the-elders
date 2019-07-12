@@ -6,8 +6,8 @@ Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->hp = ENEMY_HP;
   this->speed = ENEMY_SPEED;
   this->attackCooldown = Timer();
-  this->attackCooldown.Set(ATTACK_COOLDOWN);
-  this->enemyAttackCooldown = ATTACK_COOLDOWN;
+  this->attackCooldown.Set(ENEMY_ATTACK_COOLDOWN);
+  this->enemyAttackCooldown = ENEMY_ATTACK_COOLDOWN;
 }
 
 Enemy::~Enemy() {}
@@ -30,7 +30,7 @@ bool Enemy::TargetIsInRange() {
    return ((enemyXRange > (targetDistanceX - ATTACK_OFFSET)) && (ATTACK_Y_RANGE > targetDistanceY));
 }
 
-void Enemy::ManageInput(float dt) {
+void Enemy::ManageInput(float) {
   if(Veteran::player != nullptr) {
     this->target = Veteran::player->GetBodyCollider();
     this->tagetPlayer = Veteran::player->GetFoot();
@@ -54,7 +54,7 @@ void Enemy::ManageInput(float dt) {
     }
 
     if (this->currentState != DYING) {
-      if (this->target->GetCenter().x + 10 < this->GetBox().GetCenter().x)
+      if (this->target->GetCenter().x < this->GetBox().GetCenter().x)
         this->orientation = LEFT;
       else
         this->orientation = RIGHT;
@@ -115,9 +115,13 @@ bool Enemy::IsOpponent(GameObject &other) {
   return (not other.Has("Enemy"));
 }
 
+void Enemy::ResetAttackCooldown() {
+  this->attackCooldown.Set(this->enemyAttackCooldown*0.9);
+}
+
 void Enemy::ResetSpeed() {
   if(this->associated.Has("Nurse")) {
-    this->speed = 70;
+    this->speed = 200;
   }
   else if(this->associated.Has("Janitor")) {
     this->speed = ENEMY_SPEED;

@@ -7,6 +7,7 @@
 #include "Veteran.h"
 #include "Bullet.h"
 #include "CameraBarrier.h"
+#include "Enemy.h"
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated) : Component(associated) {
@@ -529,10 +530,15 @@ void Fighter::HandleUltimateFinal(float) {
 }
 
 void Fighter::HandleHurting(float) {
-
   if(not this->sprite[HURTING]->IsActive()) {
     this->sound[HURTING]->Play(1);
     this->ActivateSprite(HURTING);
+    if(this->associated.Has("Enemy")) {
+      Enemy *enemy = (Enemy *)this->associated.GetComponent("Enemy");
+      enemy->ResetAttackCooldown();
+      enemy->SetState(IDLE);
+
+    }
   }
 
   if(this->sprite[HURTING]->IsFinished()) {
