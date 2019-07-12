@@ -36,6 +36,7 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->arrowTimer = Timer();
   this->arrowDurationTimer = Timer();
   this->arrowDurationTimer.Set(3);
+  this->arrowGO = new GameObject();
   GameObject *go = new GameObject();
   this->goSound = new Sound(*go, "audio/go.ogg");
 }
@@ -175,6 +176,9 @@ void StageState::Update(float dt) {
       arrowTimer.Restart();
       this->goSound->Play(1);
     }
+  } else {
+    if (arrowGO->IsActive())
+      arrowGO->Desactivate();
   }
 }
 
