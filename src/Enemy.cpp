@@ -116,7 +116,7 @@ bool Enemy::IsOpponent(GameObject &other) {
 }
 
 void Enemy::ResetAttackCooldown() {
-  this->attackCooldown.Set(this->enemyAttackCooldown*0.9);
+  this->attackCooldown.Set(this->enemyAttackCooldown*0.85);
 }
 
 void Enemy::ResetSpeed() {
