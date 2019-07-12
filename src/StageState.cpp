@@ -142,7 +142,7 @@ void StageState::BuildBarriers() {
 }
 
 void StageState::LoadGates() {
-  this->gateMap = new GateMap("map/hordesStage1.txt");
+  this->gateMap = new GateMap("map/hordesStage2.txt");
 }
 
 void StageState::Update(float dt) {
@@ -176,7 +176,6 @@ void StageState::Update(float dt) {
 void StageState::HandleHorde() {
   #ifdef DEBUG
     if (InputManager::GetInstance().KeyPress(P_KEY)) {
-      this->hordeEnabled = false;
       this->UnlockCamera();
     }
   #endif
