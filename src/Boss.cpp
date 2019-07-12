@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "Playable.h"
 #include "Camera.h"
+#include "GameData.h"
 
 #include <iostream>
 
@@ -163,6 +164,7 @@ void Boss::HandleDying(float) {
   if(this->sprite[DYING]->IsFinished()){
     shadow->RequestDelete();
     StageState::DecreaseEnemiesCount();
+    GameData::playerVictory = true;
     this->associated.RequestDelete();
   }
 }

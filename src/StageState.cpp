@@ -282,7 +282,7 @@ void StageState::Start() {
 }
 
 bool StageState::PlayerWon() {
-	return false;
+  return GameData::playerVictory;
 }
 
 bool StageState::PlayerLose() {
