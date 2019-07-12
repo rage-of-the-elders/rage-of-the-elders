@@ -191,11 +191,11 @@ void StageState::LockCamera(int gatePosition) {
     this->gateMap->NextGate();
 
     this->cameraLockWallLeft = new GameObject();
-    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::position.x +30, Camera::position.y, 10, 900)));
+    cameraLockWallLeft->AddComponent(new CameraBarrier(*cameraLockWallLeft, CameraBarrier::LEFT_SIDE, Rect(Camera::initiaCameraLimit, Camera::position.y, -10, 900)));
     this->AddObject(cameraLockWallLeft);
 
     this->cameraLockWallRight = new GameObject();
-    cameraLockWallRight->AddComponent(new CameraBarrier(*cameraLockWallRight, CameraBarrier::RIGHT_SIDE, Rect(Camera::position.x + 1316, Camera::position.y, 10, 900)));
+    cameraLockWallRight->AddComponent(new CameraBarrier(*cameraLockWallRight, CameraBarrier::RIGHT_SIDE, Rect(Camera::finalCameraLimit, Camera::position.y, 10, 900)));
     this->AddObject(cameraLockWallRight);
 }
 
