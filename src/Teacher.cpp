@@ -22,6 +22,8 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->leftOfsetColliderAttack = 75;
   this->attackColliderGapBasicAtacck1 = 80;
   this->attackColliderGapBasicAtacck2 = 115;
+  this->points = 0;
+  this->attackColliderGapCombo = 60;
 
   std::string character = "teacher";
   this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 25, 0.04, 0, true);
@@ -116,7 +118,7 @@ void Teacher::HandleUltimateBegin(float dt) {
     this->currentState = IDLE;
     this->sprite[ULTIMATE_BEGIN]->SetFrame(0);
     this->sprite[ULTIMATE_BEGIN]->SetFinished(false);
-  } 
+  }
 
   std::vector <std::shared_ptr<GameObject>> objects = Game::GetInstance().GetCurrentState().GetObjects();
 
