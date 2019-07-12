@@ -56,7 +56,6 @@ void ChoosePlayerState::LoadAssets() {
   this->AddObject(text);
   
   GameObject *sound = new GameObject();
-  sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/select.ogg"));
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cursor.ogg"));

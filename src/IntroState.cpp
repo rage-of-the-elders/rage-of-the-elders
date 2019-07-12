@@ -13,6 +13,7 @@ IntroState::IntroState() {
 }
 
 IntroState::~IntroState() {
+  this->typewriter->Stop();
   this->objectArray.clear();
 }
 
@@ -50,6 +51,11 @@ void IntroState::LoadAssets() {
 
   this->music = new Music("audio/menu/credits.ogg");
   this->music->Play();
+
+  GameObject *typewriterGO = new GameObject();
+  this->typewriter = new Sound(*typewriterGO, "audio/menu/typewriter.ogg");
+  this->AddObject(typewriterGO);
+  typewriter->Play();
 }
 
 void IntroState::UpdateFade(float dt) {

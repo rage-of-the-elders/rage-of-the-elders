@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "GameObject.h"
+#include "Sound.h"
 #include "Music.h"
 #include "Sprite.h"
 #include "Timer.h"
@@ -19,6 +20,7 @@ private:
   Sprite *fade;
   Sprite *names;
   Music *music;
+  Sound *typewriter;
   Timer fadeTimer;
 
 public:
