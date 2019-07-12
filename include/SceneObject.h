@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "Sprite.h"
+#include "Rect.h"
 
 
 class SceneObject : public Component {
@@ -15,12 +16,14 @@ class SceneObject : public Component {
     bool isBreakable;
   public:
     SceneObject(GameObject &associated, std::string environment, int x, int y, int objectType);
-    bool Is(std::string type);
     void Render();
     void LoadAssets();
     void Update(float dt);
     void NotifyCollision(GameObject &other);
     void BuildObject(std::string environment, int x, int y, int objectType);
+
+    Rect GetColisionRect(int colisionHeigth = 1);
+    bool Is(std::string type);
 };
 
 #endif

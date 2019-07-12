@@ -52,25 +52,29 @@ void StageState::LoadAssets() {
 }
 
 void StageState::LoadSceneObjects() {
-  this->objectMap = new ObjectMap("positioning_furniture.txt");
+  this->objectMap = new ObjectMap("positioning_furniture1.txt", this->stageLimit, 30, 90);
   for(auto &sceneObject : this->objectMap->GetObjectList()) {
     GameObject *sceneObjectGO = new GameObject();
-    SceneObject newSceneObject = SceneObject(*sceneObjectGO, sceneObject.environment,
-                                      sceneObject.x, sceneObject.y, sceneObject.objectType);
-
-    std::cout << newSceneObject.GetBox().x << " " << newSceneObject.GetBox().y << std::endl;
-    std::cout << newSceneObject.GetBox().w << " " << newSceneObject.GetBox().h << std::endl;
+    this->objectMap->At(sceneObject.x, sceneObject.y) = sceneObject.objectType;
+    Vec2 objectPosition = this->objectMap->GetObjectPosition(sceneObject.x, sceneObject.y);
+    SceneObject *newSceneObject = new SceneObject(*sceneObjectGO, sceneObject.environment,
+                                      objectPosition.x, objectPosition.y, sceneObject.objectType);
+    sceneObjectGO->AddComponent(newSceneObject);
     this->AddObject(sceneObjectGO);
+
+    GameObject *sceneObjectBarrierGO = new GameObject();
+    sceneObjectBarrierGO->AddComponent(new Barrier(*sceneObjectBarrierGO, newSceneObject->GetColisionRect()));
+    this->AddObject(sceneObjectBarrierGO);
   }
 }
 
 void StageState::LoadBackground() {
   this->bg = new GameObject();
-	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
+	this->bg->AddComponent(new Sprite(*(this->bg), "img/black.png"));
 	this->bg->box = Rect();
 
 	GameObject *tileMapGO = new GameObject();
-	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
+	this->tileSet = new TileSet(570, 560, 720, "img/stage1v4-paralax.png");
 	this->tileMap = new TileMap(*tileMapGO, "map/tilesStage1.txt", tileSet);
 	tileMapGO->AddComponent(tileMap);
 	tileMapGO->box = Rect();
@@ -99,29 +103,29 @@ void StageState::LoadPlayers() {
   this->AddObject(nurseGO);
   nurseGO->RequestDelete();
 
-  GameObject *bossGO = new GameObject();
-  bossGO->box.SetCenterPos(800, 500);
-  bossGO->AddComponent(new Boss(*bossGO));
-  this->AddObject(bossGO);
-  bossGO->RequestDelete();
-
-  GameObject *janitorGO = new GameObject();
-  janitorGO->box.SetCenterPos(800, 500);
-  janitorGO->AddComponent(new Janitor(*janitorGO));
-  this->AddObject(janitorGO);
-  janitorGO->RequestDelete();
-
-
-  GameObject *securityGO = new GameObject();
-  securityGO->box.SetCenterPos(800, 500);
-  securityGO->AddComponent(new Security(*securityGO));
-  this->AddObject(securityGO);
-  securityGO->RequestDelete();
+  // GameObject *bossGO = new GameObject();
+  // bossGO->box.SetCenterPos(800, 500);
+  // bossGO->AddComponent(new Boss(*bossGO));
+  // this->AddObject(bossGO);
+  // bossGO->RequestDelete();
+  //
+  // GameObject *janitorGO = new GameObject();
+  // janitorGO->box.SetCenterPos(800, 500);
+  // janitorGO->AddComponent(new Janitor(*janitorGO));
+  // this->AddObject(janitorGO);
+  // janitorGO->RequestDelete();
+  //
+  //
+  // GameObject *securityGO = new GameObject();
+  // securityGO->box.SetCenterPos(800, 500);
+  // securityGO->AddComponent(new Security(*securityGO));
+  // this->AddObject(securityGO);
+  // securityGO->RequestDelete();
 }
 
 void StageState::BuildBarriers() {
   GameObject *hallWall = new GameObject();
-  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
+  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(17), 555)));
   this->AddObject(hallWall);
 
   GameObject *roomWall = new GameObject();
@@ -142,7 +146,7 @@ void StageState::BuildBarriers() {
 }
 
 void StageState::LoadGates() {
-  this->gateMap = new GateMap("map/hordesStage2.txt");
+  this->gateMap = new GateMap("map/hordesStage3.txt");
 }
 
 void StageState::Update(float dt) {

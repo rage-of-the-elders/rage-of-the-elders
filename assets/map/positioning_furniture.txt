@@ -1,4 +1,0 @@
-2,
-
-living_room, 6, 600, 690,
-living_room, 7, 500, 650,
