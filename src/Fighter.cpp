@@ -608,6 +608,7 @@ void Fighter::Shoot(std::string file, int frameCount, int damage, int yGap, int 
                                     maxDistance, file,
                                     frameCount, frameTime, true, shooterY, shooterType));
     Game::GetInstance().GetCurrentState().AddObject(bullet);
+    this->points -= 10;
     this->shootCooldown.Restart();
   }
 }
