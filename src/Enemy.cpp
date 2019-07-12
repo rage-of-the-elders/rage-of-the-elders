@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "Collider.h"
 #include "Veteran.h"
+#include "LifeItem.h"
+#include "Game.h"
 
 Enemy::Enemy(GameObject &associated) : Fighter(associated) {
   this->hp = ENEMY_HP;
@@ -95,6 +97,9 @@ void Enemy::HandleDying(float) {
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? -1 : 0) * this->sprite[MOVING]->GetWidth();
     this->sound[DYING]->Play(1);
+    GameObject *lifeItemGO = new GameObject();
+    lifeItemGO->AddComponent(new LifeItem(*lifeItemGO, this->associated.box.GetCenter().x, this->associated.box.GetCenter().y));
+    Game::GetInstance().GetCurrentState().AddObject(lifeItemGO);
   }
   if(this->sprite[DYING]->IsFinished()){
     this->shadow->RequestDelete();

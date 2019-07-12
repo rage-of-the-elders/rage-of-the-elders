@@ -1,5 +1,8 @@
 #include "Janitor.h"
 #include "Collider.h"
+#include "LifeItem.h"
+#include "Game.h"
+#include "Camera.h"
 
 Janitor::Janitor(GameObject &associated) : Enemy(associated) {
 
@@ -47,6 +50,9 @@ void Janitor::HandleDying(float) {
     this->ActivateSprite(DYING);
     this->associated.box.x += (this->orientation == RIGHT ? 60 : -320);
     this->associated.box.y += (this->orientation == RIGHT ? 30 : 30);
+    GameObject *lifeItemGO = new GameObject();
+    lifeItemGO->AddComponent(new LifeItem(*lifeItemGO, (this->associated.box.x + associated.box.w / 2) + 50, this->associated.box.y + associated.box.h - 50));
+    Game::GetInstance().GetCurrentState().AddObject(lifeItemGO);
     this->sound[DYING]->Play(1);
   }
   if(this->sprite[DYING]->IsFinished()){

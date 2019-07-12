@@ -54,11 +54,6 @@ void StageState::LoadAssets() {
   this->LoadPlayers();
 	this->BuildBarriers();
 	this->music.Play();
-
-  GameObject *lifeItemGO = new GameObject();
-  // lifeItemGO->box.SetCenterPos(600, 600);
-  lifeItemGO->AddComponent(new LifeItem(*lifeItemGO, 1000, 600));
-  this->AddObject(lifeItemGO);
 }
 
 void StageState::LoadBackground() {
