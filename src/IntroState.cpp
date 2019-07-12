@@ -13,7 +13,7 @@ IntroState::IntroState() {
 }
 
 IntroState::~IntroState() {
-  this->typewriter->Stop();
+  this->typewriter->ForceStop();
   this->objectArray.clear();
 }
 

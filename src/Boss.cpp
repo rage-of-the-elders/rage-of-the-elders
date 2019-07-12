@@ -24,7 +24,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 25, 0.04, 0, true);
   this->sprite[FROZEN] = new Sprite(this->associated, "img/" + character + "/frozen.png", 25, 0.04, 0, true);
   this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 25, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 25, 0.08, 1.5, false);
+  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 25, 0.08, 0, false);
 
   this->associated.AddComponent(this->sprite[IDLE]);
   this->associated.AddComponent(this->sprite[MOVING]);
@@ -58,6 +58,7 @@ bool Boss::Is(std::string type) {
 void Boss::Update(float dt) {
   Enemy::Update(dt);
   this->frozenTime.Update(dt);
+
 }
 
 void Boss::ManageInput(float dt) {
@@ -183,7 +184,8 @@ void Boss::HandleDying(float) {
     this->associated.AddComponent(explosion3);
     this->associated.AddComponent(explosion4);
   }
-  if(this->sprite[DYING]->IsFinished()){
+  if (this->sprite[DYING]->IsFinished())
+  {
     shadow->RequestDelete();
     StageState::DecreaseEnemiesCount();
     GameData::playerVictory = true;

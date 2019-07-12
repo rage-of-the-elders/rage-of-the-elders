@@ -377,7 +377,8 @@ void Fighter::NotifyCollision(GameObject &other) {
           explosionSound->Play(1);
           this->storedState = HURTING;
           if (Veteran::player != nullptr) {
-            this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+            if(not this->associated.Has("Boss"))
+              this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
           }
           bullet->RemoveBullet();
         }

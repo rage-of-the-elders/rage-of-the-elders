@@ -20,6 +20,7 @@ public:
   void Play(int times = -1);
   void PlayIfNotPlaying(int times = -1);
   void Stop();
+  void ForceStop();
   void Open(std::string file);
   bool IsOpen();
 
