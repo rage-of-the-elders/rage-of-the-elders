@@ -357,22 +357,24 @@ void Fighter::NotifyCollision(GameObject &other) {
     }
     else if(not this->IsAttacking()){
       if(Math::InRange(this->GetFoot().y, bullet->shooterY -30, bullet->shooterY + 40)) {
-        this->ApplyDamage(bullet->GetDamage());
-        GameObject *explosionGo = new GameObject();
-        explosionGo->box = bullet->GetBox();
-        if(bullet->shooterType == "Nurse")
-          explosionGo->AddComponent(new Sprite(*explosionGo, "img/nurse_explosion.png", 7, 0.07, (7 * 0.07), false));
-        else
-          explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
+        if(not (bullet->shooterType == "Nurse" && (this->associated.Has("Security") || this->associated.Has("Janitor")))) {
+          this->ApplyDamage(bullet->GetDamage());
+          GameObject *explosionGo = new GameObject();
+          explosionGo->box = bullet->GetBox();
+          if(bullet->shooterType == "Nurse")
+            explosionGo->AddComponent(new Sprite(*explosionGo, "img/nurse_explosion.png", 7, 0.07, (7 * 0.07), false));
+          else
+            explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
 
-        Game::GetInstance().GetCurrentState().AddObject(explosionGo);
-        Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
-        explosionSound->Play(1);
-        this->storedState = HURTING;
-        if (Veteran::player != nullptr) {
-          this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+          Game::GetInstance().GetCurrentState().AddObject(explosionGo);
+          Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
+          explosionSound->Play(1);
+          this->storedState = HURTING;
+          if (Veteran::player != nullptr) {
+            this->MoveInX(FIGHTER_RECOIL * 2 * (Veteran::player->GetOrientation() == LEFT ? -1 : 1)); // TODO: Difficulty
+          }
+          bullet->RemoveBullet();
         }
-        bullet->RemoveBullet();
       }
     }
   }
