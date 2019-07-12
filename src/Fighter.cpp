@@ -321,16 +321,6 @@ void Fighter::NotifyCollision(GameObject &other) {
               this->MoveInX(FIGHTER_RECOIL * (opponent->GetOrientation() == LEFT ? -1 : 1));
               opponent->comboCount = 0;
             }
-
-            auto pow = new GameObject();
-            int size = (*(&HITS + 1) - HITS);
-            int rand = (int)floor(Math::GetRand(0, size));
-            std::string file = HITS[rand];
-            Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
-            sprite->SetScaleX(0.9);
-            pow->AddComponent(sprite);
-            pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 30);
-            Game::GetInstance().GetCurrentState().AddObject(pow);
           }
         }
       }
@@ -547,6 +537,16 @@ void Fighter::HandleHurting(float) {
       enemy->SetState(IDLE);
 
     }
+
+    auto pow = new GameObject();
+    int size = (*(&HITS + 1) - HITS);
+    int rand = (int)floor(Math::GetRand(0, size));
+    std::string file = HITS[rand];
+    Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
+    sprite->SetScaleX(0.9);
+    pow->AddComponent(sprite);
+    pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 30);
+    Game::GetInstance().GetCurrentState().AddObject(pow);
   }
 
   if(this->sprite[HURTING]->IsFinished()) {

@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "Playable.h"
 #include "Camera.h"
+#include "Game.h"
 #include <iostream>
 
 Nurse::Nurse(GameObject &associated) : Enemy(associated) {
@@ -120,6 +121,15 @@ void Nurse::HandleHurting(float) {
   if(not this->sprite[HURTING]->IsActive()) {
     this->ActivateSprite(HURTING);
     this->sound[HURTING]->Play(1);
+    auto pow = new GameObject();
+    int size = (*(&HITS + 1) - HITS);
+    int rand = (int)floor(Math::GetRand(0, size));
+    std::string file = HITS[rand];
+    Sprite *sprite = new Sprite(*pow, "img/fighter/" + file, 1, 0, 0.35);
+    sprite->SetScaleX(0.9);
+    pow->AddComponent(sprite);
+    pow->box.SetCenterPos(this->GetBox().GetCenter().x, this->GetBox().y - 30);
+    Game::GetInstance().GetCurrentState().AddObject(pow);
   }
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);
