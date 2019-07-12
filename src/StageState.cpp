@@ -37,7 +37,7 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->arrowDurationTimer = Timer();
   this->arrowDurationTimer.Set(3);
   GameObject *go = new GameObject();
-  this->goSound = new Sound(*go, "audio/boom.ogg");
+  this->goSound = new Sound(*go, "audio/go.ogg");
 }
 
 StageState::~StageState() {
