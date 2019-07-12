@@ -28,8 +28,9 @@ void VictoryState::LoadAssets() {
   this->AddObject(fadeGO);
   fade->SetAlpha(0);
 
-  this->music = new Music("audio/menu/victory.ogg");
-  this->music->Play();
+  this->sea = new Music("audio/menu/victory.ogg");
+  this->sea->Play();
+  this->music = new Music("audio/menu/victory2.ogg");
 }
 
 void VictoryState::UpdateFade(float dt) {
@@ -51,6 +52,10 @@ void VictoryState::UpdateCutscene(float dt) {
   if (changeScenes.Get() > SCENE_DURATION) {
     if(this->currentScene < SCENES_NUMBER) {
       this->cutscene->SetFrame(++currentScene);
+
+      if(currentScene == SCENES_NUMBER-1){
+        this->music->Play(1);
+      }
     } else {
       this->popRequested = true;
       Game::GetInstance().Push(new CreditsState());

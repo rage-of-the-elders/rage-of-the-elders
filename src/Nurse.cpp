@@ -119,6 +119,7 @@ void Nurse::HandleMovement(float dt) {
 void Nurse::HandleHurting(float) {
   if(not this->sprite[HURTING]->IsActive()) {
     this->ActivateSprite(HURTING);
+    this->sound[HURTING]->Play(1);
   }
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);

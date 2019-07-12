@@ -7,6 +7,7 @@
 #include "Veteran.h"
 #include "Bullet.h"
 #include "CameraBarrier.h"
+#include "Enemy.h"
 #include <iostream>
 
 Fighter::Fighter(GameObject &associated) : Component(associated) {
@@ -310,7 +311,7 @@ void Fighter::NotifyCollision(GameObject &other) {
             if (other.Has("Playable") && (not this->associated.Has("Boss"))) {
               this->MoveInX(FIGHTER_RECOIL * 2 * (opponent->GetOrientation() == LEFT ? -1 : 1)); // TODO: DIFFICULTY
               opponent->comboCount++;
-              opponent->points++;
+              opponent->points += abs(opponent->points - POINTS_TO_ULTIMATE)*0.03 + 5;
 
               if (opponent->comboCount > 3) {
                 opponent->points += (opponent->comboCount * 0.2);
@@ -536,10 +537,15 @@ void Fighter::HandleUltimateFinal(float) {
 }
 
 void Fighter::HandleHurting(float) {
-
   if(not this->sprite[HURTING]->IsActive()) {
     this->sound[HURTING]->Play(1);
     this->ActivateSprite(HURTING);
+    if(this->associated.Has("Enemy")) {
+      Enemy *enemy = (Enemy *)this->associated.GetComponent("Enemy");
+      enemy->ResetAttackCooldown();
+      enemy->SetState(IDLE);
+
+    }
   }
 
   if(this->sprite[HURTING]->IsFinished()) {

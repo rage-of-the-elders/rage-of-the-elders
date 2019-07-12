@@ -43,11 +43,20 @@ void IntroState::LoadAssets() {
   textGO->AddComponent(this->names);
   this->AddObject(textGO);
 
+  GameObject *photoGO = new GameObject();
+  this->photo = new Sprite(*photoGO, "img/cutscenes/" + GameData::choosedCharacter +"-photo.png");
+  photo->SetScaleX(0.9);
+  photoGO->box.SetCenterPos(PHOTO_POS);
+  photoGO->AddComponent(this->photo);
+  this->AddObject(photoGO);
+  photo->SetAlpha(70);
+
   GameObject *fadeGO = new GameObject();
   this->fade = new Sprite(*fadeGO, "img/black.png");
   fadeGO->AddComponent(this->fade);
   this->AddObject(fadeGO);
   fade->SetAlpha(100);
+
 
   this->music = new Music("audio/menu/credits.ogg");
   this->music->Play();

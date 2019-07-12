@@ -39,8 +39,8 @@ void GameOverState::LoadAssets() {
   sound = new GameObject();
   this->buttonSounds.push_back(new Sound(*sound, "audio/menu/cancel.ogg"));
 
-  this->music = new Music("audio/menu/credits.ogg");
-  this->music->Play();
+  this->music = new Music("audio/menu/game-over.ogg");
+  this->music->Play(1);
 }
 
 void GameOverState::Update(float dt) {

@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "Playable.h"
 #include "Camera.h"
+#include "GameData.h"
 
 #include <iostream>
 
@@ -69,7 +70,7 @@ void Boss::ManageInput(float dt) {
       this->currentState = DYING;
     }
     else if (TargetIsInRange() && this->currentState != FROZEN) {
-      // Playable::player->ApplyDamage(1);
+      Playable::player->ApplyDamage(1);
       Playable::player->SetState(HURTING);
     }
     else if(this->currentState != IDLE && this->currentState != FROZEN) {
@@ -185,5 +186,7 @@ void Boss::HandleDying(float) {
   if(this->sprite[DYING]->IsFinished()){
     shadow->RequestDelete();
     StageState::DecreaseEnemiesCount();
+    GameData::playerVictory = true;
+    this->associated.RequestDelete();
   }
 }
