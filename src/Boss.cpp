@@ -69,7 +69,7 @@ void Boss::ManageInput(float dt) {
       this->currentState = DYING;
     }
     else if (TargetIsInRange() && this->currentState != FROZEN) {
-      // Playable::player->ApplyDamage(1);
+      Playable::player->ApplyDamage(1);
       Playable::player->SetState(HURTING);
     }
     else if(this->currentState != IDLE && this->currentState != FROZEN) {
