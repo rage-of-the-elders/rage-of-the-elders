@@ -361,13 +361,18 @@ void Fighter::NotifyCollision(GameObject &other) {
           this->ApplyDamage(bullet->GetDamage());
           GameObject *explosionGo = new GameObject();
           explosionGo->box = bullet->GetBox();
-          if(bullet->shooterType == "Nurse")
+          Sound *explosionSound; 
+          if(bullet->shooterType == "Nurse") {
             explosionGo->AddComponent(new Sprite(*explosionGo, "img/nurse_explosion.png", 7, 0.07, (7 * 0.07), false));
-          else
+            explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
+
+          }
+          else {
             explosionGo->AddComponent(new Sprite(*explosionGo, "img/explosion.png", 7, 0.07, (7 * 0.07), false));
+            explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
+          }
 
           Game::GetInstance().GetCurrentState().AddObject(explosionGo);
-          Sound *explosionSound = new Sound(*explosionGo, "audio/boom.ogg");
           explosionSound->Play(1);
           this->storedState = HURTING;
           if (Veteran::player != nullptr) {
