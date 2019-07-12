@@ -66,34 +66,35 @@ void Nurse::ManageInput(float dt) {
     if(this->IsDead()) {
       this->currentState = DYING;
     }
+    if(this->currentState != FROZEN) {
+      float targetXPosition = (Camera::position.x - this->associated.box.x);
+      Vec2 tagetYPosition = Vec2(Camera::position.x + 224, this->tagetPlayer.y);
 
-    float targetXPosition = (Camera::position.x - this->associated.box.x);
-    Vec2 tagetYPosition = Vec2(Camera::position.x + 224, this->tagetPlayer.y);
-
-    if(targetXPosition < 1) {
-      if(this->attackCooldown.Get() > enemyAttackCooldown && not this->IsAttacking()) {
-        this->currentState = BASIC_ATTACK_ONE;
-        this->Shoot("img/nurse/shoot.png", NURSE_BULLET_FRAME_COUNT, NURSE_BULLET_DAMAGE, NURSE_BULLET_Y_GAP, BULLET_LEFT_GAP, BULLET_RIGHT_GAP, this->GetFoot().y, "Nurse", 400);
-        this->attackCooldown.Restart();
-      }
-      else {
-        Component *basicAtacckAsComponent = (Component *)(this->sprite[BASIC_ATTACK_ONE]);
-        if(not basicAtacckAsComponent->IsActive()) {
-          this->currentState = IDLE;
-          if(not (abs(this->GetFoot().y - Playable::player->GetFoot().y) < 30)) {
-            this->currentState = MOVING;
-            Vec2 direction = this->GetFoot().GetCenter().GetSpeed(Vec2(this->tagetPlayer.x, this->tagetPlayer.y));
-            this->associated.box.UpdatePosY(NURSE_SPEED * dt * direction.y * 2);
-          }
-          else {
+      if(targetXPosition < 1) {
+        if(this->attackCooldown.Get() > enemyAttackCooldown && not this->IsAttacking()) {
+          this->currentState = BASIC_ATTACK_ONE;
+          this->Shoot("img/nurse/shoot.png", NURSE_BULLET_FRAME_COUNT, NURSE_BULLET_DAMAGE, NURSE_BULLET_Y_GAP, BULLET_LEFT_GAP, BULLET_RIGHT_GAP, this->GetFoot().y, "Nurse", 600);
+          this->attackCooldown.Restart();
+        }
+        else {
+          Component *basicAtacckAsComponent = (Component *)(this->sprite[BASIC_ATTACK_ONE]);
+          if(not basicAtacckAsComponent->IsActive()) {
             this->currentState = IDLE;
+            if(not (abs(this->GetFoot().y - Playable::player->GetFoot().y) < 30)) {
+              this->currentState = MOVING;
+              Vec2 direction = this->GetFoot().GetCenter().GetSpeed(Vec2(this->tagetPlayer.x, this->tagetPlayer.y));
+              this->associated.box.UpdatePosY(NURSE_SPEED * dt * direction.y * 2);
+            }
+            else {
+              this->currentState = IDLE;
+            }
           }
         }
       }
-    }
-    else {
-      Vec2 direction = this->GetFoot().GetCenter().GetSpeed(tagetYPosition);
-      this->associated.box.UpdatePos((direction * this->speed) * dt);
+      else {
+        Vec2 direction = this->GetFoot().GetCenter().GetSpeed(tagetYPosition);
+        this->associated.box.UpdatePos((direction * this->speed) * dt);
+      }
     }
 
   }
@@ -126,7 +127,8 @@ void Nurse::HandleHurting(float) {
     if(this->associated.Has("Boss"))
       this->currentState = FROZEN;
     else
-      this->currentState = MOVING;
+      if(this->currentState != FROZEN)
+        this->currentState = MOVING;
     this->storedState = INVALID;
 
     if(this->nurseSide == LEFT_SIDE_OF_THE_SCREEN) {

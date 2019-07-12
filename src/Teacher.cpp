@@ -22,7 +22,6 @@ Teacher::Teacher(GameObject &associated) : Playable(associated) {
   this->leftOfsetColliderAttack = 75;
   this->attackColliderGapBasicAtacck1 = 80;
   this->attackColliderGapBasicAtacck2 = 115;
-  this->points = 0;
   this->attackColliderGapCombo = 60;
 
   std::string character = "teacher";

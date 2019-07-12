@@ -16,12 +16,16 @@
 class StageState : public State {
 private:
   Music music;
+  Sound *goSound;
   GameObject *bg;
   TileSet *tileSet;
   TileMap *tileMap;
   GateMap *gateMap;
   GameObject *cameraLockWallLeft;
   GameObject *cameraLockWallRight;
+  GameObject *arrowGO;
+  Timer arrowDurationTimer;
+  Timer arrowTimer;
 
   bool hordeEnabled;
 

@@ -39,6 +39,7 @@ public:
   bool Is(std::string type);
   bool IsOpponent(GameObject &other);
   void NotifyCollision(GameObject &other);
+  void SetHp(int hp);
   void Update(float dt);
 };
 

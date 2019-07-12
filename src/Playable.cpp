@@ -109,7 +109,7 @@ void Playable::HandleMovement(float) {
     this->sound[MOVING]->Activate();
     // TODO: Add PlayIfNotPlaying()
     // if (not this->sound[MOVING]->IsPlaying())
-      this->sound[MOVING]->Play(-1);
+      // this->sound[MOVING]->Play(-1);
 
   }
   if(not (InputManager::GetInstance().IsKeyDown(D_KEY) ||
@@ -145,7 +145,7 @@ void Playable::HandleUltimateFinal(float dt) {
 
 void Playable::CreateInfoBar() {
   this->ultimateBarSpriteNumber = -1;
-  this->points = 0;
+  this->points = 100;
 
   this->infoBar = new GameObject();
   this->infoBar->AddComponent(new Sprite(*infoBar, "img/playable/infobar.png"));
@@ -193,14 +193,34 @@ void Playable::UpdateUltimateBarSprite(int spriteNumber) {
 }
 
 void Playable::UpdateLifeBar() {
-  if (GetHPPercentage() <= 0)
-    this->hearts[0]->Desactivate();
-  if (GetHPPercentage() < 25)
+  if (GetHPPercentage() <= 0) {
+    for (int i = HEARTS_COUNTER - 1; i >= 0; i--)
+      this->hearts[i]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 25) {
+    this->hearts[0]->Activate();
     this->hearts[1]->Desactivate();
-  if (GetHPPercentage() < 50)
     this->hearts[2]->Desactivate();
-  if (GetHPPercentage() < 75)
     this->hearts[3]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 50) {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Desactivate();
+    this->hearts[3]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 75) {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Activate();
+    this->hearts[3]->Desactivate();
+
+  } else {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Activate();
+    this->hearts[3]->Activate();
+  }
 
   // TODO: Maybe...
   // if (GetHPPercentage() < 15) {
@@ -239,4 +259,8 @@ void Playable::UpdateLifeBar() {
   //   follower->offset.y = center.y - Camera::position.y;
   //   follower->offset.x = center.x - Camera::position.x;
   // }
+}
+
+void Playable::SetHp(int hp) {
+  this->hp = hp;
 }
