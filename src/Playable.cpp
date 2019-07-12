@@ -193,14 +193,34 @@ void Playable::UpdateUltimateBarSprite(int spriteNumber) {
 }
 
 void Playable::UpdateLifeBar() {
-  if (GetHPPercentage() <= 0)
-    this->hearts[0]->Desactivate();
-  if (GetHPPercentage() < 25)
+  if (GetHPPercentage() <= 0) {
+    for (int i = HEARTS_COUNTER - 1; i >= 0; i--)
+      this->hearts[i]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 25) {
+    this->hearts[0]->Activate();
     this->hearts[1]->Desactivate();
-  if (GetHPPercentage() < 50)
     this->hearts[2]->Desactivate();
-  if (GetHPPercentage() < 75)
     this->hearts[3]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 50) {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Desactivate();
+    this->hearts[3]->Desactivate();
+  }
+  else if (GetHPPercentage() <= 75) {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Activate();
+    this->hearts[3]->Desactivate();
+
+  } else {
+    this->hearts[0]->Activate();
+    this->hearts[1]->Activate();
+    this->hearts[2]->Activate();
+    this->hearts[3]->Activate();
+  }
 
   // TODO: Maybe...
   // if (GetHPPercentage() < 15) {
