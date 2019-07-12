@@ -35,6 +35,7 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
 }
 
 StageState::~StageState() {
+  UnlockCamera();
   Camera::position = Vec2();
   StageState::enemiesCount = 0;
   this->objectArray.clear();
@@ -166,7 +167,6 @@ void StageState::HandleHorde() {
   #endif
 
   if (this->hordeEnabled and (StageState::enemiesCount <= 0)) {
-    this->hordeEnabled = false;
     this->UnlockCamera();
   }
 
@@ -212,6 +212,7 @@ void StageState::UnlockCamera() {
     if (this->cameraLockWallRight) {
       this->cameraLockWallRight->RequestDelete();
     }
+    this->hordeEnabled = false;
   }
 }
 
