@@ -226,10 +226,10 @@ void StageState::Spawn(int gate, int type, int invertSide, int yLimit) {
 
   switch (type) {
     case 1:
-      // enemyGO->AddComponent(new Nurse(*enemyGO));
+      enemyGO->AddComponent(new Nurse(*enemyGO));
       break;
     case 2:
-      // enemyGO->AddComponent(new Janitor(*enemyGO));
+      enemyGO->AddComponent(new Janitor(*enemyGO));
       break;
     case 3:
       enemyGO->AddComponent(new Security(*enemyGO));
