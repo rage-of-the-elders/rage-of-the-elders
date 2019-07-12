@@ -22,6 +22,9 @@ private:
   GateMap *gateMap;
   GameObject *cameraLockWallLeft;
   GameObject *cameraLockWallRight;
+  GameObject *arrowGO;
+  Timer arrowDurationTimer;
+  Timer arrowTimer;
 
   bool hordeEnabled;
 

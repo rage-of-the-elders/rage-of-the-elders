@@ -33,6 +33,9 @@ StageState::StageState() : music("audio/stage-1/bg.ogg") {
   this->hordeEnabled = false;
   this->started = false;
 	this->objectArray = std::vector<std::shared_ptr<GameObject>>();
+  this->arrowTimer = Timer();
+  this->arrowDurationTimer = Timer();
+  this->arrowDurationTimer.Set(3);
 }
 
 StageState::~StageState() {
@@ -162,6 +165,14 @@ void StageState::Update(float dt) {
 	this->CollisionCheck();
 	this->DeletionCheck();
 	this->CheckGameEnd();
+  this->arrowDurationTimer.Update(dt);
+  if (arrowDurationTimer.Get() < 3) {
+    this->arrowTimer.Update(dt);
+    if (arrowTimer.Get() > 0.5) {
+      this->arrowGO->ToggleActive();
+      arrowTimer.Restart();
+    }
+  }
 }
 
 void StageState::HandleHorde() {
@@ -174,6 +185,11 @@ void StageState::HandleHorde() {
 
   if (this->hordeEnabled and (StageState::enemiesCount <= 0)) {
     this->UnlockCamera();
+    this->arrowGO = new GameObject();
+    arrowGO->AddComponent(new Sprite(*arrowGO, "img/go_arrow.png"));
+    arrowGO->AddComponent(new CameraFollower(*arrowGO, {1000, 100}));
+    this->AddObject(arrowGO);
+    arrowDurationTimer.Restart();
   }
 
   Gate currentGate = this->gateMap->GetCurrentGate();
@@ -218,6 +234,15 @@ void StageState::UnlockCamera() {
     }
     this->hordeEnabled = false;
   }
+
+
+  // if(this->arrowTimer.Get() > 2) {
+  //   arrowGO->Activate();
+  //   this->arrowTimer.Restart();
+  // }
+  // else {
+  //   arrowGO->Desactivate();
+  // }
 }
 
 /*
