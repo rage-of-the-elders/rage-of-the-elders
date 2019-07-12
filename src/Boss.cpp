@@ -40,6 +40,7 @@ Boss::Boss(GameObject &associated) : Enemy(associated) {
   this->associated.AddComponent(this->bodyColliderBox);
   this->associated.AddComponent(this->attackColliderBox);
 
+  this->sound[HURTING] = new Sound(this->associated, "audio/boss/hurting.ogg");
   // this->associated.AddComponent(new Collider(this->associated, {0.4,0.9}));
 }
 

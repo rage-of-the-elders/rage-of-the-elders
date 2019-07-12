@@ -439,11 +439,12 @@ void Fighter::HandleUltimateFinal(float) {
 }
 
 void Fighter::HandleHurting(float) {
+    this->sound[HURTING]->PlayIfNotPlaying(1);
+
   if(not this->sprite[HURTING]->IsActive()) {
     this->ActivateSprite(HURTING);
-    this->sound[HURTING]->Play(1);
-    //Som
   }
+
   if(this->sprite[HURTING]->IsFinished()) {
     this->sprite[HURTING]->SetFrame(0);
     this->sprite[HURTING]->SetFinished(false);
