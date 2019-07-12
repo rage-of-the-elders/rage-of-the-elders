@@ -77,7 +77,7 @@ void IntroState::UpdateScreenElements(float dt) {
   if (fadeTimer.Get() < FADE_DURATION) {
     this->UpdateFade(dt);
   } else {
-    bool enterPressed = InputManager::GetInstance().KeyPress(ENTER_KEY) 
+    bool enterPressed = InputManager::GetInstance().KeyPress(ENTER_KEY)
                         || InputManager::GetInstance().KeyPress(KEYPAD_ENTER_KEY)
                         || InputManager::GetInstance().KeyPress(SPACE_KEY);
 
@@ -97,6 +97,13 @@ void IntroState::UpdateScreenElements(float dt) {
 }
 
 void IntroState::Update(float dt) {
+  #ifdef DEBUG
+    if (InputManager::GetInstance().KeyPress(M_KEY)) {
+      this->popRequested = true;
+      Game::GetInstance().Push(new StageState());
+    }
+  #endif
+
   this->quitRequested = InputManager::GetInstance().QuitRequested();
   if (InputManager::GetInstance().KeyPress(ESCAPE_KEY)) {
 		this->popRequested = true;

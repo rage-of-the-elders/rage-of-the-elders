@@ -9,6 +9,7 @@
 #include "TileSet.h"
 #include "TileMap.h"
 #include "GateMap.h"
+#include "ObjectMap.h"
 
 #include <vector>
 #include <memory>
@@ -21,6 +22,7 @@ private:
   TileSet *tileSet;
   TileMap *tileMap;
   GateMap *gateMap;
+  ObjectMap *objectMap;
   GameObject *cameraLockWallLeft;
   GameObject *cameraLockWallRight;
   GameObject *arrowGO;
@@ -56,6 +58,7 @@ public:
   void Update(float dt);
   void CollisionCheck();
   void LoadBackground();
+  void LoadSceneObjects();
   void LockCamera(int gatePosition);
   void SpawnEnemies(int gatePosition, Gate gate);
 

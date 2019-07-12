@@ -1,0 +1,5 @@
+3,
+
+living_room, 2, 51, 19,
+living_room, 1, 60, 16,
+living_room, 6, 75, 16,
