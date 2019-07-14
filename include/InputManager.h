@@ -22,6 +22,7 @@
 #define J_KEY SDLK_j
 #define P_KEY SDLK_p
 #define O_KEY SDLK_o
+#define M_KEY SDLK_m
 
 #define INCLUDE_SDL
 #include "SDL_include.h"

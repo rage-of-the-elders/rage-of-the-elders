@@ -23,6 +23,7 @@
 #include "GameOverState.h"
 #include "CameraBarrier.h"
 #include "LifeItem.h"
+#include "SceneObject.h"
 
 #include <iostream>
 
@@ -53,16 +54,34 @@ void StageState::LoadAssets() {
   this->LoadGates();
   this->LoadPlayers();
 	this->BuildBarriers();
+  this->LoadSceneObjects();
 	this->music.Play();
+}
+
+void StageState::LoadSceneObjects() {
+  this->objectMap = new ObjectMap("positioning_furniture1.txt", this->stageLimit, 30, 90);
+  for(auto &sceneObject : this->objectMap->GetObjectList()) {
+    GameObject *sceneObjectGO = new GameObject();
+    this->objectMap->At(sceneObject.x, sceneObject.y) = sceneObject.objectType;
+    Vec2 objectPosition = this->objectMap->GetObjectPosition(sceneObject.x, sceneObject.y);
+    SceneObject *newSceneObject = new SceneObject(*sceneObjectGO, sceneObject.environment,
+                                      objectPosition.x, objectPosition.y, sceneObject.objectType);
+    sceneObjectGO->AddComponent(newSceneObject);
+    this->AddObject(sceneObjectGO);
+
+    GameObject *sceneObjectBarrierGO = new GameObject();
+    sceneObjectBarrierGO->AddComponent(new Barrier(*sceneObjectBarrierGO, newSceneObject->GetColisionRect()));
+    this->AddObject(sceneObjectBarrierGO);
+  }
 }
 
 void StageState::LoadBackground() {
   this->bg = new GameObject();
-	this->bg->AddComponent(new Sprite(*(this->bg), "img/ocean.jpg"));
+	this->bg->AddComponent(new Sprite(*(this->bg), "img/black.png"));
 	this->bg->box = Rect();
 
 	GameObject *tileMapGO = new GameObject();
-	this->tileSet = new TileSet(570, 560, 720, "img/stage1.png");
+	this->tileSet = new TileSet(570, 560, 720, "img/stage1v4-paralax.png");
 	this->tileMap = new TileMap(*tileMapGO, "map/tilesStage1.txt", tileSet);
 	tileMapGO->AddComponent(tileMap);
 	tileMapGO->box = Rect();
@@ -96,14 +115,14 @@ void StageState::LoadPlayers() {
   bossGO->AddComponent(new Boss(*bossGO));
   this->AddObject(bossGO);
   bossGO->RequestDelete();
-
+  
   GameObject *janitorGO = new GameObject();
   janitorGO->box.SetCenterPos(800, 500);
   janitorGO->AddComponent(new Janitor(*janitorGO));
   this->AddObject(janitorGO);
   janitorGO->RequestDelete();
-
-
+  
+  
   GameObject *securityGO = new GameObject();
   securityGO->box.SetCenterPos(800, 500);
   securityGO->AddComponent(new Security(*securityGO));
@@ -113,7 +132,7 @@ void StageState::LoadPlayers() {
 
 void StageState::BuildBarriers() {
   GameObject *hallWall = new GameObject();
-  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(14), 555)));
+  hallWall->AddComponent(new Barrier(*hallWall, Rect(0, 0, this->tileMap->GetTileEnd(17), 555)));
   this->AddObject(hallWall);
 
   GameObject *roomWall = new GameObject();
@@ -134,7 +153,7 @@ void StageState::BuildBarriers() {
 }
 
 void StageState::LoadGates() {
-  this->gateMap = new GateMap("map/hordesStage1.txt");
+  this->gateMap = new GateMap("map/hordesStage3.txt");
 }
 
 void StageState::Update(float dt) {
@@ -180,7 +199,6 @@ void StageState::Update(float dt) {
 void StageState::HandleHorde() {
   #ifdef DEBUG
     if (InputManager::GetInstance().KeyPress(P_KEY)) {
-      this->hordeEnabled = false;
       this->UnlockCamera();
     }
   #endif
