@@ -110,24 +110,24 @@ void StageState::LoadPlayers() {
   this->AddObject(nurseGO);
   nurseGO->RequestDelete();
 
-  // GameObject *bossGO = new GameObject();
-  // bossGO->box.SetCenterPos(800, 500);
-  // bossGO->AddComponent(new Boss(*bossGO));
-  // this->AddObject(bossGO);
-  // bossGO->RequestDelete();
-  //
-  // GameObject *janitorGO = new GameObject();
-  // janitorGO->box.SetCenterPos(800, 500);
-  // janitorGO->AddComponent(new Janitor(*janitorGO));
-  // this->AddObject(janitorGO);
-  // janitorGO->RequestDelete();
-  //
-  //
-  // GameObject *securityGO = new GameObject();
-  // securityGO->box.SetCenterPos(800, 500);
-  // securityGO->AddComponent(new Security(*securityGO));
-  // this->AddObject(securityGO);
-  // securityGO->RequestDelete();
+  GameObject *bossGO = new GameObject();
+  bossGO->box.SetCenterPos(800, 500);
+  bossGO->AddComponent(new Boss(*bossGO));
+  this->AddObject(bossGO);
+  bossGO->RequestDelete();
+  
+  GameObject *janitorGO = new GameObject();
+  janitorGO->box.SetCenterPos(800, 500);
+  janitorGO->AddComponent(new Janitor(*janitorGO));
+  this->AddObject(janitorGO);
+  janitorGO->RequestDelete();
+  
+  
+  GameObject *securityGO = new GameObject();
+  securityGO->box.SetCenterPos(800, 500);
+  securityGO->AddComponent(new Security(*securityGO));
+  this->AddObject(securityGO);
+  securityGO->RequestDelete();
 }
 
 void StageState::BuildBarriers() {

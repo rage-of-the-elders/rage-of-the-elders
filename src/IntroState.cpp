@@ -92,6 +92,7 @@ void IntroState::UpdateScreenElements(float dt) {
     if(this->names->IsFinished()) {
       this->popRequested = true;
       Game::GetInstance().Push(new StageState());
+      GameData::playerVictory = false;
     }
   }
 }

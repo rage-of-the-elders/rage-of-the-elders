@@ -34,7 +34,6 @@ void SceneObject::NotifyCollision(GameObject &other) {
   if(other.Has("Playable")) {
     Playable *player = (Playable*) other.GetComponent("Playable");
     if(Collision::IsColliding(*player->GetColliderBox(), this->associated.box, other.angleDeg, this->associated.angleDeg)) {
-      printf("Quebrou!\n");
     }
   }
 }
