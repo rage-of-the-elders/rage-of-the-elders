@@ -54,6 +54,26 @@ make go
 ### [Release 1.0](https://github.com/rage-of-the-elders/rage-of-the-elders/releases/tag/1.0)
 
 
+# Development Team
+
+## Artists
+
+- *Kevin Lalagüe*
+- *Letícia Fidelix*
+- *Matheus Andrade*
+- *Monique Pires*
+
+## Musicians
+
+- *Pedro Ribeiro*
+- *Rodrigo Dal Moro*
+
+## Programmers
+- *Lucas Martins*
+- *Matheus Richard*
+- *Thalisson Melo*
+
+
 # License
 
 MIT License
