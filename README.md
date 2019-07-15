@@ -52,6 +52,7 @@ make go
 # Releases
 ### [Pre-Release 0.1](https://github.com/rage-of-the-elders/rage-of-the-elders/releases/tag/0.1)
 ### [Release 1.0](https://github.com/rage-of-the-elders/rage-of-the-elders/releases/tag/1.0)
+### [Release 1.1](https://github.com/rage-of-the-elders/rage-of-the-elders/releases/tag/1.1)
 
 
 # Development Team
