@@ -1,8 +1,10 @@
 #include "Veteran.h"
+
+#include <iostream>
+
+#include "Collider.h"
 #include "Collision.h"
 #include "Sprite.h"
-#include "Collider.h"
-#include <iostream>
 
 Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->hp = VETERAN_HP;
@@ -19,16 +21,32 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->attackColliderGapCombo = 50;
 
   std::string character = "veteran";
-  this->sprite[MOVING] = new Sprite(this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
-  this->sprite[BASIC_ATTACK_ONE] = new Sprite(this->associated, "img/" + character + "/basic_attack_one.png", 12, 0.04, 0, false);
-  this->sprite[BASIC_ATTACK_TWO] = new Sprite(this->associated, "img/" + character + "/basic_attack_two.png", 19, 0.025, 0, false);
-  this->sprite[COMBO] = new Sprite(this->associated, "img/" + character + "/combo.png", 20, 0.04, 0, false);
-  this->sprite[ULTIMATE_BEGIN] = new Sprite(this->associated, "img/" + character + "/ultimate_begin.png", 3, 0.04, 0, false);
-  this->sprite[ULTIMATE_MIDLE] = new Sprite(this->associated, "img/" + character + "/ultimate_midle.png", 4, 0.04, 0, true);
-  this->sprite[ULTIMATE_FINAL] = new Sprite(this->associated, "img/" + character + "/ultimate_final.png", 3, 0.04, 0, false);
-  this->sprite[IDLE] = new Sprite(this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
-  this->sprite[HURTING] = new Sprite(this->associated, "img/" + character + "/hurting.png", 10, 0.04, 0, false);
-  this->sprite[DYING] = new Sprite(this->associated, "img/" + character + "/dying.png", 21, 0.04, 0, false);
+  this->sprite[MOVING] = new Sprite(
+      this->associated, "img/" + character + "/moving.png", 21, 0.04, 0, true);
+  this->sprite[BASIC_ATTACK_ONE] =
+      new Sprite(this->associated, "img/" + character + "/basic_attack_one.png",
+                 12, 0.04, 0, false);
+  this->sprite[BASIC_ATTACK_TWO] =
+      new Sprite(this->associated, "img/" + character + "/basic_attack_two.png",
+                 19, 0.025, 0, false);
+  this->sprite[COMBO] = new Sprite(
+      this->associated, "img/" + character + "/combo.png", 20, 0.04, 0, false);
+  this->sprite[ULTIMATE_BEGIN] =
+      new Sprite(this->associated, "img/" + character + "/ultimate_begin.png",
+                 3, 0.04, 0, false);
+  this->sprite[ULTIMATE_MIDLE] =
+      new Sprite(this->associated, "img/" + character + "/ultimate_midle.png",
+                 4, 0.04, 0, true);
+  this->sprite[ULTIMATE_FINAL] =
+      new Sprite(this->associated, "img/" + character + "/ultimate_final.png",
+                 3, 0.04, 0, false);
+  this->sprite[IDLE] = new Sprite(
+      this->associated, "img/" + character + "/idle.png", 15, 0.04, 0, true);
+  this->sprite[HURTING] =
+      new Sprite(this->associated, "img/" + character + "/hurting.png", 10,
+                 0.04, 0, false);
+  this->sprite[DYING] = new Sprite(
+      this->associated, "img/" + character + "/dying.png", 21, 0.04, 0, false);
 
   this->ActivateSprite(IDLE);
 
@@ -43,21 +61,20 @@ Veteran::Veteran(GameObject &associated) : Playable(associated) {
   this->associated.AddComponent(this->sprite[HURTING]);
   this->associated.AddComponent(this->sprite[DYING]);
 
-  this->bodyColliderBox = new Collider(this->associated, {0.4,0.8});
-  this->attackColliderBox = new Collider(this->associated, {0.4,0.8}, 1);
+  this->bodyColliderBox = new Collider(this->associated, {0.4, 0.8});
+  this->attackColliderBox = new Collider(this->associated, {0.4, 0.8}, 1);
   this->associated.AddComponent(this->bodyColliderBox);
   this->associated.AddComponent(this->attackColliderBox);
 
   this->attackColliderBox->SetColliderType(1);
 }
 
-Veteran::~Veteran() {
-  Veteran::player = nullptr;
-}
+Veteran::~Veteran() { Veteran::player = nullptr; }
 
 void Veteran::Update(float dt) {
   Fighter::Update(dt);
-  this->bodyColliderBox->SetOffset({(this->orientation == RIGHT ? 7 : -7), 0});
+  this->bodyColliderBox->SetOffset(
+      {float(this->orientation == RIGHT ? 7 : -7), float(0)});
 }
 
 bool Veteran::Is(std::string type) {
@@ -65,5 +82,5 @@ bool Veteran::Is(std::string type) {
 }
 
 float Veteran::GetHPPercentage() {
-  return (this->hp*1.0/VETERAN_HP*1.0) * 100;
+  return (this->hp * 1.0 / VETERAN_HP * 1.0) * 100;
 }

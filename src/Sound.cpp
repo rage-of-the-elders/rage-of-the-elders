@@ -1,15 +1,16 @@
 #include "Sound.h"
+
 #include "Game.h"
 #include "Resources.h"
 
-Sound::Sound(GameObject &associated) : Component (associated) {
+Sound::Sound(GameObject &associated) : Component(associated) {
   this->chunk = nullptr;
   this->channel = -1;
   this->active = true;
   this->loops = 0;
 }
 
-Sound::Sound(GameObject &associated, std::string file) : Sound (associated) {
+Sound::Sound(GameObject &associated, std::string file) : Sound(associated) {
   this->Open(file);
 }
 
@@ -19,19 +20,18 @@ Sound::~Sound() {
 }
 
 void Sound::PlayIfNotPlaying(int times) {
-  if (not this->IsPlaying())
-    this->Play(times);
+  if (not this->IsPlaying()) this->Play(times);
 }
 
 void Sound::Play(int times) {
-  this-> loops = times - (times > 0 ? 1 : 0);
-  
+  this->loops = times - (times > 0 ? 1 : 0);
+
   this->channel = Mix_PlayChannel(channel, this->chunk.get(), loops);
 
   if (this->channel == -1) {
-		printf("Mix Play Channel: %s\n", Mix_GetError());
-		exit(-1);
-	}
+    printf("Mix Play Channel: %s\n", Mix_GetError());
+    // exit(-1);
+  }
 }
 
 void Sound::ForceStop() {
@@ -44,27 +44,18 @@ void Sound::Stop() {
     Mix_HaltChannel(this->channel);
   }
   this->channel = -1;
-  
+
   // if(IsPlaying())
   //   Mix_HaltChannel(-1);
 }
 
-void Sound::Open(std::string file) {
-  this->chunk = Resources::GetSound(file);
-}
+void Sound::Open(std::string file) { this->chunk = Resources::GetSound(file); }
 
-bool Sound::IsOpen() {
-  return this->chunk != nullptr;
-}
+bool Sound::IsOpen() { return this->chunk != nullptr; }
 
 void Sound::Update(float) {}
 void Sound::Render() {}
 
-bool Sound::IsPlaying() {
-  return (Mix_Playing(this->channel));
-}
+bool Sound::IsPlaying() { return (Mix_Playing(this->channel)); }
 
-bool Sound::Is(std::string type) {
-  return (type == "Sound");
-}
-
+bool Sound::Is(std::string type) { return (type == "Sound"); }

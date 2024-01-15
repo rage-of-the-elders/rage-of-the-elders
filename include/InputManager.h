@@ -25,11 +25,12 @@
 #define M_KEY SDLK_m
 
 #define INCLUDE_SDL
-#include "SDL_include.h"
-#include "Vec2.h"
-#include "Timer.h"
-
+#include <string>
 #include <unordered_map>
+
+#include "SDL_include.h"
+#include "Timer.h"
+#include "Vec2.h"
 
 class InputManager {
 private:
